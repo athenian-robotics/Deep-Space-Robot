@@ -6,7 +6,7 @@ import frc.team852.Robot;
 public class SampleCommand extends Command {
 
     public SampleCommand() {
-        requires(Robot.sampleSubsystem);
+        requires(Robot.elevatorSubsystem);
     }
 
     /**
