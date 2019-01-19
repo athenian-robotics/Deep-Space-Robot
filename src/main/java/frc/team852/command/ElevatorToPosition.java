@@ -42,6 +42,8 @@ public class ElevatorToPosition extends Command {
 
     @Override
     protected void execute() {
-
+        //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
+        double move = pid.getPID(this.targetDistance, this.currentDistance);
+        if(Rob)
     }
 }
