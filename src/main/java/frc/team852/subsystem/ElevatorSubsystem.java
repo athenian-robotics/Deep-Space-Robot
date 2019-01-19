@@ -21,7 +21,7 @@ public class ElevatorSubsystem extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new ElevatorToPosition());
+        setDefaultCommand(new ElevatorToPosition(100, 0.75));
     }
 
     public void setSpeed(double speed){
