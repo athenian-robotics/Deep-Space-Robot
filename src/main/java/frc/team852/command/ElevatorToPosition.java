@@ -2,6 +2,7 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
+import frc.team852.RobotMap;
 import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.utils.PIDControl;
 
@@ -13,37 +14,43 @@ public class ElevatorToPosition extends Command {
     private double distance = 0;
     private PIDControl pid = new PIDControl(0,0,0);
 
+    //TODO Implement speed
     public ElevatorToPosition(double target, double speed) {
         requires(Robot.elevatorSubsystem);
         this.targetDistance = target;
-        //this.currentDistance
+        //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
         raising = targetDistance > currentDistance;
     }
 
     @Override
-    protected void initialize() {
-
-    }
-
-    @Override
     protected boolean isFinished() {
-        return false;
+        //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
+        return this.currentDistance >= targetDistance-RobotMap.elevatorDistanceError && this.currentDistance <= targetDistance+RobotMap.elevatorDistanceError;
     }
 
     @Override
     protected void end() {
-
+        elevator.stopMotors();
+        //TODO Return control to hold command
     }
 
     @Override
     protected void interrupted() {
-
+        end();
     }
 
     @Override
     protected void execute() {
         //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
         double move = pid.getPID(this.targetDistance, this.currentDistance);
-        if(Rob)
+        if(move > 0 && RobotMap.elevatorUpperLimit.get()){
+            System.out.println("Elevator Upper Limit Triggered!");
+            end();
+        }
+        if(move < 0 && RobotMap.elevatorLowerLimit.get()){
+            System.out.println("Elevator Lower Limit Triggered!");
+            end();
+        }
+        elevator.setSpeed(move);
     }
 }

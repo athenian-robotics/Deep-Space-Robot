@@ -23,6 +23,7 @@ public class RobotMap {
     public static CANSparkMax elevatorMotorR = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static DigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
     public static DigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
+    public static int elevatorDistanceError = 5;
 
     //public static I2C elevatorDistance = new I2C();
 }
