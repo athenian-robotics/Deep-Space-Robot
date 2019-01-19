@@ -3,7 +3,7 @@ package frc.team852.subsystem;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
-import frc.team852.command.SampleCommand;
+import frc.team852.command.ElevatorToPosition;
 
 public class ElevatorSubsystem extends Subsystem {
 
@@ -21,7 +21,7 @@ public class ElevatorSubsystem extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new SampleCommand());
+        setDefaultCommand(new ElevatorToPosition());
     }
 
     public void setSpeed(double speed){

@@ -2,7 +2,7 @@ package frc.team852;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team852.command.SampleCommand;
+import frc.team852.command.ElevatorToPosition;
 
 public class OI {
 
@@ -24,15 +24,15 @@ public class OI {
 
     // Start the command when the button is pressed and let it run the command
     // until it is finished as determined by it's isFinished method.
-    // button.whenPressed(new SampleCommand());
+    // button.whenPressed(new ElevatorToPosition());
 
     // Run the command while the button is being held down and interrupt it once
     // the button is released.
-    // button.whileHeld(new SampleCommand());
+    // button.whileHeld(new ElevatorToPosition());
 
     // Start the command when the button is released and let it run the command
     // until it is finished as determined by it's isFinished method.
-    // button.whenReleased(new SampleCommand());
+    // button.whenReleased(new ElevatorToPosition());
 
     //public static Joystick leftStick = new Joystick(0);
     //public static Joystick rightStick = new Joystick(1);
@@ -45,7 +45,7 @@ public class OI {
     public static Joystick stick2 = new Joystick(1);
     public OI(){
         // Only created once, init and execute are called when button is released
-        new JoystickButton(stick1, 1).whenReleased(new SampleCommand());
+        new JoystickButton(stick1, 1).whenReleased(new ElevatorToPosition());
     }
 
 

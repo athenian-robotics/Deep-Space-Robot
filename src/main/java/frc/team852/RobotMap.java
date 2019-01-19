@@ -2,6 +2,8 @@ package frc.team852;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SensorUtil;
 import frc.team852.subsystem.ElevatorSubsystem;
 
 /**
@@ -19,5 +21,9 @@ public class RobotMap {
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static CANSparkMax elevatorMotorL = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax elevatorMotorR = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    public static I2C elevatorDistance = new I2C();
+
+
 
 }
