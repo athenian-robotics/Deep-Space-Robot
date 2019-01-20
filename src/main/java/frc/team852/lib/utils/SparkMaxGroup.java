@@ -29,4 +29,10 @@ public class SparkMaxGroup extends SpeedControllerGroup {
         }
         return val / speedControllerList.size();
     }
+
+    public void resetEncoders(){
+        for(SparkMax s : speedControllerList){
+            s.resetEncoder();
+        }
+    }
 }
