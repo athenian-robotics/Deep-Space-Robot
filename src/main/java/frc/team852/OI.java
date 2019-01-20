@@ -2,6 +2,8 @@ package frc.team852;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team852.commands.NEOTester;
+import frc.team852.subsystems.NEOTesterSub;
 
 public class OI {
 
@@ -44,6 +46,7 @@ public class OI {
     public static Joystick stick2 = new Joystick(1);
     public OI(){
         // Only created once, init and execute are called when button is released
+		//new JoystickButton(stick1, 6)
     }
 
 
