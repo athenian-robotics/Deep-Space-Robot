@@ -18,12 +18,8 @@ public class SparkMax extends CANSparkMax {
      * @return Readings from the encoder
      */
     public double getEncoderPosition() {
-        double val = enc.getPosition();
-        return val - resetOffset;
-
-
+        return enc.getPosition() - resetOffset;
     }
-
     /**
      * Compensate for hardware drift
      */
