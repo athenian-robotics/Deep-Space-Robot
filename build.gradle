@@ -3,7 +3,7 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
 }
 
-def ROBOT_MAIN_CLASS = "frc.team852.Robot"
+def ROBOT_MAIN_CLASS = "frc.team852.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
@@ -42,7 +42,6 @@ dependencies {
     compile files('deps/SparkMax-java-1.0.26.jar')
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-    testCompile 'junit:junit:4.12'
 
 }
 
