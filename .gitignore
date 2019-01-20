@@ -1,5 +1,11 @@
+# Build artifacts
 build
-*.iml
-.idea
 .gradle
-*.jar
+#*.jar
+
+# Project files
+*.iml
+*.ipr
+.idea
+.project
+.eclipse
