@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team852.subsystems.LimitTesterSub;
 import frc.team852.subsystems.NEOTesterSub;
 
 /**
@@ -19,6 +20,7 @@ public class Robot extends TimedRobot {
 	private String m_autoSelected;
 	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 	public static NEOTesterSub neoTesterSub = RobotMap.neoTesterSub;
+	public static LimitTesterSub limitTesterSub = RobotMap.limitTesterSub;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
