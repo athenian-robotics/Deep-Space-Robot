@@ -18,13 +18,14 @@ public class RobotMap {
     public static SpeedController rightFront = new SparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static SpeedController rightBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //Elevator Motors
+    //Elevator Motors //TODO Implement elevatorDistanceSensor
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static DigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
     public static DigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
-    public static int elevatorDistanceError = 5;
+    public static double elevatorDistanceError = 5;
 
     //public static I2C elevatorDistance = new I2C();
+
 }
