@@ -1,3 +1,9 @@
+/**
+ * A simple-as-possible subsystem tester for the SPARKMAX/NEO motor controller/motor dynamic duo.
+ * @author Ezra Newman
+ * @version 2019-01-19
+ * @see frc.team852.commands.NEOTester
+ **/
 package frc.team852.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -39,7 +45,7 @@ import frc.team852.commands.NEOTester;
 		return RobotMap.neoTest.getEncoder().getPosition();
 	}
 	
-	public void resetEncoders(){
+	public void resetEncoders(){ //TODO implement a one that works, fix zeros bug
 		currEncoderValT = RobotMap.neoTest.getEncoder().getPosition();
 
 	}

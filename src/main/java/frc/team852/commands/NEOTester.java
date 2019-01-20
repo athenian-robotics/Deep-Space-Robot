@@ -1,3 +1,9 @@
+/**
+ * A simple-as-possible command tester for the SPARKMAX/NEO motor controller/motor dynamic duo.
+ * @author Ezra Newman
+ * @version 2019-01-19
+ * @see frc.team852.subsystems.NEOTesterSub
+ **/
 package frc.team852.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
