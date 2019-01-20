@@ -3,6 +3,7 @@ package frc.team852;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.team852.subsystems.LimitTesterSub;
 import frc.team852.subsystems.NEOTesterSub;
 import frc.team852.lib.utils.InvertedDigitalInput;
 
@@ -23,4 +24,7 @@ public class RobotMap {
 	
 	//NEOTesterSub subsystem
 	public static NEOTesterSub neoTesterSub = new NEOTesterSub();
+	
+	//LimitTesterSub subsystem
+	public static LimitTesterSub limitTesterSub = new LimitTesterSub(7);
 }
