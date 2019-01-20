@@ -1,11 +1,10 @@
 package frc.team852;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SpeedController;
-import frc.team852.lib.utils.InvertedDigitalInput;
-import frc.team852.lib.utils.SparkMax;
 import frc.team852.subsystem.ElevatorSubsystem;
+import frc.team852.lib.utils.InvertedDigitalInput;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -13,15 +12,15 @@ import frc.team852.subsystem.ElevatorSubsystem;
  */
 public class RobotMap {
     //Drivetrain Motors
-    public static SpeedController leftFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SpeedController leftBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SpeedController rightFront = new SparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SpeedController rightBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax leftFront = new CANSparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax leftBack = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightFront = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightBack = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //Elevator Motors //TODO Implement elevatorDistanceSensor
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-    public static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax elevatorMotorL = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax elevatorMotorR = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static DigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
     public static DigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
     public static double elevatorDistanceError = 5;
