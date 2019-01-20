@@ -1,5 +1,6 @@
 package frc.team852;
 
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,13 +18,14 @@ public class RobotMap {
     public static CANSparkMax rightFront = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax rightBack = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //Elevator Motors
+    //Elevator Motors //TODO Implement elevatorDistanceSensor
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static CANSparkMax elevatorMotorL = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static CANSparkMax elevatorMotorR = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static DigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
     public static DigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
-    public static int elevatorDistanceError = 5;
+    public static double elevatorDistanceError = 5;
 
     //public static I2C elevatorDistance = new I2C();
+
 }

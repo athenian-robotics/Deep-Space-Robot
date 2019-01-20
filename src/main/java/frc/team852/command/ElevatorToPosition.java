@@ -14,7 +14,7 @@ public class ElevatorToPosition extends Command {
     private double distance = 0;
     private PIDControl pid = new PIDControl(0,0,0);
 
-    //TODO Implement speed
+    //TODO Implement speed, elevatorDistanceSensor
     public ElevatorToPosition(double target, double speed) {
         requires(Robot.elevatorSubsystem);
         this.targetDistance = target;
@@ -30,8 +30,7 @@ public class ElevatorToPosition extends Command {
 
     @Override
     protected void end() {
-        elevator.stopMotors();
-        //TODO Return control to hold command
+        System.out.println("Elevator Returning To Hold Position");
     }
 
     @Override
