@@ -1,13 +1,8 @@
 package frc.team852.commands;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team852.OI;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystems.NEOTesterSub;
-import frc.team852.utils.PIDControl;
 
 public class NEOTester extends Command {
 	private double speed;
