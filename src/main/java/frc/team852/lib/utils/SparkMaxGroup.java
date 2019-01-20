@@ -8,8 +8,9 @@ import java.util.Arrays;
 public class SparkMaxGroup extends SpeedControllerGroup {
 
     private ArrayList<SparkMax> speedControllerList;
+
     /**
-     * @param speedController Motor Controller using SparkMax speed controller wrapper
+     * @param speedController  Motor Controller using SparkMax speed controller wrapper
      * @param speedControllers The SpeedControllers to add
      */
     public SparkMaxGroup(SparkMax speedController, SparkMax... speedControllers) {
@@ -21,12 +22,11 @@ public class SparkMaxGroup extends SpeedControllerGroup {
     /**
      * @return The average of all encoder positions within group
      */
-
-    public double getEncoderPos(){
+    public double getEncoderPos() {
         double val = 0.0;
-        for(SparkMax s:speedControllerList){
+        for (SparkMax s : speedControllerList) {
             val += s.getEncoderPosition();
         }
-        return val/speedControllerList.size();
+        return val / speedControllerList.size();
     }
 }
