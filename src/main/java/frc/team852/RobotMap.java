@@ -2,9 +2,8 @@ package frc.team852;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.subsystems.NEOTesterSub;
-import frc.team852.utils.InvertedDigitalInput;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -19,8 +18,12 @@ public class RobotMap {
 
     //Elevator Motors
     public static CANSparkMax neoTest = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax neoTest2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //public static I2C elevatorDistance = new I2C();
-	
+
 	//NEOTesterSub subsystem
 	public static NEOTesterSub neoTesterSub = new NEOTesterSub();
+
+
+    public static SerialPort lidar = new SerialPort(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
 }

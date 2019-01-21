@@ -49,5 +49,7 @@ public class NEOTester extends Command {
 			}
 		}
 		if(OI.stick1.getTrigger()) neoTesterSub.resetEncoders();
+
+		System.out.println(neoTesterSub.getLidarDist());
 	}
 }
