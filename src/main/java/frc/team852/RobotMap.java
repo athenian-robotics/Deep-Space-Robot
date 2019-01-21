@@ -2,8 +2,8 @@ package frc.team852;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.subsystems.NEOTesterSub;
+import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -23,6 +23,9 @@ public class RobotMap {
 
 	//NEOTesterSub subsystem
 	public static NEOTesterSub neoTesterSub = new NEOTesterSub();
+
+	//LimitTesterSub subsystem
+	public static LimitTesterSub limitTesterSub = new LimitTesterSub(7);
 
 
     public static SerialPort lidar = new SerialPort(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
