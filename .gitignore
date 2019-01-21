@@ -3,3 +3,7 @@ build
 .idea
 .gradle
 *.jar
+out
+
+# Personal Deploy scripts
+deploy.sh

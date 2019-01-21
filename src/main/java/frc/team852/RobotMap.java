@@ -24,7 +24,7 @@ public class RobotMap {
     public static DifferentialDrive drive = new DifferentialDrive(leftDrive, rightDrive);
 
     //Elevator Motors //TODO Implement elevatorDistanceSensor
-    private static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+    public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     private static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static SparkMaxGroup elevatorMotors = new SparkMaxGroup(elevatorMotorL, elevatorMotorR);
