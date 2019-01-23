@@ -1,11 +1,16 @@
+# Output
 build
-*.iml
-.idea
-.gradle
+out
 *.jar
+.gradle
+
+# Project files
+.idea
+*.ipr
+*.iml
+*.iws
 .project
 .workspace
-out
 
 # Personal scripts
 deploy.sh
