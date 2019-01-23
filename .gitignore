@@ -7,3 +7,4 @@ out
 
 # Personal Deploy scripts
 deploy.sh
+debug.sh
