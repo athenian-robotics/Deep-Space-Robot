@@ -9,3 +9,7 @@ build
 .idea
 .project
 .eclipse
+
+# Personal deploy scripts
+deploy.sh
+debug.sh
