@@ -3,3 +3,10 @@ build
 .idea
 .gradle
 *.jar
+.project
+.workspace
+out
+
+# Personal scripts
+deploy.sh
+debug.sh
