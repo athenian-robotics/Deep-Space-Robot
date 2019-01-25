@@ -3,6 +3,7 @@ package frc.team852;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team852.command.ElevatorToPosition;
+import frc.team852.command.WristTo90;
 
 public class OI {
 
@@ -46,6 +47,7 @@ public class OI {
     public OI(){
         // Only created once, init and execute are called when button is released
         new JoystickButton(stick1, 1).whenReleased(new ElevatorToPosition(100, .75));
+        new JoystickButton(stick1, 2).whenReleased(new WristTo90());
     }
 
 
