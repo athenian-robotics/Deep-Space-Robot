@@ -3,6 +3,7 @@ package frc.team852;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team852.subsystem.Drivetrain;
 import frc.team852.subsystem.ElevatorSubsystem;
 
 /**
@@ -18,6 +19,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static ElevatorSubsystem elevatorSubsystem = RobotMap.elevatorSubsystem;
+  public static Drivetrain drivetrain = new Drivetrain();
 
   /**
    * This function is run when the robot is first started up and should be
