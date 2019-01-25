@@ -1,31 +1,33 @@
 package frc.team852;
 
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SpeedController;
-import frc.team852.lib.utils.InvertedDigitalInput;
-import frc.team852.lib.utils.SparkMax;
-import frc.team852.subsystem.ElevatorSubsystem;
+import frc.team852.lib.utils.SerialLidar;
+import frc.team852.subsystems.LimitTesterSub;
+import frc.team852.subsystems.NEOTesterSub;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
  * This provides a lot of flexibility
  */
+
 public class RobotMap {
     //Drivetrain Motors
-    public static SpeedController leftFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SpeedController leftBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SpeedController rightFront = new SparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SpeedController rightBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax leftFront = new CANSparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax leftBack = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightFront = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax rightBack = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //Elevator Motors //TODO Implement elevatorDistanceSensor
-    public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-    public static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static DigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
-    public static DigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
-    public static double elevatorDistanceError = 5;
-
+    //Elevator Motors
+    public static CANSparkMax neoTest = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static CANSparkMax neoTest2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //public static I2C elevatorDistance = new I2C();
 
+	//NEOTesterSub subsystem
+	public static NEOTesterSub neoTesterSub = new NEOTesterSub();
+
+	//LimitTesterSub subsystem
+	public static LimitTesterSub limitTesterSub = new LimitTesterSub(7);
+
+    public static SerialLidar lidar;
+   // public static I2C i2cLidar = new I2C(I2C.Port.kOnboard, 0x10);
 }
