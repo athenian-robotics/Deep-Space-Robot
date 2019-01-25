@@ -2,8 +2,8 @@ package frc.team852;
 
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.team852.lib.utils.SerialLidar;
-import frc.team852.subsystems.LimitTesterSub;
-import frc.team852.subsystems.NEOTesterSub;
+import frc.team852.subsystem.LimitTesterSub;
+import frc.team852.subsystem.NEOTesterSub;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses

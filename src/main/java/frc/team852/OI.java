@@ -2,9 +2,7 @@ package frc.team852;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team852.commands.LimitTester;
-import frc.team852.commands.NEOTester;
-import frc.team852.subsystems.NEOTesterSub;
+import frc.team852.command.LimitTester;
 
 public class OI {
 

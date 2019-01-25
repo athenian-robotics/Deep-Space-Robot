@@ -2,12 +2,12 @@
  * A simple-as-possible command tester for limit switches. intended as a base for future use.
  * @author Ezra Newman
  * @version 2019-01-19
- * @see frc.team852.subsystems.LimitTesterSub
+ * @see frc.team852.subsystem.LimitTesterSub
  **/
-package frc.team852.commands;
+package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.subsystems.LimitTesterSub;
+import frc.team852.subsystem.LimitTesterSub;
 
 public class LimitTester extends Command {
 	private final LimitTesterSub limitTesterSub = Robot.limitTesterSub;

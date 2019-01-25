@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.lib.utils.SerialLidar;
-import frc.team852.subsystems.LimitTesterSub;
-import frc.team852.subsystems.NEOTesterSub;
+import frc.team852.subsystem.LimitTesterSub;
+import frc.team852.subsystem.NEOTesterSub;
 
 /**
  * The VM is configured to automatically run this class, and to call the

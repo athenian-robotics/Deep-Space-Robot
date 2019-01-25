@@ -2,16 +2,13 @@
  * A simple-as-possible subsystem tester for the SPARKMAX/NEO motor controller/motor dynamic duo.
  * @author Ezra Newman
  * @version 2019-01-19
- * @see frc.team852.commands.NEOTester
+ * @see frc.team852.command.NEOTester
  **/
-package frc.team852.subsystems;
+package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.team852.RobotMap;
-import frc.team852.commands.LimitTester;
-import frc.team852.commands.NEOTester;
+import frc.team852.command.LimitTester;
 
 public class LimitTesterSub extends Subsystem {
 	private DigitalInput limit;
