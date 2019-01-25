@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.subsystem.ElevatorSubsystem;
-import frc.team852.utils.PIDControl;
+import frc.team852.lib.utils.PIDControl;
 
 public class ElevatorToPosition extends Command {
 
