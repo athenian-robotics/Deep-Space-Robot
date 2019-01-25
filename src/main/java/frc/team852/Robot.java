@@ -1,9 +1,12 @@
 package frc.team852;
 
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team852.lib.utils.SerialLidar;
 import frc.team852.subsystems.LimitTesterSub;
 import frc.team852.subsystems.NEOTesterSub;
 
@@ -31,6 +34,11 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
 		m_chooser.addOption("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
+
+		RobotMap.lidar = new SerialLidar(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+		Timer.delay(0.5);
+		RobotMap.lidar.setReadBufferSize(4500);
+		RobotMap.lidar.setWriteBufferSize(32);
 	}
 	
 	/**

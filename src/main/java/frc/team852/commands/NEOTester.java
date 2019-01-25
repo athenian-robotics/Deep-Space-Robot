@@ -6,7 +6,6 @@
  **/
 package frc.team852.commands;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.subsystems.NEOTesterSub;
 
@@ -39,17 +38,17 @@ public class NEOTester extends Command {
 	
 	@Override
 	protected void execute() {
-		neoTesterSub.setSpeed(OI.stick1.getY());
-		if(neoTesterSub.getEncoderPos()==0 || true){
-			System.out.println(neoTesterSub.getEncoderPos());
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		if(OI.stick1.getTrigger()) neoTesterSub.resetEncoders();
+//		neoTesterSub.setSpeed(OI.stick1.getY());
+//		if(neoTesterSub.getEncoderPos()==0 || true){
+//			System.out.println(neoTesterSub.getEncoderPos());
+//			try {
+//				Thread.sleep(10);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		if(OI.stick1.getTrigger()) neoTesterSub.resetEncoders();
 
-		System.out.println(neoTesterSub.getLidarDist());
+		neoTesterSub.getLidarDist();
 	}
 }

@@ -2,13 +2,15 @@ package frc.team852;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import frc.team852.lib.utils.SerialLidar;
+import frc.team852.subsystems.LimitTesterSub;
 import frc.team852.subsystems.NEOTesterSub;
-import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
  * This provides a lot of flexibility
  */
+
 public class RobotMap {
     //Drivetrain Motors
 //    public static CANSparkMax leftFront = new CANSparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -17,8 +19,8 @@ public class RobotMap {
 //    public static CANSparkMax rightBack = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //Elevator Motors
-    public static CANSparkMax neoTest = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSparkMax neoTest2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax neoTest = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static CANSparkMax neoTest2 = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     //public static I2C elevatorDistance = new I2C();
 
 	//NEOTesterSub subsystem
@@ -27,6 +29,6 @@ public class RobotMap {
 	//LimitTesterSub subsystem
 	public static LimitTesterSub limitTesterSub = new LimitTesterSub(7);
 
-
-    public static SerialPort lidar = new SerialPort(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+    public static SerialLidar lidar;
+   // public static I2C i2cLidar = new I2C(I2C.Port.kOnboard, 0x10);
 }
