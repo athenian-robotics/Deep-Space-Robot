@@ -26,7 +26,7 @@ public class SerialLidar extends SerialPort {
             currByte = RobotMap.lidar.read(1);
 
             if (lastByte[0] == 0x59 && currByte[0] == 0x59) {
-                currByte = RobotMap.lidar.read(1);
+                lastByte[0] = 0x00;
                 break;
             } else {
                 lastByte = currByte;
