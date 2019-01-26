@@ -1,6 +1,5 @@
 import grpc
-
-from proto import route_guide_pb2_grpc
+import CVData_pb2_grpc
 
 
 class GrpcInfo(object):

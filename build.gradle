@@ -1,10 +1,14 @@
 plugins {
     id "java"
+
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
+
     // Provide convenience executables for trying out the examples.
     id 'application'
+
     // ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier gradle versions
-    id 'com.google.protobuf' version '0.8.5'
+    id 'com.google.protobuf' version '0.8.8'
+
     // Generate IntelliJ IDEA's .idea & .iml project files
     id 'idea'
 }
@@ -107,21 +111,16 @@ jar {
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
 
-//applicationDistribution.into('bin') {
-//    //from(helloWorldServer)
-//    //from(helloWorldClient)
-//    fileMode = 0755
-//}
-
 wrapper {
-    gradleVersion = '5.0'
+    gradleVersion = '5.1.1'
 }
 
 startScripts.enabled = false
 
+
 task grpcServer(type: CreateStartScripts) {
     mainClassName = 'frc.team852.lib.gRPC.CVDataServer'
-    applicationName = 'helloworld-server'
+    applicationName = 'grpc-Server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
