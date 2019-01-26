@@ -7,9 +7,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
-import frc.team852.subsystem.ElevatorSubsystem;
-import frc.team852.subsystem.HatchSubsystem;
-import frc.team852.subsystem.WristSubsystem;
+import frc.team852.subsystem.*;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -17,6 +15,8 @@ import frc.team852.subsystem.WristSubsystem;
  */
 public class RobotMap {
 
+    //Drivetrain
+    public static Drivetrain driveSubsystem = new Drivetrain();
     //Drivetrain Motors
     private static SparkMax leftFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static SparkMax leftBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -52,5 +52,8 @@ public class RobotMap {
     //Hatch Subsystem
     public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2,3);
     public static HatchSubsystem hatchSubsystem = new HatchSubsystem();
+
+    //Cargo subsystem
+    public static CargoSubsystem cargoSubsystem = new CargoSubsystem();
 
 }

@@ -3,9 +3,9 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team852.OI
+import frc.team852.OI;
 import frc.team852.Robot;
-import frc.team852.RobotMap
+import frc.team852.RobotMap;
 
 import static frc.team852.OI.stick1;
 
