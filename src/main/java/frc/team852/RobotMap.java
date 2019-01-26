@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
+import frc.team852.subsystem.CargoSubsystem;
 import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.subsystem.HatchSubsystem;
 import frc.team852.subsystem.WristSubsystem;
@@ -48,6 +49,11 @@ public class RobotMap {
     public static SerialPort lidar = new SerialPort(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
 
     //public static I2C elevatorDistance = new I2C();
+
+
+    //Cargo subsystem
+    public static SparkMax cargoMotor = new SparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CargoSubsystem cargoSubsystem = new CargoSubsystem();
 
     //Hatch Subsystem
     public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2,3);
