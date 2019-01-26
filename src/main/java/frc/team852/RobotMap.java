@@ -7,10 +7,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
-import frc.team852.subsystem.CargoSubsystem;
-import frc.team852.subsystem.ElevatorSubsystem;
-import frc.team852.subsystem.HatchSubsystem;
-import frc.team852.subsystem.WristSubsystem;
+import frc.team852.subsystem.*;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses

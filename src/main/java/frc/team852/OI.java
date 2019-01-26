@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team852.command.CargoIntakeMove;
 import frc.team852.command.ElevatorToPosition;
 import frc.team852.command.OutputHatch;
 import frc.team852.command.WristTo90;
@@ -59,7 +60,12 @@ public class OI {
         new JoystickButton(stick1, 1).whenReleased(new ElevatorToPosition(100, .75));
         new JoystickButton(stick1, 2).whenReleased(new WristTo90());
 
+
         xboxA.whenPressed(new OutputHatch());
+
+        //Allows values to be passed through when xboxB or xboxY buttons are pressed
+        xboxB.whileHeld(new CargoIntakeMove());
+        xboxY.whileHeld(new CargoIntakeMove(-1));
     }
 
 
