@@ -1,5 +1,6 @@
 package frc.team852;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.subsystem.LimitTesterSub;
