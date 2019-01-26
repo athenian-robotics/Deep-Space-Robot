@@ -2,12 +2,13 @@ package frc.team852;
 
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
 import frc.team852.subsystem.ElevatorSubsystem;
+import frc.team852.subsystem.HatchSubsystem;
 import frc.team852.subsystem.WristSubsystem;
 
 /**
@@ -47,5 +48,9 @@ public class RobotMap {
     public static SerialPort lidar = new SerialPort(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
 
     //public static I2C elevatorDistance = new I2C();
+
+    //Hatch Subsystem
+    public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2,3);
+    public static HatchSubsystem hatchSubsystem = new HatchSubsystem();
 
 }

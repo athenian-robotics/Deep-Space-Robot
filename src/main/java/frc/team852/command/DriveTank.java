@@ -14,7 +14,8 @@ public class DriveTank extends Command
 
     public DriveTank()
     {
-        requires(Robot.DriveSubsystem);
+        super();
+        requires(Robot.driveSubsystem);
     }
 
     @Override

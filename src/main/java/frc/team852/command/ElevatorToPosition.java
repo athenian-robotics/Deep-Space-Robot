@@ -16,6 +16,7 @@ public class ElevatorToPosition extends Command {
 
     //TODO Implement speed, elevatorDistanceSensor
     public ElevatorToPosition(double target, double speed) {
+        super();
         requires(Robot.elevatorSubsystem);
         this.targetDistance = target;
         //this.currentDistance = RobotMap.elevatorDistanceSensor.get();

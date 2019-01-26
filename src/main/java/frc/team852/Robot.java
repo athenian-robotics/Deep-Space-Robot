@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.subsystem.ElevatorSubsystem;
+import frc.team852.subsystem.HatchSubsystem;
 import frc.team852.subsystem.WristSubsystem;
 
 /**
@@ -20,6 +21,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static ElevatorSubsystem elevatorSubsystem = RobotMap.elevatorSubsystem;
   public static WristSubsystem wristSubsystem = RobotMap.wristSubsystem;
+  public static HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
+  public static CargoSubsystem cargoSubsystem = RobotMap.cargoSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be
