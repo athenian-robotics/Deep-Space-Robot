@@ -1,8 +1,11 @@
 package frc.team852;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team852.command.ElevatorToPosition;
+import frc.team852.command.OutputHatch;
 import frc.team852.command.WristTo90;
 
 public class OI {
@@ -35,19 +38,28 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ElevatorToPosition());
 
-    //public static Joystick leftStick = new Joystick(0);
-    //public static Joystick rightStick = new Joystick(1);
-
-    //public static Joystick xbox = new Joystick(2);
-
-    //public static Button xboxA = new JoystickButton(xbox, 1);
-
     public static Joystick stick1 = new Joystick(0);
     public static Joystick stick2 = new Joystick(1);
+    public static XboxController xbox = new XboxController(2);
+
+    // Joystick buttons start at 1
+    public static Button xboxA = new JoystickButton(xbox, 1);
+    public static Button xboxB = new JoystickButton(xbox, 2);
+    public static Button xboxX = new JoystickButton(xbox, 3);
+    public static Button xboxY = new JoystickButton(xbox, 4);
+    public static Button xboxLB = new JoystickButton(xbox, 5);
+    public static Button xboxRB = new JoystickButton(xbox, 6);
+    public static Button xboxBack = new JoystickButton(xbox, 7);
+    public static Button xboxStart = new JoystickButton(xbox, 8);
+    public static Button xboxLS = new JoystickButton(xbox, 9);
+    public static Button xboxRS = new JoystickButton(xbox, 10);
+
     public OI(){
         // Only created once, init and execute are called when button is released
         new JoystickButton(stick1, 1).whenReleased(new ElevatorToPosition(100, .75));
         new JoystickButton(stick1, 2).whenReleased(new WristTo90());
+
+        xboxA.whenPressed(new OutputHatch());
     }
 
 
