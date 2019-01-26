@@ -18,6 +18,8 @@ import frc.team852.subsystem.WristSubsystem;
  */
 public class RobotMap {
 
+    //Drivetrain
+    public static Drivetrain driveSubsystem = new Drivetrain();
     //Drivetrain Motors
     private static SparkMax leftFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static SparkMax leftBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
