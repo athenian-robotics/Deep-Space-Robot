@@ -1,15 +1,13 @@
 import logging
 import sys
 
-# appended path so program can read the proto files
-
-sys.path.append('build/generated/source/python')
-
-
-import CVData_pb2
 import grpc_info
 from CVObject import *
 from enum import Enum
+
+# appended path so program can read the proto files
+sys.path.append('build/generated/source/python')
+import CVData_pb2
 
 
 class RouteClient:

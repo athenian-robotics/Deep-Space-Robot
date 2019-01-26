@@ -13,7 +13,7 @@ class GrpcInfo(object):
 
     def __enter__(self):
         self._channel = grpc.insecure_channel(self._host + ":" + str(self._port))
-        self._stub = route_guide_pb2_grpc.OpenCVInfoStub(self._channel)
+        self._stub = CVData_pb2_grpc.OpenCVInfoStub(self._channel)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
