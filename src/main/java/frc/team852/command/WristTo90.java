@@ -10,6 +10,7 @@ public class WristTo90 extends Command{
     private final WristSubsystem wrist = Robot.wristSubsystem;
 
     public WristTo90() {
+        super();
         requires(Robot.wristSubsystem);
     }
 

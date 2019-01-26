@@ -14,6 +14,7 @@ public class ElevatorPositionHold extends Command
 
     //TODO Implement elevatorDistanceSensor
     public  ElevatorPositionHold() {
+        super();
         requires(Robot.elevatorSubsystem);
         //this.targetDistance = RobotMap.elevatorDistanceSensor.get();
     }

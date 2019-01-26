@@ -3,6 +3,7 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.subsystem.HatchSubsystem;
 
@@ -13,6 +14,7 @@ public class OutputHatch extends Command {
 
     public OutputHatch(){
         super();
+        requires(Robot.hatchSubsystem);
         time = Timer.getFPGATimestamp();
     }
 
