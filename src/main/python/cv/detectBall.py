@@ -83,7 +83,7 @@ def main():
 
             # Display images
             cv2.imshow('Original', image)
-            
+
             key = cv2.waitKey(30) & 0xFF
 
             if key == ord('q'):

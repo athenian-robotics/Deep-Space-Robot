@@ -15,6 +15,7 @@ def get_center(contour):
     area = int(momt["m00"])
     return int(momt["m10"] / area), int(momt["m01"] / area)
 
+
 def save_image(frame):
     file_name = "ct-{0}.png".format(datetime.datetime.now().strftime("%H-%M-%S"))
     cv2.imwrite(file_name, frame)

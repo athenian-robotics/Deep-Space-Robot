@@ -116,3 +116,20 @@ jar {
 wrapper {
     gradleVersion = '5.0'
 }
+
+startScripts.enabled = false
+
+task grpcServer(type: CreateStartScripts) {
+    mainClassName = 'frc.team852.lib.gRPC.CVDataServer'
+    applicationName = 'helloworld-server'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+
+applicationDistribution.into('bin') {
+    from(grpcServer)
+    fileMode = 0755
+}
+
+
