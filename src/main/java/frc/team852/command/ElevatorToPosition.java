@@ -25,7 +25,8 @@ public class ElevatorToPosition extends Command {
     @Override
     protected boolean isFinished() {
         //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
-        return this.currentDistance >= targetDistance-RobotMap.elevatorDistanceError && this.currentDistance <= targetDistance+RobotMap.elevatorDistanceError;
+        return this.currentDistance >= targetDistance-RobotMap.elevatorDistanceError
+                && this.currentDistance <= targetDistance+RobotMap.elevatorDistanceError;
     }
 
     @Override
