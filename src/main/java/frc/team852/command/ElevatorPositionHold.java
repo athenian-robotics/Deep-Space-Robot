@@ -2,11 +2,12 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.lib.utils.PIDControl;
+import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorPositionHold extends Command
 {
+
     private double targetDistance, move;
     private static boolean wasInterrupted = false;
     private final ElevatorSubsystem elevator = Robot.elevatorSubsystem;
@@ -25,10 +26,7 @@ public class ElevatorPositionHold extends Command
     }
 
     @Override
-    protected void end()
-    {
-
-    }
+    protected void end() {}
 
     @Override
     protected void interrupted()
@@ -45,10 +43,8 @@ public class ElevatorPositionHold extends Command
             wasInterrupted = false;
         }
 
-
         //TODO tune PID loop
         //move = pid.getPID(this.targetDistance, RobotMap.elevatorDistanceSensor.get());
         elevator.setSpeed(move);
     }
-
 }
