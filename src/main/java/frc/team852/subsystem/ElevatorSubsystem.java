@@ -1,6 +1,5 @@
 package frc.team852.subsystem;
 
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.ElevatorPositionHold;
@@ -9,7 +8,6 @@ import frc.team852.lib.utils.SparkMaxGroup;
 public class ElevatorSubsystem extends Subsystem {
 
   private SparkMaxGroup elevatorMotors = RobotMap.elevatorMotors;
-  private SerialPort lidar = RobotMap.lidar;
 
   //TODO fix inversion motor & check encoder tick up/down
 
@@ -42,8 +40,9 @@ public class ElevatorSubsystem extends Subsystem {
     elevatorMotors.resetEncoders();
   }
 
-  public String getLidarDistance() {
-    return lidar.readString();
+  //Returns an Int array with [distance,strength]
+  public int[] getLidarDistance() {
+    return RobotMap.lidar.getLidarDistance();
   }
 
 }

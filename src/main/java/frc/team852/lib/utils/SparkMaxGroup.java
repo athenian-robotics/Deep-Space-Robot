@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import static edu.wpi.first.wpilibj.PIDSourceType.kDisplacement;
 
-public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PIDSource {
+public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PIDOutput {
 
   private ArrayList<SparkMax> speedControllerList = new ArrayList<>();
   private PIDSourceType m_sourceType;

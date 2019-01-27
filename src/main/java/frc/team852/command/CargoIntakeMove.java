@@ -41,12 +41,12 @@ public class CargoIntakeMove extends Command {
     @Override
     protected void end() {
         //Set the motor speed to 0 that way they won't move
-        RobotMap.cargoMotor.set(0);
+        RobotMap.cargoSubsystem.stopMotors();
     }
 
     @Override
     protected void execute() {
         //Sets the speed to a given value when button is pressed
-        RobotMap.cargoMotor.set(speed);
+        RobotMap.cargoSubsystem.setSpeed(speed);
     }
 }

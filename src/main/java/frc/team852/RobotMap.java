@@ -1,11 +1,13 @@
 package frc.team852;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.lib.utils.InvertedDigitalInput;
+import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
 import frc.team852.subsystem.*;
@@ -26,7 +28,9 @@ public class RobotMap {
     public static SparkMaxGroup leftDrive = new SparkMaxGroup(leftFront, leftBack);
     public static SparkMaxGroup rightDrive = new SparkMaxGroup(rightFront, rightBack);
     public static Encoder test = new Encoder(0,1);
-    //Elevator //TODO Implement elevatorDistanceSensor
+
+
+    //Elevator
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     //left and right motors
     private static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -35,7 +39,11 @@ public class RobotMap {
     //limit switches
     public static DigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
     public static DigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
+    //Lidar
+    public static SerialLidar lidar = new SerialLidar(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+
     public static double elevatorDistanceError = 5;
+
 
     //Wrist
     public static WristSubsystem wristSubsystem = new WristSubsystem();
@@ -44,10 +52,6 @@ public class RobotMap {
     //limit switches
     public static DigitalInput wristLowerLimit = new InvertedDigitalInput(2);
     public static DigitalInput wristUpperLimit = new InvertedDigitalInput(3);
-
-    //error
-    public static SerialPort lidar = new SerialPort(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
-
     //public static I2C elevatorDistance = new I2C();
 
 
@@ -62,4 +66,6 @@ public class RobotMap {
     //Climber Subsystem
     public static SparkMax climberMotor = new SparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+
+    public static AHRS gyroscope = Robot.gyro;
 }

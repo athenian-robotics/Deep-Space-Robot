@@ -2,7 +2,6 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.lib.utils.PIDControl;
 import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorPositionHold extends Command
@@ -10,7 +9,7 @@ public class ElevatorPositionHold extends Command
     private double targetDistance, move;
     private static boolean wasInterrupted = false;
     private final ElevatorSubsystem elevator = Robot.elevatorSubsystem;
-    private PIDControl pid = new PIDControl(0,0,0);
+    //private PIDControl pid = new PIDControl(0,0,0);
 
     //TODO Implement elevatorDistanceSensor
     public  ElevatorPositionHold() {
