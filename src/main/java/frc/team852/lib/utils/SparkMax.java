@@ -28,12 +28,22 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
    * @param sourceType Read from the encoder in displacement or rate mode
    */
   public SparkMax(int channel, MotorType motorType, PIDSourceType sourceType) {
+    this(channel, motorType, sourceType, false);
+  }
+  /**
+   * @param channel    CAN id of the SparkMax
+   * @param motorType  Brushed or Brushless motor connected (Really important)
+   * @param sourceType Read from the encoder in displacement or rate mode
+   * @param inverted   Reverse the motor direction if true
+   */
+  public SparkMax(int channel, MotorType motorType, PIDSourceType sourceType, boolean inverted) {
     super(channel, motorType);
     this.resetOffset = 0.0;
     this.lastPos = 0.0;
     this.val = 0.0;
     this.enc = getEncoder();
     this.m_sourceType = sourceType;
+    this.setInverted(inverted);
   }
 
 
@@ -56,7 +66,6 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
   }
 
   /**
-   *
    * @param pidSource The new source type (displacement or rate)
    */
   @Override

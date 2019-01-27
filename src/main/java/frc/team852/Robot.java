@@ -1,6 +1,8 @@
 package frc.team852;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.subsystem.*;
@@ -13,16 +15,14 @@ import frc.team852.subsystem.*;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static OI oi;
+  public static Drivetrain drivetrain;
+  public static DoubleSolenoid.Value gearstate;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  public static Drivetrain driveSubsystem = RobotMap.driveSubsystem;
-  public static ElevatorSubsystem elevatorSubsystem = RobotMap.elevatorSubsystem;
-  public static WristSubsystem wristSubsystem = RobotMap.wristSubsystem;
-  public static HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
-  public static CargoSubsystem cargoSubsystem = RobotMap.cargoSubsystem;
-  public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -30,9 +30,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    new RobotMap(); // Empty declaration
+    drivetrain = new Drivetrain();
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    oi = new OI(); // Must be defined last
   }
 
   /**
@@ -45,6 +50,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    try {
+      Scheduler.getInstance().run();
+    } catch (Exception e) {
+      System.out.println("Exception in robotPeriodic");
+      e.printStackTrace();
+    }
+    // Do stuff like zeroing sensors here (i.e. arm is on limit switch-> zero the encoder)
+  }
+
+  /**
+   * This is called whenever the Robot enters disabled mode
+   * Use this method to reset any subsystem information on disable
+   */
+  @Override
+  public void disabledInit() {
+
   }
 
   /**
@@ -81,11 +102,17 @@ public class Robot extends TimedRobot {
     }
   }
 
+  @Override
+  public void teleopInit() {
+  }
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+    // Make sure to cancel any autonomous stuff
+    // Might not be needed as sandstorm etc
   }
 
   /**

@@ -36,15 +36,6 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
     speedControllerList.forEach(x -> x.setPIDSourceType(m_sourceType));
   }
 
-  /**
-   * @return The average of all encoder positions within group
-   */
-  public double getEncoderPos() {
-    double sum = speedControllerList.stream().mapToDouble(SparkMax::getEncoderPosition).sum();
-    if (speedControllerList.size() == 0)
-      return 0;
-    return sum / speedControllerList.size();
-  }
 
   public void resetEncoders() {
     speedControllerList.forEach(SparkMax::resetEncoder);
@@ -61,11 +52,21 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
     return m_sourceType;
   }
 
+  /**
+   * @return The average PID source/output for each SparkMax in the group
+   */
   @Override
   public double pidGet() {
-    double sum = speedControllerList.stream().mapToDouble(SparkMax::pidGet).sum();
     if (speedControllerList.size() == 0)
       return 0;
+    double sum = speedControllerList.stream().mapToDouble(SparkMax::pidGet).sum();
     return sum / speedControllerList.size();
+  }
+
+  /**
+   * @param inverted The inversion value to set for each speed controller in the group
+   */
+  public void setInverted(boolean inverted) {
+    speedControllerList.forEach(sc -> sc.setInverted(inverted));
   }
 }
