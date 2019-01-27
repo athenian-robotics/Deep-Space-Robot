@@ -9,15 +9,12 @@ public class ClimberMove extends Command {
 
     public ClimberMove(double speed) {
         super();
+        requires(Robot.climberSubsystem);
         this.speed = speed;
     }
 
     public ClimberMove() {
         this(1);
-    }
-
-    protected void initialize() {
-        requires(Robot.climberSubsystem);
     }
 
     protected void interrupted() {
@@ -26,7 +23,7 @@ public class ClimberMove extends Command {
 
     protected void end() {
         RobotMap.climberMotor.resetEncoder();
-        RobotMap.climberMotor.set(0);
+        RobotMap.climberSubsystem.stopMotors();
     }
 
 
