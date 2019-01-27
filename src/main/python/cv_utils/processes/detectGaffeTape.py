@@ -3,7 +3,7 @@ import numpy
 
 from grpc_utils.CVObject import *
 #range of values to scan
-low = numpy.array([100, 100, 50])
+low = numpy.array([0, 100, 50])
 high = numpy.array([110, 255, 255])
 
 
@@ -19,9 +19,9 @@ def detectGaffeTape(frame):
         ordered = sorted(contours, key=cv2.contourArea, reverse=True) #arrange contours by area
 
         contour = ordered[0] #biggest contour
-        bottompt = sorted(contour, key=lambda a:a[0][0])[0][1] #find the point with the smallest y value in the contour
+        bottompt = sorted(contour, key=lambda a:a[0][1])[0][0] #find the point with the smallest y value in the contour
         bottomobj = Point(bottompt[0], bottompt[1]) #create Point object ^^^
-        toppt = sorted(contour, key=lambda a:a[0][0])[-1][1] #find the point with the largest y value in the contour
+        toppt = sorted(contour, key=lambda a:a[0][1])[-1][0] #find the point with the largest y value in the contour
         topobj = Point(toppt[0], toppt[1]) #create Point object ^^^
         centroid = Point(int((bottompt[0] + toppt[0]) / 2), int((bottompt[1] + toppt[1]) / 2)) #find centroid as the average of ^^^
         if len(contour) > 5:
