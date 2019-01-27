@@ -1,11 +1,11 @@
 /**
  * Generates splines between each waypoint (using CubicSpline class) and generates equidistant points on the spline
  */
-package frc.team852.lib.geometry;
+package frc.team852.lib.path.geometry;
 
-import frc.team852.lib.utilities.CSVWritable;
-import frc.team852.lib.utilities.Pose2D;
-import frc.team852.lib.utilities.Trajectory;
+import frc.team852.lib.path.utilities.CSVWritable;
+import frc.team852.lib.path.utilities.Pose2D;
+import frc.team852.lib.path.utilities.Trajectory;
 
 import java.util.ArrayList;
 import java.util.Arrays;

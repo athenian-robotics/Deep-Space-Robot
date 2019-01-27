@@ -2,9 +2,9 @@
  * Class to write any CSVWritable objects to CSV
  * This is the main file; run the main() method to generate the path and save in CSV
  */
-package frc.team852.lib.utilities;
+package frc.team852.lib.path.utilities;
 
-import frc.team852.lib.geometry.PathGenerator;
+import frc.team852.lib.path.geometry.PathGenerator;
 
 import java.io.File;
 import java.io.FileWriter;

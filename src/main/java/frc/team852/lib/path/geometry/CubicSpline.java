@@ -1,8 +1,8 @@
-package frc.team852.lib.geometry;
+package frc.team852.lib.path.geometry;
 
-import frc.team852.lib.utilities.Pose2D;
-import frc.team852.lib.utilities.Rotation2D;
-import frc.team852.lib.utilities.Translation2D;
+import frc.team852.lib.path.utilities.Pose2D;
+import frc.team852.lib.path.utilities.Rotation2D;
+import frc.team852.lib.path.utilities.Translation2D;
 
 public class CubicSpline extends Spline {
     private final double ax, bx, cx, dx, ay, by, cy, dy, x0, x1, dx0, dx1, y0, y1, dy0, dy1;

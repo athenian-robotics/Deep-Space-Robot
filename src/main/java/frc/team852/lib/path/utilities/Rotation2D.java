@@ -1,7 +1,7 @@
 /**
  * Data type used for specifying heading/rotation of robot and methods to manipulate it, implements Rotation2D
  */
-package frc.team852.lib.utilities;
+package frc.team852.lib.path.utilities;
 
 public class Rotation2D implements CSVWritable {
 

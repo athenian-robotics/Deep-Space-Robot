@@ -2,7 +2,7 @@
  * Data type that implements CSVWritable
  * Describes "pose" with Translation2D and Rotation2D objects
  */
-package frc.team852.lib.utilities;
+package frc.team852.lib.path.utilities;
 
 public class Pose2D implements CSVWritable {
 

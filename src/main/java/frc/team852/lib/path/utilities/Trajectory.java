@@ -1,7 +1,7 @@
 /**
  * Data type that contains a list of Pose2D objects and methods to interact with them
  */
-package frc.team852.lib.utilities;
+package frc.team852.lib.path.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;

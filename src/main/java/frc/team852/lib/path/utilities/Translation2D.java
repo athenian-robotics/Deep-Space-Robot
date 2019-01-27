@@ -1,7 +1,7 @@
 /**
  * Data type to keep track of location in an xy-plane, implements Translation2D
  */
-package frc.team852.lib.utilities;
+package frc.team852.lib.path.utilities;
 
 public class Translation2D implements CSVWritable {
 

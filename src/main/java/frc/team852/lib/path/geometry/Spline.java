@@ -1,11 +1,11 @@
 /**
  * Abstract class extended by CubicSpline
  */
-package frc.team852.lib.geometry;
+package frc.team852.lib.path.geometry;
 
-import frc.team852.lib.utilities.Pose2D;
-import frc.team852.lib.utilities.Rotation2D;
-import frc.team852.lib.utilities.Translation2D;
+import frc.team852.lib.path.utilities.Pose2D;
+import frc.team852.lib.path.utilities.Rotation2D;
+import frc.team852.lib.path.utilities.Translation2D;
 
 public abstract class Spline {
     private Pose2D start;

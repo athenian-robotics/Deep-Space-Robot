@@ -3,7 +3,9 @@
  * Contains a Pose2D (Translation2D and Rotation2D) along with curvature and change in curvature (dcurvature_ds)
  */
 
-package frc.team852.lib.utilities;
+package frc.team852.lib.path.utilities;
+
+import frc.team852.lib.path.utilities.Pose2D;
 
 public class Pose2DWithCurvature implements CSVWritable {
     private final Pose2D pose;
