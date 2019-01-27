@@ -23,6 +23,11 @@ public class ElevatorToPosition extends Command {
     }
 
     @Override
+    protected void initialize(){
+        elevator.resetEncoders();
+    }
+
+    @Override
     protected boolean isFinished() {
         //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
         if (this.currentDistance >= targetDistance - RobotMap.elevatorDistanceError

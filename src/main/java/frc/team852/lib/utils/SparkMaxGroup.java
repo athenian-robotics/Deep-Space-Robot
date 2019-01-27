@@ -12,7 +12,7 @@ import static edu.wpi.first.wpilibj.PIDSourceType.kDisplacement;
 
 public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PIDSource {
 
-  private ArrayList<SparkMax> speedControllerList;
+  private ArrayList<SparkMax> speedControllerList = new ArrayList<>();
   private PIDSourceType m_sourceType;
 
   /**
