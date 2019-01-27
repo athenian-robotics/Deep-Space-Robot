@@ -1,27 +1,25 @@
 import logging
 import sys
 
-import grpc_info
 from CVObject import *
 from enum import Enum
+import grpc_info
 
 # appended path so program can read the proto files
 sys.path.append('build/generated/source/python')
 import CVData_pb2
 
-
 class RouteClient:
-    class ClientTypes(Enum):
-        CVData = "sendCVData"
-        FrameData = "sendFrameSize"
 
-    @staticmethod
-    def sendFrameSize(grpcInfo, width: int, height: int):
-        response = grpcInfo.stub.SendFrameSize(x=width, y=height)
+    def __init__(self, host: str, port):
+        self.grpcInfo = grpc_info.GrpcInfo(host=host, port=port)
+
+    def sendFrameSize(self, width: int, height: int):
+        data = CVData_pb2.FrameSize(x=width, y=height)
+        response = self.grpcInfo.stub.SendFrameSize(data)
         print("frame size set to: {}".format(response.x, response.y))
 
-    @staticmethod
-    def sendCVData(grpcInfo, CVBulk: CVData):
+    def sendCVData(self, CVBulk: CVData):
         def newPoint(p: Point):
             return CVData_pb2.Point(x=p.x, y=p.y)
 
@@ -46,26 +44,10 @@ class RouteClient:
                                         centroid=newPoint(CVBulk.gaffeTape.centroid),
                                         back=newPoint(CVBulk.gaffeTape.back))
 
-        grpcInfo.stub.SendCVData(left=glt, right=grt, tape=ggt)
+        data = CVData_pb2.CVData(left=glt, right=grt, tape=ggt)
+        self.grpcInfo.stub.SendCVData(data)
         print(toString(CVBulk))
 
-    @staticmethod
-    def main(typecheck: ClientTypes, kwargs):
-        logger = logging.getLogger(__name__)
-        try:
-            with grpc_info.GrpcInfo(host='localhost:', port=50051) as grpcInfo:
-                if len(kwargs) == 2:
-                    eval(typecheck.value)(grpcInfo, kwargs.get("width"), kwargs.get("height"))
-                elif len(kwargs) == 1:
-                    eval(typecheck.value)(grpcInfo, kwargs.get("CVBulk"))
-
-        except BaseException as e:
-            logger.error("Failure with: [{0}]".format(e))
-            return
-
-    # Type is CVData and FrameData
-    @staticmethod
-    def sendInfo(typecheck: ClientTypes = None, **kwargs):
-        assert typecheck is not None
-        logging.basicConfig()
-        RouteClient.main(typecheck, kwargs)
+k = RouteClient("localhost", 50051)
+k.sendFrameSize(width=1, height=2)
+k.grpcInfo.close()

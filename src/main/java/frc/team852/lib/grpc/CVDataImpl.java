@@ -1,6 +1,5 @@
-package frc.team852.lib.gRPC;
+package frc.team852.lib.grpc;
 
-import com.google.common.collect.Lists;
 import com.google.protobuf.Empty;
 import frc.team852.DeepSpaceRobot.CVData;
 import frc.team852.DeepSpaceRobot.FrameSize;
@@ -11,9 +10,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
-
     @Override
-    public void setFrameSize (FrameSize request, StreamObserver<Empty> responseObserver) {
+    public void sendFrameSize(FrameSize request, StreamObserver<Empty> responseObserver) {
         Empty reply = Empty.newBuilder().build();
         System.out.print(request);
         responseObserver.onNext(reply);

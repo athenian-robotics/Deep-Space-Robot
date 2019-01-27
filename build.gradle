@@ -119,7 +119,7 @@ startScripts.enabled = false
 
 
 task grpcServer(type: CreateStartScripts) {
-    mainClassName = 'frc.team852.lib.gRPC.CVDataServer'
+    mainClassName = 'frc.team852.lib.grpc.CVDataServer'
     applicationName = 'grpc-Server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
