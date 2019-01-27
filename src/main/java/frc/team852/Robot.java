@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   public static WristSubsystem wristSubsystem = RobotMap.wristSubsystem;
   public static HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
   public static CargoSubsystem cargoSubsystem = RobotMap.cargoSubsystem;
-  public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
+  //public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   /**
    * This autonomous (along with the chooser code above) shows how to select
    * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
+   * chooser code works with the java SmartDashboard. If you prefer the
    * LabVIEW Dashboard, remove all of the chooser code and uncomment the
    * getString line to get the auto name from the text box below the Gyro
    *

@@ -61,5 +61,5 @@ public class RobotMap {
 
     //Climber Subsystem
     public static SparkMax climberMotor = new SparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+    //public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 }
