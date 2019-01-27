@@ -15,5 +15,18 @@
     }
   ],
   "jniDependencies": [],
-  "cppDependencies": []
+  "cppDependencies": [
+    {
+      "groupId": "com.revrobotics.frc",
+      "artifactId": "SparkMax-cpp",
+      "version": "1.0.27",
+      "libName": "libSparkMax",
+      "headerClassifier": "headers",
+      "sharedLibrary": false,
+      "skipInvalidPlatforms": true,
+      "binaryPlatforms": [
+        "linuxathena"
+      ]
+    }
+  ]
 }
