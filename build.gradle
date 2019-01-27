@@ -63,9 +63,9 @@ dependencies {
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-    compile group: 'io.prometheus', name: 'simpleclient', version: '2.6.1'
-    compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: '2.6.1'
-    compile group: 'io.prometheus', name: 'simpleclient_httpserver', version: '2.6.1'
+    implementation group: 'io.prometheus', name: 'simpleclient', version: '0.6.0'
+    implementation group: 'io.prometheus', name: 'simpleclient_hotspot', version: '0.6.0'
+    implementation group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.6.0'
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     compileOnly "javax.annotation:javax.annotation-api:1.2"
