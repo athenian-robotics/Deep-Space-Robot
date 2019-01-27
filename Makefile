@@ -26,7 +26,7 @@ python-stubs:
 
 # initiate java server
 java-server:
-	build/install/HelloWorldGrpc/bin/hello-world-server
+	build/install/Deep-Space-Robot/bin/grpc-Server
 
 # initiated python server, nonexistent as of now
 python-server:
@@ -34,7 +34,7 @@ python-server:
 
 # initiate python client, nonapplicable, the usage of client is different and can be found under src/main/python/grpc
 python-client:
-	python3 src/main/python/greeter_client.py
+	python3 src/main/python/grpc_util/routeClient.py
 
 # initiate java client, not applicable
 java-client:
