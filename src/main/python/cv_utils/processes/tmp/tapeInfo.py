@@ -1,5 +1,4 @@
 import cv2
-import numpy
 from arc852 import camera
 
 cam = camera.Camera()

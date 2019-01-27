@@ -1,13 +1,15 @@
 import datetime
 import logging
 import platform
-
+from enum import Enum
 import cv2
 
-RED = (0, 0, 255)
-GREEN = (0, 255, 0)
-BLUE = (255, 0, 0)
-YELLOW = (0, 255, 255)
+
+class Colors(Enum):
+    RED = (0, 0, 255)
+    GREEN = (0, 255, 0)
+    BLUE = (255, 0, 0)
+    YELLOW = (0, 255, 255)
 
 
 def get_center(contour):

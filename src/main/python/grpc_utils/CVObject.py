@@ -20,9 +20,14 @@ class GaffeTape:
         self.back = back
         self.centroid = centroid
 
+class DoubleTape:
+    def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape):
+        self.leftTape = leftTape
+        self.rightTape = rightTape
 
 class CVData:
     def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape, gaffeTape: GaffeTape):
         self.leftTape = leftTape
         self.rightTape = rightTape
         self.gaffeTape = gaffeTape
+
