@@ -15,9 +15,10 @@ public class Drivetrain extends Subsystem {
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
-    // TODO please finish this
-    //leftSpeed =
+    leftSpeed = leftSpeed > 1 ? 1 : (leftSpeed < -1 ? -1 : leftSpeed);
+    rightSpeed = rightSpeed > 1 ? 1 : (rightSpeed < -1 ? -1 : rightSpeed);
+    leftDrive.set(leftSpeed);
+    rightDrive.set(rightSpeed);
   }
-
 
 }

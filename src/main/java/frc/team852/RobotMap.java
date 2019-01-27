@@ -3,6 +3,7 @@ package frc.team852;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SparkMax;
@@ -24,7 +25,7 @@ public class RobotMap {
     private static SparkMax rightBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static SparkMaxGroup leftDrive = new SparkMaxGroup(leftFront, leftBack);
     public static SparkMaxGroup rightDrive = new SparkMaxGroup(rightFront, rightBack);
-
+    public static Encoder test = new Encoder(0,1);
     //Elevator //TODO Implement elevatorDistanceSensor
     public static ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     //left and right motors
