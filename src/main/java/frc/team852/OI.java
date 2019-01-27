@@ -57,7 +57,7 @@ public class OI {
 
     public OI(){
         // Only created once, init and execute are called when button is released
-        new JoystickButton(stick1, 1).whenReleased(new ElevatorToPosition(100, .75));
+        new JoystickButton(stick1, 1).whenReleased(new ElevatorToPosition(100));
         new JoystickButton(stick1, 2).whenReleased(new WristTo90());
 
 

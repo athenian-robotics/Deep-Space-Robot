@@ -14,8 +14,12 @@ public class OutputHatch extends Command {
 
     public OutputHatch(){
         super();
-        requires(Robot.hatchSubsystem);
         time = Timer.getFPGATimestamp();
+    }
+
+    @Override
+    protected void initialize(){
+        requires(Robot.hatchSubsystem);
     }
 
     @Override

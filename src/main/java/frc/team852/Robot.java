@@ -1,5 +1,8 @@
 package frc.team852;
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +25,8 @@ public class Robot extends TimedRobot {
   public static WristSubsystem wristSubsystem = RobotMap.wristSubsystem;
   public static HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
   public static CargoSubsystem cargoSubsystem = RobotMap.cargoSubsystem;
-  //public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
+  public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
+  public static AHRS gyro;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -33,6 +37,12 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    try {
+      gyro = new AHRS(SerialPort.Port.kUSB);
+    } catch (RuntimeException ex ) {
+      DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+    }
   }
 
   /**
@@ -50,7 +60,7 @@ public class Robot extends TimedRobot {
   /**
    * This autonomous (along with the chooser code above) shows how to select
    * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the java SmartDashboard. If you prefer the
+   * chooser code works with the Java SmartDashboard. If you prefer the
    * LabVIEW Dashboard, remove all of the chooser code and uncomment the
    * getString line to get the auto name from the text box below the Gyro
    *

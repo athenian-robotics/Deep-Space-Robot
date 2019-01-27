@@ -2,7 +2,6 @@ package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
-import frc.team852.command.CargoIntakeMove;
 
 public class CargoSubsystem extends Subsystem {
 
@@ -12,7 +11,6 @@ public class CargoSubsystem extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new CargoIntakeMove());
     }
 
     public void stopMotors() {
