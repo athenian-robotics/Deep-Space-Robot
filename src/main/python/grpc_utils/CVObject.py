@@ -26,3 +26,9 @@ class CVData:
         self.leftTape = leftTape
         self.rightTape = rightTape
         self.gaffeTape = gaffeTape
+
+
+class DoubleTape:
+    def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape):
+        self.leftTape = leftTape
+        self.rightTape = rightTape
