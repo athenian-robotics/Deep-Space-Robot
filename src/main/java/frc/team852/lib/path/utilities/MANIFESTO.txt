@@ -1,0 +1,5 @@
+Revision: 2018-10-05 @ 8:58 AM
+
+Style Guide for Abstract Modeling Objects (e.g. Pose2D)
+ - Each object should implement at least one interface
+ - Each interface should extend JSONWritable
