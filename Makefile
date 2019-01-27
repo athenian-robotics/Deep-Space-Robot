@@ -2,7 +2,7 @@ default: all
 
 all: clean stubs bin
 
-stubs: java-stubs python-stubs
+stubs: clean java-stubs python-stubs
 
 bin: java-bin
 
@@ -34,9 +34,9 @@ python-server:
 
 # initiate python client, nonapplicable, the usage of client is different and can be found under src/main/python/grpc
 python-client:
-	python3 src/main/python/grpc_util/routeClient.py
+	python3 src/main/python/grpc_utils/routeClient.py
 
 # initiate java client, not applicable
 java-client:
-	build/install/HelloWorldGrpc/bin/hello-world-client
+	build/install/Deep-Space-Robot/bin/grpc-Server
 

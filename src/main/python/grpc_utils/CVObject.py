@@ -10,7 +10,7 @@ class ReflectiveTape:
         self.size = size
         self.topInside = topInside
         self.centroid = centroid
-        self.bottomOutside = bottomOutside,
+        self.bottomOutside = bottomOutside
 
 
 class GaffeTape:
