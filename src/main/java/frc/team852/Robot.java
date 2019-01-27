@@ -3,7 +3,7 @@ package frc.team852;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team852.subsystem.ElevatorSubsystem;
+import frc.team852.subsystem.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,7 +17,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  public static Drivetrain driveSubsystem = RobotMap.driveSubsystem;
   public static ElevatorSubsystem elevatorSubsystem = RobotMap.elevatorSubsystem;
+  public static WristSubsystem wristSubsystem = RobotMap.wristSubsystem;
+  public static HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
+  public static CargoSubsystem cargoSubsystem = RobotMap.cargoSubsystem;
+  public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be

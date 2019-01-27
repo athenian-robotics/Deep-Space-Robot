@@ -3,13 +3,13 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
-import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.lib.utils.PIDControl;
+import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorToPosition extends Command {
 
     private double targetDistance, currentDistance, speed;
-    private boolean raising;
+    boolean raising;
     private final ElevatorSubsystem elevator = Robot.elevatorSubsystem;
     private double distance = 0;
     private PIDControl pid = new PIDControl(0,0,0);
@@ -23,23 +23,37 @@ public class ElevatorToPosition extends Command {
     }
 
     @Override
+    protected void initialize(){
+        elevator.resetEncoders();
+    }
+
+    @Override
     protected boolean isFinished() {
         //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
-        return this.currentDistance >= targetDistance-RobotMap.elevatorDistanceError && this.currentDistance <= targetDistance+RobotMap.elevatorDistanceError;
+        if (this.currentDistance >= targetDistance - RobotMap.elevatorDistanceError
+                && this.currentDistance <= targetDistance + RobotMap.elevatorDistanceError)
+        {
+            System.out.println(this.getClass() + "is finished");
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected void end() {
-        System.out.println("Elevator Returning To Hold Position");
+        System.out.println(this.getClass() + "was ended");
     }
 
     @Override
     protected void interrupted() {
+        System.out.println(this.getClass() + "should never be interrupted, ending()");
         end();
     }
 
+    //TODO Tune PID Control
     @Override
-    protected void execute() {
+    protected void execute()
+    { // Called repeatedly when this command is scheduled to run
         //this.currentDistance = RobotMap.elevatorDistanceSensor.get();
         double move = pid.getPID(this.targetDistance, this.currentDistance);
         if(move > 0 && RobotMap.elevatorUpperLimit.get()){

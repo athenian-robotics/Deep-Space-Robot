@@ -2,8 +2,8 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.lib.utils.PIDControl;
+import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorPositionHold extends Command
 {
@@ -14,40 +14,33 @@ public class ElevatorPositionHold extends Command
 
     //TODO Implement elevatorDistanceSensor
     public  ElevatorPositionHold() {
+        super();
         requires(Robot.elevatorSubsystem);
         //this.targetDistance = RobotMap.elevatorDistanceSensor.get();
     }
 
-    @Override
+    @Override // This is the default command and should never return true
     protected boolean isFinished()
     {
         return false;
     }
 
-    @Override
-    protected void end()
-    {
-
-    }
-
-    @Override
-    protected void interrupted()
-    {
-        wasInterrupted = true;
-        end();
-    }
-
-    @Override
+    @Override // Called repeatedly when this command is scheduled to run
     protected void execute()
     {
         if(wasInterrupted) {
-            //targetDistance = RobotMap.elevatorDistanceSensor.get();
+            // targetDistance = RobotMap.elevatorDistanceSensor.get();
             wasInterrupted = false;
         }
-
 
         //move = pid.getPID(this.targetDistance, RobotMap.elevatorDistanceSensor.get());
         elevator.setSpeed(move);
     }
 
+    @Override// Called when elevatorToPosition is used
+    protected void interrupted()
+    {
+        wasInterrupted = true;
+        end();
+    }
 }

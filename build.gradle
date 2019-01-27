@@ -1,7 +1,7 @@
 plugins {
     id "java"
-
-    id "edu.wpi.first.GradleRIO" version "2019.1.1"
+    
+    id "edu.wpi.first.GradleRIO" version "2019.2.1"
 
     // Provide convenience executables for trying out the examples.
     id 'application'
@@ -61,7 +61,6 @@ deploy {
 dependencies {
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
-    compile files('deps/SparkMax-java-1.0.26.jar')
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
