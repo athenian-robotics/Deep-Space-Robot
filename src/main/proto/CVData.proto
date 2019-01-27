@@ -11,6 +11,10 @@ package utils;
 service OpenCVInfo {
     rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
     rpc SendCVData (CVData) returns (google.protobuf.Empty) {}
+    rpc SendBall (GameObject) returns (google.protobuf.Empty) {
+    }
+    rpc SendHatch (GameObject) returns (google.protobuf.Empty) {
+    }
 }
 
 message FrameSize {
@@ -18,7 +22,12 @@ message FrameSize {
     double y = 2;
 }
 
-message CVData{
+message GameObject {
+    Point centroid = 1;
+    int32 radius = 2;
+}
+
+message CVData {
     ReflTape left = 1;
     ReflTape right = 2;
     GaffeTape tape = 3;
@@ -29,7 +38,7 @@ message ReflTape {
     Point centroid = 2;
     Point bottomOutside = 3;
     double degrees = 4;
-    double size = 5;
+    int32 size = 5;
 }
 
 message GaffeTape {
@@ -40,6 +49,6 @@ message GaffeTape {
 }
 
 message Point {
-    double x = 1;
-    double y = 2;
+    int32 x = 1;
+    int32 y = 2;
 }

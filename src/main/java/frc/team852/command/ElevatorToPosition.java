@@ -12,6 +12,7 @@ public class ElevatorToPosition extends Command {
     boolean raising;
     private final ElevatorSubsystem elevator = Robot.elevatorSubsystem;
     private double distance = 0;
+
     private PIDControl pid = new PIDControl(0,0,0);
 
     //TODO Implement speed, elevatorDistanceSensor

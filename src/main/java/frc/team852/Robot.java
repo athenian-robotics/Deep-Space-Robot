@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   public static WristSubsystem wristSubsystem = RobotMap.wristSubsystem;
   public static HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
   public static CargoSubsystem cargoSubsystem = RobotMap.cargoSubsystem;
-  //public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
+  public static ClimberSubsystem climberSubsystem = RobotMap.climberSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be
