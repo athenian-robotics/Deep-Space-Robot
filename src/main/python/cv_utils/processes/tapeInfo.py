@@ -1,12 +1,13 @@
 import cv2
 import numpy
+from arc852 import camera
 
-cap = cv2.VideoCapture(0)
+cam = camera.Camera()
 low = numpy.array([100, 100, 50])
 high = numpy.array([110, 255, 255])
 
 while True:
-    ret, frame = cap.read()
+    ret, frame = cam.read()
     blurredframe = cv2.blur(frame, (5, 5))
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)
     colormask = cv2.inRange(hsv, low, high)

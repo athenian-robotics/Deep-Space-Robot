@@ -2,7 +2,7 @@ import cv2
 import imutils
 import numpy as np
 
-import camera
+from arc852 import camera
 from opencv_utils import BLUE, GREEN, RED, is_raspi, get_center
 
 

@@ -17,6 +17,9 @@ class RouteClient:
     def sendFrameSize(self, width: int, height: int):
         data = CVData_pb2.FrameSize(x=width, y=height)
         response = self.grpcInfo.stub.SendFrameSize(data)
+        if response:
+            print("Data sent!")
+            print(data)
 
     def sendCVData(self, CVBulk: CVData):
         def newPoint(p: Point):
@@ -24,7 +27,7 @@ class RouteClient:
 
         # TODO Implement to string function
         def toString(bulk: CVData) -> str:
-            return "to be implemented..."
+            return bulk
 
         glt = CVData_pb2.ReflTape(degrees=CVBulk.leftTape.degree,
                                        size=CVBulk.leftTape.size,
@@ -44,8 +47,10 @@ class RouteClient:
                                         back=newPoint(CVBulk.gaffeTape.back))
 
         data = CVData_pb2.CVData(left=glt, right=grt, tape=ggt)
-        self.grpcInfo.stub.SendCVData(data)
-        print(toString(CVBulk))
+        response = self.grpcInfo.stub.SendCVData(data)
+        if response:
+            print("Data sent!")
+            #print(toString(CVBulk))
 
 k = RouteClient("localhost", 50051)
 k.sendFrameSize(width=1, height=2)
