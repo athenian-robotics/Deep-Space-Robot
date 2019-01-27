@@ -2,7 +2,7 @@ import cv2
 import numpy
 
 from grpc_utils.CVObject import *
-#Range of values to scan
+#range of values to scan
 low = numpy.array([100, 100, 50])
 high = numpy.array([110, 255, 255])
 
@@ -13,57 +13,39 @@ def detectReflTape(frame):
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV) #change colorspace to HSV
     colormask = cv2.inRange(hsv, low, high) #find tape
     contourmask, contours, hierarchy = cv2.findContours(colormask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) #create a list of contours
-    viewmask = cv2.bitwise_and(blurredframe, blurredframe, mask=contourmask) #combine the original frame with the mask for testing
 
 
     if len(contours) > 0:
-        ordered = sorted(contours, key=cv2.contourArea, reverse=True)
+        ordered = sorted(contours, key=cv2.contourArea, reverse=True) #arrange contours by area
         if len(ordered) > 1:
 
-            tape1 = ordered[0]
-            left1 = sorted(tape1, key=lambda a:a[0][0])[0][0]
-            left12 = Point(left1[0], left1[1])
-            right1 = sorted(tape1, key=lambda a:a[0][0])[-1][0]
-            right12 = Point(right1[0], right1[1])
-
-            centroid1 = (int((left1[0] + right1[0]) / 2), int((left1[1] + right1[1]) / 2))
-            cv2.circle(viewmask, tuple(left1), 25, (255, 0, 255), 5)
-            cv2.circle(viewmask, tuple(right1), 40, (255, 0, 255), 5)
-            cv2.circle(viewmask, tuple(centroid1), 10, (255, 255, 255))
-            area1 = cv2.contourArea(tape1)
-            if len(tape1) > 5:
-                (x1, y1), (MA1, ma1), angle1 = cv2.fitEllipse(tape1)
+            contour1 = ordered[0] #biggest contour
+            leftpt1 = sorted(contour1, key=lambda a:a[0][0])[0][0] #find the point with the smallest x value in the contour
+            leftobj1 = Point(leftpt1[0], leftpt1[1]) #create Point object ^^^
+            rightpt1 = sorted(contour1, key=lambda a:a[0][0])[-1][0] #find the point with the largest x value in the contour
+            rightobj1 = Point(rightpt1[0], rightpt1[1]) #create Point object ^^^
+            centroid1 = (int((leftpt1[0] + rightpt1[0]) / 2), int((leftpt1[1] + rightpt1[1]) / 2)) #find centroid as the average of ^^^
+            area1 = cv2.contourArea(contour1) #find area of contour
+            if len(contour1) > 5:
+                (x1, y1), (MA1, ma1), angle1 = cv2.fitEllipse(contour1) #if there are enough points, find the angle of the contour (using fitEllipse)
             else:
-                angle1 = -1
-            tapeA = ReflectiveTape(angle1, area1, max(left12, right12, key = lambda p: p.y), Point(centroid1[0], centroid1[1]), min(left12, right12, key = lambda p: p.y))
+                angle1 = 0 #default
+            tapeA = ReflectiveTape(angle1, area1, max(leftobj1, rightobj1, key = lambda p: p.y), Point(centroid1[0], centroid1[1]), min(leftobj1, rightobj1, key = lambda p: p.y)) #jam all values into a tape object
 
 
-
-            tape2 = ordered[0]
-            left2 = sorted(tape1, key=lambda a:a[0][0])[0][0]
-            left22 = Point(left2[0], left2[1])
-            right2 = sorted(tape2, key=lambda a:a[0][0])[-1][0]
-            right22 = Point(right2[0], right2[1])
-
-            centroid2 = (int((left2[0] + right2[0]) / 2), int((left2[1] + right2[1]) / 2))
-            cv2.circle(viewmask, tuple(left2), 25, (255, 0, 255), 5)
-            cv2.circle(viewmask, tuple(right2), 40, (255, 0, 255), 5)
-            cv2.circle(viewmask, tuple(centroid2), 10, (255, 255, 255))
-            area2 = cv2.contourArea(tape2)
-            if len(tape2) > 5:
-                (x2, y2), (MA2, ma2), angle2 = cv2.fitEllipse(tape2)
+            #SAME LOGIC AS ABOVE
+            contour2 = ordered[1] #second largest tape
+            leftpt2 = sorted(contour1, key=lambda a:a[0][0])[0][0]
+            leftobj2 = Point(leftpt2[0], leftpt2[1])
+            rightpt2 = sorted(contour2, key=lambda a:a[0][0])[-1][0]
+            rightobj2 = Point(rightpt2[0], rightpt2[1])
+            centroid2 = (int((leftpt2[0] + rightpt2[0]) / 2), int((leftpt2[1] + rightpt2[1]) / 2))
+            area2 = cv2.contourArea(contour2)
+            if len(contour2) > 5:
+                (x2, y2), (MA2, ma2), angle2 = cv2.fitEllipse(contour2)
             else:
-                angle2 = -1
-            tapeB = ReflectiveTape(angle2, area2, max(left22, right22, key = lambda p: p.y), Point(centroid2[0], centroid2[1]), min(left22, right22, key = lambda p: p.y))
-
-            cv2.imshow("k", viewmask)
-
-            return DoubleTape(tapeA, tapeB)
+                angle2 = 0
+            tapeB = ReflectiveTape(angle2, area2, max(leftobj2, rightobj2, key = lambda p: p.y), Point(centroid2[0], centroid2[1]), min(leftobj2, rightobj2, key = lambda p: p.y))
 
 
-while True:
-    ret, cashmoney = cv2.VideoCapture(1).read()
-    detectReflTape(cashmoney)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+            return DoubleTape(tapeA, tapeB) #jam both tape objects into a DoubleTape object
