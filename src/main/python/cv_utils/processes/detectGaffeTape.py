@@ -29,4 +29,4 @@ def detectGaffeTape(frame):
         else:
             angle = 0 #default
 
-        return GaffeTape(angle, topobj, bottomobj, centroid) #jam both tape objects into a DoubleTape object
+        return GaffeTape(angle, topobj, bottomobj, centroid) #jam all values into a gaffetape object
