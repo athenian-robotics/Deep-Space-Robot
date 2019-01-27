@@ -1,9 +1,7 @@
-import logging
 import sys
 
-from CVObject import *
-from enum import Enum
 import grpc_info
+from CVObject import *
 
 # appended path so program can read the proto files
 sys.path.append('build/generated/source/python')
@@ -51,6 +49,37 @@ class RouteClient:
         if response:
             print("Data sent!")
             #print(toString(CVBulk))
+
+    def SendBall(self, CVBulk: CVData):
+        def newPoint(p: Point):
+            return CVData_pb2.Point(x=p.x, y=p.y)
+
+        # TODO Implement to string function
+        def toString(bulk: CVData) -> str:
+            return bulk
+
+        glt = CVData_pb2.ReflTape(degrees=CVBulk.leftTape.degree,
+                                  size=CVBulk.leftTape.size,
+                                  topInside=newPoint(CVBulk.leftTape.topInside),
+                                  centroid=newPoint(CVBulk.leftTape.centroid),
+                                  bottomOutside=newPoint(CVBulk.leftTape.bottomOutside))
+
+        grt = CVData_pb2.ReflTape(degrees=CVBulk.rightTape.degree,
+                                  size=CVBulk.rightTape.size,
+                                  topInside=newPoint(CVBulk.rightTape.topInside),
+                                  centroid=newPoint(CVBulk.rightTape.centroid),
+                                  bottomOutside=newPoint(CVBulk.rightTape.bottomOutside))
+
+        ggt = CVData_pb2.GaffeTape(degrees=CVBulk.gaffeTape.degree,
+                                   front=newPoint(CVBulk.gaffeTape.front),
+                                   centroid=newPoint(CVBulk.gaffeTape.centroid),
+                                   back=newPoint(CVBulk.gaffeTape.back))
+
+        data = CVData_pb2.CVData(left=glt, right=grt, tape=ggt)
+        response = self.grpcInfo.stub.SendCVData(data)
+        if response:
+            print("Data sent!")
+            # print(toString(CVBulk))
 
 k = RouteClient("localhost", 50051)
 k.sendFrameSize(width=1, height=2)
