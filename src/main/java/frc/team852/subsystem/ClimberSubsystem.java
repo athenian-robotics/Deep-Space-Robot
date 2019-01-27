@@ -7,17 +7,27 @@ import frc.team852.lib.utils.SparkMax;
 
 public class ClimberSubsystem extends Subsystem {
 
+    //Set a climber motor
     private SparkMax climberMotor = RobotMap.climberMotor;
 
-
+    //Constructor
     public ClimberSubsystem() {
         super();
     }
 
+    //Default command is climberMove
     @Override
     protected void initDefaultCommand() {
         setDefaultCommand(new ClimberMove());
     }
+
+
+    /*
+
+        Everything from here on should be self-explanatory
+
+     */
+
 
     public void stopMotors() {
         this.climberMotor.stopMotor();
