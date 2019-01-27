@@ -1,5 +1,6 @@
 package frc.team852;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.team852.lib.utils.SparkMax;
@@ -9,6 +10,7 @@ import frc.team852.lib.utils.SparkMaxGroup;
  * Map of all the sensors, motors, and other that the robot uses
  * This provides a lot of flexibility
  */
+
 public class RobotMap {
 
   // Drivetrain Stuff
