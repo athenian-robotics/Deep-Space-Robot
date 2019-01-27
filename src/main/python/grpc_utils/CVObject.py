@@ -29,6 +29,12 @@ class CVData:
 
 
 class DoubleTape:
-    def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape):
-        self.leftTape = leftTape
-        self.rightTape = rightTape
+    def __init__(self, TapeA: ReflectiveTape, TapeB: ReflectiveTape):
+        self.tapeA = TapeA
+        self.tapeB = TapeB
+
+
+class GameObject:
+    def __init__(self, centroid: Point, radius):
+        self.centroid = centroid
+        self.radius = radius
