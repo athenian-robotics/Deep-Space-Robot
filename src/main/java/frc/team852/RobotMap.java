@@ -59,4 +59,7 @@ public class RobotMap {
     public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2,3);
     public static HatchSubsystem hatchSubsystem = new HatchSubsystem();
 
+    //Climber Subsystem
+    public static SparkMax climberMotor = new SparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 }

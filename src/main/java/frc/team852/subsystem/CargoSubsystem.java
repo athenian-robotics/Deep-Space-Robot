@@ -2,6 +2,7 @@ package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
+import frc.team852.command.CargoIntakeMove;
 
 public class CargoSubsystem extends Subsystem {
 
@@ -11,7 +12,7 @@ public class CargoSubsystem extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand();
+        setDefaultCommand(new CargoIntakeMove());
     }
 
     public void stopMotors() {
@@ -19,7 +20,7 @@ public class CargoSubsystem extends Subsystem {
     }
 
     public double getSpeed() {
-        RobotMap.cargoMotor.get();
+        return RobotMap.cargoMotor.get();
     }
 
     public void setSpeed(double speed) {
@@ -27,7 +28,7 @@ public class CargoSubsystem extends Subsystem {
     }
 
     public double getEncoderPos() {
-        RobotMap.cargoMotor.getEncoderPosition();
+        return RobotMap.cargoMotor.getEncoderPosition();
     }
 
     public void resetEncoders() {
