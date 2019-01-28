@@ -64,6 +64,7 @@ public class PathGenerator implements CSVWritable {
 
 
     public List<Pose2D> generatePoints() {
+        // TODO update to use Pose2DWithCurvature
         // Stop if already generated
         if (generated()) {
             return points;
