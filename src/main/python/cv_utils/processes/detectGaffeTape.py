@@ -1,7 +1,7 @@
 import cv2
 import numpy
-
 from grpc_utils.CVObject import *
+
 #range of values to scan
 low = numpy.array([0, 100, 50])
 high = numpy.array([110, 255, 255])
@@ -13,7 +13,6 @@ def detectGaffeTape(frame):
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV) #change colorspace to HSV
     colormask = cv2.inRange(hsv, low, high) #find tape
     contourmask, contours, hierarchy = cv2.findContours(colormask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) #create a list of contours
-
 
     if len(contours) > 0:
         ordered = sorted(contours, key=cv2.contourArea, reverse=True) #arrange contours by area
