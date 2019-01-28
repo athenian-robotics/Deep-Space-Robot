@@ -5,6 +5,8 @@ import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.subsystem.WristSubsystem;
 
+//TODO implement encoders/PID if necessary
+
 public class WristTo0 extends Command{
 
     private final WristSubsystem wrist = Robot.wristSubsystem;

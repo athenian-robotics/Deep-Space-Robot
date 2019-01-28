@@ -24,13 +24,6 @@ public class CargoSubsystem extends Subsystem {
     public void setSpeed(double speed) {
         RobotMap.cargoMotor.set(speed);
     }
-
-    public double getEncoderPos() {
-        return RobotMap.cargoMotor.getEncoderPosition();
-    }
-
-    public void resetEncoders() {
-        RobotMap.cargoMotor.resetEncoder();
-    }
+    
 
 }
