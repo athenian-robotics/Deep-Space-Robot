@@ -7,7 +7,7 @@ low = numpy.array([0, 100, 100]) #TODO find ideal value range
 high = numpy.array([10, 255, 255])
 
 
-def detectHatchPanel(frame):
+def detectCargo(frame):
 
     blurredframe = cv2.blur(frame, (5, 5)) #blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV) #change colorspace to HSV
