@@ -3,7 +3,7 @@ import numpy
 from grpc_utils.CVObject import *
 
 #range of values to scan
-low = numpy.array([0, 100, 50])
+low = numpy.array([0, 100, 50]) #TODO find ideal value range
 high = numpy.array([110, 255, 255])
 
 
