@@ -1,14 +1,12 @@
 package frc.team852.lib.utils;
 
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
-import frc.team852.RobotMap;
+import edu.wpi.first.wpilibj.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SerialLidar extends SerialPort {
+public class SerialLidar extends SerialPort implements PIDSource {
 
     private int[] currVal, lastVal, badVal;
     private int numCharsRead;
@@ -23,7 +21,7 @@ public class SerialLidar extends SerialPort {
 
     private int[] getDist(){
         while(true) {
-            currByte = RobotMap.lidar.read(1);
+            currByte = read(1);
 
             if (lastByte[0] == 0x59 && currByte[0] == 0x59) {
                 lastByte[0] = 0x00;
@@ -39,7 +37,7 @@ public class SerialLidar extends SerialPort {
         byte[] b = new byte[7];
         byte checksum = (byte) 0xB2;
         for(int i = 0; i<=6; i++){
-            b[i] = RobotMap.lidar.read(1)[0];
+            b[i] = read(1)[0];
             if(i<=5) checksum = (byte) (b[i] + checksum);
         }
         if(checksum != b[6]){
@@ -76,5 +74,21 @@ public class SerialLidar extends SerialPort {
     public void shutDownLidar(){
         running.set(false);
         executor.shutdown();
+    }
+
+
+    //Does nothing
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return PIDSourceType.kDisplacement;
+    }
+
+    @Override
+    public double pidGet() {
+        return getLidarDistance()[0];
     }
 }
