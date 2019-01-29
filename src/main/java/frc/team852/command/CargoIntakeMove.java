@@ -34,13 +34,13 @@ public class CargoIntakeMove extends Command {
 
     @Override
     protected void interrupted() {
-        //Set the speed to 0
+        //when interrupted then end
         end();
     }
 
     @Override
     protected void end() {
-        //Set the motor speed to 0 that way they won't move
+        //Stop motors
         RobotMap.cargoSubsystem.stopMotors();
     }
 
