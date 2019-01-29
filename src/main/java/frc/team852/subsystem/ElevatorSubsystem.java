@@ -33,7 +33,7 @@ public class ElevatorSubsystem extends Subsystem {
   }
 
   public double getEncoderPos() {
-    return elevatorMotors.getEncoderPos();
+    return elevatorMotors.pidGet();
   }
 
   public void resetEncoders() {

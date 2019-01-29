@@ -7,12 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.subsystem.*;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team852.subsystem.*;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -24,6 +18,13 @@ public class Robot extends TimedRobot {
   public static OI oi;
   public static Drivetrain drivetrain;
   public static DoubleSolenoid.Value gearstate;
+  public static ElevatorSubsystem elevatorSubsystem;
+  public static WristSubsystem wristSubsystem;
+  public static CargoSubsystem cargoSubsystem;
+  public static HatchSubsystem hatchSubsystem;
+  public static ClimberSubsystem climberSubsystem;
+
+
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -38,6 +39,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     new RobotMap(); // Empty declaration
     drivetrain = new Drivetrain();
+    elevatorSubsystem = new ElevatorSubsystem();
+    wristSubsystem = new WristSubsystem();
+    cargoSubsystem = new CargoSubsystem();
+    hatchSubsystem = new HatchSubsystem();
+    climberSubsystem = new ClimberSubsystem();
+
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);

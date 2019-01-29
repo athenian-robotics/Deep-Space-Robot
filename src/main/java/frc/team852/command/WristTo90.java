@@ -23,7 +23,7 @@ public class WristTo90 extends Command{
     
     @Override
     protected void end(){
-        wrist.stopMotors();
+        wrist.stop();
         System.out.println("Wrist at 90 degrees");
     }
 

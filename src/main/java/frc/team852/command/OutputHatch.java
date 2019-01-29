@@ -9,7 +9,7 @@ import frc.team852.subsystem.HatchSubsystem;
 
 public class OutputHatch extends Command {
 
-    private HatchSubsystem hatchSubsystem = RobotMap.hatchSubsystem;
+    private HatchSubsystem hatchSubsystem = Robot.hatchSubsystem;
     private double time;
 
     public OutputHatch(){
