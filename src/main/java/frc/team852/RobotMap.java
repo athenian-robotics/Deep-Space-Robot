@@ -1,6 +1,6 @@
 package frc.team852;
 
-import com.kauailabs.navx.frc.AHRS;
+
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -67,5 +67,5 @@ public class RobotMap {
     public static SparkMax climberMotor = new SparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
-    public static AHRS gyroscope = Robot.gyro;
+
 }
