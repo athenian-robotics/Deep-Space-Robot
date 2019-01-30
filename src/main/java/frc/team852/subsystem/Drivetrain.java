@@ -50,6 +50,10 @@ public class Drivetrain extends Subsystem {
     return leftDrive.pidGet();
   }
 
+  public void resetEncoders(){
+    rightDrive.resetEncoders();
+    leftDrive.resetEncoders();
+  }
   public double getRight() {
     return rightDrive.pidGet();
   }

@@ -13,7 +13,7 @@ import java.io.IOException;
 public final class CSVEditor {
 
     private static final String systemPath; // from root to generated_path, no file
-    private static final String workingPath = "/src/main/java/frc/team852/lib/utilities/generated_path/";
+    private static final String workingPath = "/src/main/java/frc/team852/lib/path/utilities/generated_path/";
     private static String filename; //name
     private static String relativePath; // relative path
     private static String absPath; // absolute path

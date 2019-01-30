@@ -54,6 +54,7 @@ public class DrivePathBasic extends Command {
         }
         // Emulate an encoder reset
         encoderStart = 0;
+        dt.resetEncoders();
         encoderStart = getEncoderDist();
 
         prev = null;
@@ -130,7 +131,7 @@ public class DrivePathBasic extends Command {
 
         // Compute the curvature of an arc with angle angle and length currDist
 
-        double curvature = angle / currDist;
+        double curvature = angle / currDist / 2;
         double mag = maxSpeed / (1 + Math.abs(curvature));
         leftSpeed = mag * (1 - curvature);
         rightSpeed = mag * (1 + curvature);
