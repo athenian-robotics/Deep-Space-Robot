@@ -56,7 +56,7 @@ public class DriveTank extends Command {
 
 
   private double dedband(double value) {
-    return Math.abs(value) > 0.05 ? value : 0;
+    return Math.abs(value) > 0.1 ? value : 0;
   }
 
   private double sign(double num) {

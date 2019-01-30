@@ -1,6 +1,7 @@
 package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.DriveTank;
@@ -16,6 +17,8 @@ public class Drivetrain extends Subsystem {
     super();
     // Gotta reverse one side of the drivetrain
     rightDrive.setInverted(true);
+    leftDrive.setPIDSourceType(PIDSourceType.kDisplacement);
+    rightDrive.setPIDSourceType(PIDSourceType.kDisplacement);
   }
 
   @Override
@@ -41,6 +44,14 @@ public class Drivetrain extends Subsystem {
       return;
     gearbox.set(m_gearing);
     gearing = m_gearing;
+  }
+
+  public double getLeft() {
+    return leftDrive.pidGet();
+  }
+
+  public double getRight() {
+    return rightDrive.pidGet();
   }
 
   public void stop() {

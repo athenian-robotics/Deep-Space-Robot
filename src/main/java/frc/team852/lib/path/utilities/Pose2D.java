@@ -54,23 +54,28 @@ public class Pose2D implements CSVWritable {
         return translation.distanceTo(other.translation);
     }
 
+    public double netAngleTo(Pose2D other) {
+        return rotation.angleTo(other.rotation);
+    }
+
     public Pose2D interpolate(Pose2D other, double t) {
         return new Pose2D(translation.interpolate(other.translation, t), rotation.interpolate(other.rotation, t));
     }
 
-    public Pose2D getPose() {
-        return null;
+    public Translation2D getTranslation() {
+        return translation;
     }
 
     public Rotation2D getRotation() {
-        return null;
-    }
-
-    public Translation2D getTranslation() {
-        return null;
+        return rotation;
     }
 
     public String toCSV() {
         return String.format("%s,%s", translation.toCSV(), rotation.toCSV());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Pose2D[pos: (%f, %f), rot: %f]", translation.getX(), translation.getY(), rotation.getAngle());
     }
 }
