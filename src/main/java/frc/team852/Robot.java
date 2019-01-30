@@ -1,5 +1,6 @@
 package frc.team852;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -28,8 +29,7 @@ public class Robot extends TimedRobot {
   public static ClimberSubsystem climberSubsystem;
 
   public static SerialLidar elevatorLidar;
-
-
+  public static AHRS gyro;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     elevatorLidar.setReadBufferSize(4500);
     elevatorLidar.setWriteBufferSize(32);
 
+    gyro = new AHRS(SerialPort.Port.kUSB);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);

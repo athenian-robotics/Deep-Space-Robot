@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SerialPort;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
@@ -66,5 +65,5 @@ public class RobotMap {
   public static PIDController climberPIDHold = new PIDController(0,0,0, climberMotor, climberMotor);
 
 
-  public static AHRS gyroscope = new AHRS(SerialPort.Port.kUSB);
+  public static AHRS gyro = Robot.gyro;
 }
