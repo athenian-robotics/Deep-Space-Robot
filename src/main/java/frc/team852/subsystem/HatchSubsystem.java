@@ -1,26 +1,24 @@
 package frc.team852.subsystem;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.team852.RobotMap;
 
-// TODO implement
 public class HatchSubsystem extends Subsystem {
-
-  public Value getPneumaticState() {
-    // TODO implement
-    return Value.kOff;
-  }
-
-  public void retractPneumatics() {
-    // TODO implement
-  }
-
-  public void extendPneumatics() {
-    // TODO implement
-  }
 
   @Override
   protected void initDefaultCommand() {
-    // TODO implement
+  }
+
+  public void extendPneumatics(){
+    RobotMap.hatchPancakePneumatics.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void retractPneumatics(){
+    RobotMap.hatchPancakePneumatics.set(DoubleSolenoid.Value.kReverse);
+  }
+
+  public DoubleSolenoid.Value getPneumaticState(){
+    return RobotMap.hatchPancakePneumatics.get();
   }
 }
