@@ -24,7 +24,7 @@ public class WristTo90 extends Command{
     @Override
     protected void end(){
         wrist.stop();
-        System.out.println("Wrist at 90 degrees");
+        if (RobotMap.wristUpperLimit.get()) System.out.println("Wrist at 90 degrees");
     }
 
     @Override

@@ -5,7 +5,7 @@ import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.subsystem.WristSubsystem;
 
-//TODO implement encoders/PID if necessary
+//TODO encoders if necessary
 
 public class WristTo0 extends Command{
 
@@ -17,21 +17,20 @@ public class WristTo0 extends Command{
     }
 
     @Override
-    protected boolean isFinished(){
-        return RobotMap.wristLowerLimit.get();
-    }
+    protected boolean isFinished(){ return RobotMap.wristLowerLimit.get(); }
 
     @Override
     protected void end(){
         wrist.stop();
-        System.out.println("Wrist at 0 degrees");
+        if (RobotMap.wristLowerLimit.get()) System.out.println("Wrist at 0 degrees");
     }
 
     @Override
     protected void execute(){
-        if (!isFinished()) wrist.setSpeed(-.5);
+        if (!RobotMap.wristLowerLimit.get()) wrist.setSpeed(-.5);
         else end();
     }
 
 
 }
+
