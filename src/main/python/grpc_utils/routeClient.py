@@ -1,7 +1,7 @@
 import sys
 
-import grpc_info
-from CVObject import *
+from grpc_utils import grpc_info
+from grpc_utils.CVObject import *
 
 # appended path so program can read the proto files
 sys.path.append('build/generated/source/python')
@@ -78,10 +78,3 @@ class RouteClient:
         response = self.grpcInfo.stub.SendHatch(obj)
         if response:
             print("Data sent!")
-
-
-k = RouteClient("localhost", 50051)
-k.sendFrameSize(width=1, height=2)
-# k.sendCVData(CVData(ReflectiveTape(1,2,Point(3,4),Point(5,6), Point(7,8)), ReflectiveTape(9,10,Point(11,12),Point(13,14), Point(15,16)), GaffeTape(17, Point(18,19), Point(20,21), Point(22,23))))
-k.sendBall(GameObject(Point(1, 2), 3))
-k.grpcInfo.close()
