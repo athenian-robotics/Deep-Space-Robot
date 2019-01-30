@@ -30,27 +30,19 @@ public class RobotMap {
 
 
   //Elevator
-
-  //left and right motors
   private static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
   private static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
   public static SparkMaxGroup elevatorMotors = new SparkMaxGroup(elevatorMotorL, elevatorMotorR);
-  //limit switches
   public static DigitalInput elevatorLowerLimit = new DigitalInput(0);
   public static DigitalInput elevatorUpperLimit = new DigitalInput(1);
   public static double elevatorDistanceError = 5;
-  //Lidar
   public static SerialLidar lidar = new SerialLidar(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
 
 
   //Wrist
-
-  //wrist motor
   public static SparkMax wristMotor = new SparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-  //limit switches
   public static DigitalInput wristLowerLimit = new DigitalInput(2);
   public static DigitalInput wristUpperLimit = new DigitalInput(3);
-  //public static I2C elevatorDistance = new I2C();
 
 
   //Cargo subsystem
@@ -62,5 +54,5 @@ public class RobotMap {
   //Climber Subsystem
   public static SparkMax climberMotor = new SparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  public static AHRS gyroscope = new AHRS(SerialPort.Port.kUSB);
+  public static AHRS gyro = Robot.gyro;
 }

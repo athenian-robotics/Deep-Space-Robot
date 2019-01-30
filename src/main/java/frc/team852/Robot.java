@@ -1,6 +1,8 @@
 package frc.team852;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,8 +25,7 @@ public class Robot extends TimedRobot {
   public static CargoSubsystem cargoSubsystem;
   public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
-
-
+  public static AHRS gyro;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -44,7 +45,7 @@ public class Robot extends TimedRobot {
     cargoSubsystem = new CargoSubsystem();
     hatchSubsystem = new HatchSubsystem();
     climberSubsystem = new ClimberSubsystem();
-
+    gyro = new AHRS(SerialPort.Port.kUSB);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
