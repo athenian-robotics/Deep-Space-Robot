@@ -5,10 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDController;
-import frc.team852.lib.utils.InvertedDigitalInput;
-import frc.team852.lib.utils.SerialLidar;
-import frc.team852.lib.utils.SparkMax;
-import frc.team852.lib.utils.SparkMaxGroup;
+import frc.team852.lib.utils.*;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -30,15 +27,16 @@ public class RobotMap {
 
 
   //Elevator
-  private static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-  private static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
-  public static SparkMaxGroup elevatorMotors = new SparkMaxGroup(elevatorMotorL, elevatorMotorR);
+  //private static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+  //private static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+  //public static SparkMaxGroup elevatorMotors = new SparkMaxGroup(elevatorMotorL, elevatorMotorR);
+  public static VictorSPX_PID elevatorMotor = new VictorSPX_PID(4, false);
   public static InvertedDigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
   public static InvertedDigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
   public static SerialLidar elevatorLidar = Robot.elevatorLidar;
   //TODO tune pid values
-  public static PIDController elevatorPIDPosition = new PIDController(0,0,0, elevatorLidar, elevatorMotors);
-  public static PIDController elevatorPIDHold = new PIDController(0,0,0, elevatorLidar, elevatorMotors);
+  public static PIDController elevatorPIDPosition = new PIDController(0,0,0, elevatorLidar, elevatorMotor);
+  public static PIDController elevatorPIDHold = new PIDController(0,0,0, elevatorLidar, elevatorMotor);
 
 
   //Wrist

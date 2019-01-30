@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.SubsystemPID;
-import frc.team852.lib.utils.SparkMaxGroup;
+import frc.team852.lib.utils.VictorSPX_PID;
 
 public class ElevatorSubsystem extends Subsystem {
 
-  private SparkMaxGroup elevatorMotors = RobotMap.elevatorMotors;
+  private VictorSPX_PID elevatorMotors = RobotMap.elevatorMotor;
 
   //TODO fix inversion motor & check encoder tick up/down
 
@@ -22,7 +22,7 @@ public class ElevatorSubsystem extends Subsystem {
   }
 
   public void setSpeed(double speed) {
-    this.elevatorMotors.set(speed);
+    this.elevatorMotors.setSpeed(speed);
   }
 
   public void stopMotors() {
@@ -33,17 +33,16 @@ public class ElevatorSubsystem extends Subsystem {
     return this.elevatorMotors.get();
   }
 
-  public double getEncoderPos() {
-    return elevatorMotors.pidGet();
-  }
+//  public double getEncoderPos() {
+//    return elevatorMotors.pidGet();
+//  }
 
-  public void resetEncoders() {
-    elevatorMotors.resetEncoders();
-  }
+//  public void resetEncoders() {
+//    elevatorMotors.resetEncoders();
+//  }
 
   //Returns an Int array with [distance,strength]
   public int[] getLidarDistance() {
     return RobotMap.elevatorLidar.getLidarDistance();
   }
-
 }

@@ -10,7 +10,7 @@ public class ElevatorToPosition extends Command {
 
     private double targetDistance, currentDistance;
     private final ElevatorSubsystem elevator = Robot.elevatorSubsystem;
-    private PIDController pid = new PIDController(0, 0, 0, RobotMap.elevatorLidar, RobotMap.elevatorMotors);
+    private PIDController pid = new PIDController(0, 0, 0, RobotMap.elevatorLidar, RobotMap.elevatorMotor);
 
     //TODO Implement speed
     public ElevatorToPosition(double target) {
