@@ -1,8 +1,9 @@
 package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.team852.Robot;
 import frc.team852.RobotMap;
-import frc.team852.command.ElevatorPositionHold;
+import frc.team852.command.SubsystemPID;
 import frc.team852.lib.utils.SparkMaxGroup;
 
 public class ElevatorSubsystem extends Subsystem {
@@ -17,7 +18,7 @@ public class ElevatorSubsystem extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new ElevatorPositionHold());
+    setDefaultCommand(new SubsystemPID(RobotMap.elevatorLidar.getLidarDistance()[0], RobotMap.elevatorPIDHold, Robot.elevatorSubsystem, 2, RobotMap.elevatorLowerLimit, RobotMap.elevatorUpperLimit, true, RobotMap.elevatorLidar));
   }
 
   public void setSpeed(double speed) {
@@ -42,7 +43,7 @@ public class ElevatorSubsystem extends Subsystem {
 
   //Returns an Int array with [distance,strength]
   public int[] getLidarDistance() {
-    return RobotMap.lidar.getLidarDistance();
+    return RobotMap.elevatorLidar.getLidarDistance();
   }
 
 }

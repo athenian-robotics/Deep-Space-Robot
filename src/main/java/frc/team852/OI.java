@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team852.command.SubsystemPID;
 import frc.team852.command.ToggleGearbox;
 
 public class OI {
@@ -56,6 +57,9 @@ public class OI {
     // Only created once, init and execute are called when button is pressed/released
     new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
     new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
+
+    //TODO change target
+    xboxA.whenPressed(new SubsystemPID(1000, RobotMap.elevatorPIDPosition, Robot.elevatorSubsystem, 2, RobotMap.elevatorLowerLimit, RobotMap.elevatorUpperLimit));
 
 
   }

@@ -4,7 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.PIDController;
+import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
@@ -17,7 +18,6 @@ import frc.team852.lib.utils.SparkMaxGroup;
 public class RobotMap {
 
   //Drivetrain
-  //Drivetrain Motors
   private static SparkMax leftFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
   private static SparkMax leftBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
   private static SparkMax rightFront = new SparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -30,37 +30,40 @@ public class RobotMap {
 
 
   //Elevator
-
-  //left and right motors
   private static SparkMax elevatorMotorL = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
   private static SparkMax elevatorMotorR = new SparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
   public static SparkMaxGroup elevatorMotors = new SparkMaxGroup(elevatorMotorL, elevatorMotorR);
-  //limit switches
-  public static DigitalInput elevatorLowerLimit = new DigitalInput(0);
-  public static DigitalInput elevatorUpperLimit = new DigitalInput(1);
-  public static double elevatorDistanceError = 5;
-  //Lidar
-  public static SerialLidar lidar = new SerialLidar(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+  public static InvertedDigitalInput elevatorLowerLimit = new InvertedDigitalInput(0);
+  public static InvertedDigitalInput elevatorUpperLimit = new InvertedDigitalInput(1);
+  public static SerialLidar elevatorLidar = Robot.elevatorLidar;
+  //TODO tune pid values
+  public static PIDController elevatorPIDPosition = new PIDController(0,0,0, elevatorLidar, elevatorMotors);
+  public static PIDController elevatorPIDHold = new PIDController(0,0,0, elevatorLidar, elevatorMotors);
 
 
   //Wrist
-
-  //wrist motor
   public static SparkMax wristMotor = new SparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-  //limit switches
   public static DigitalInput wristLowerLimit = new DigitalInput(2);
   public static DigitalInput wristUpperLimit = new DigitalInput(3);
-  //public static I2C elevatorDistance = new I2C();
+  //TODO tune pid values
+  public static PIDController wristPIDPosition = new PIDController(0,0,0, wristMotor, wristMotor);
+  public static PIDController wristPIDHold = new PIDController(0,0,0, wristMotor, wristMotor);
 
 
   //Cargo subsystem
   public static SparkMax cargoMotor = new SparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+
   //Hatch Subsystem
   public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2, 3);
 
+
   //Climber Subsystem
   public static SparkMax climberMotor = new SparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
+  //TODO tune pid values
+  public static PIDController climberPIDPosition = new PIDController(0,0,0, climberMotor, climberMotor);
+  public static PIDController climberPIDHold = new PIDController(0,0,0, climberMotor, climberMotor);
 
-  public static AHRS gyroscope = new AHRS(SerialPort.Port.kUSB);
+
+  public static AHRS gyro = Robot.gyro;
 }
