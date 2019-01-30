@@ -63,12 +63,16 @@ dependencies {
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+    implementation group: 'io.prometheus', name: 'client', version: '0.0.10'
     implementation group: 'io.prometheus', name: 'simpleclient', version: '0.6.0'
     implementation group: 'io.prometheus', name: 'simpleclient_hotspot', version: '0.6.0'
     implementation group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.6.0'
+    implementation group: 'io.prometheus', name: 'simpleclient_servlet', version: '0.6.0'
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     compileOnly "javax.annotation:javax.annotation-api:1.2"
+    implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.14.v20181114'
+    implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.14.v20181114'
 
     // examples/advanced need this for JsonFormat
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
