@@ -20,7 +20,10 @@ def detectHatchPanel(frame):
         leftPoint = points[0][0] #choose the point with the lowest x value
         rightPoint = points[-1][0] #choose the point with the highest x value
     else:
-        leftPoint = -1
-        rightPoint = -1
+        leftPoint = 0
+        rightPoint = 0
 
-    return GameObject(leftPoint, rightPoint)
+    centroid = ((leftPoint[0]+rightPoint[0])/2, (leftPoint[1] + rightPoint[2])/2)
+    diameter = rightPoint[0]-leftPoint[0]
+
+    return GameObject(centroid, diameter)
