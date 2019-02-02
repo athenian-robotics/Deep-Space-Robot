@@ -69,6 +69,10 @@ public class Rotation2D implements CSVWritable {
         return rotate(t * angleTo(other));
     }
 
+    public Rotation2D compose(Rotation2D other) {
+        return new Rotation2D(cos * other.cos - sin * other.sin, cos * other.sin + sin * other.cos);
+    }
+
     @Override
     public String toCSV() {
         return String.format("%.6f,%.6f", cos, sin);

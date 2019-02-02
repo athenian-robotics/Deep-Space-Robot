@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     try {
-      //gyro = new AHRS(SerialPort.Port.kUSB2);
+      gyro = new AHRS(SerialPort.Port.kUSB2);
     } catch (RuntimeException ex ) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
