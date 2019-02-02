@@ -13,7 +13,9 @@ import static edu.wpi.first.wpilibj.PIDSourceType.kDisplacement;
 public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PIDSource {
 
   private ArrayList<SparkMax> speedControllerList = new ArrayList<>();
-  private PIDSourceType m_sourceType;
+  private PIDSourceType sourceType;
+  private SparkMax leader;
+  private double lastSpeed = 0;
 
   /**
    * @param speedController  Motor Controller using SparkMax speed controller wrapper
@@ -25,15 +27,27 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
 
   /**
    * @param sourceType       Read from the encoders in displacement or rate mode
-   * @param speedController  Motor controller using SparkMax speed controller wrapper
+   * @param leader           Motor controller using SparkMax speed controller wrapper
    * @param speedControllers The SparkMaxes to add
    */
-  public SparkMaxGroup(PIDSourceType sourceType, SparkMax speedController, SparkMax... speedControllers) {
-    super(speedController, speedControllers);
-    speedControllerList.add(speedController);
+  public SparkMaxGroup(PIDSourceType sourceType, SparkMax leader, SparkMax... speedControllers) {
+    super(leader, speedControllers);
+//    speedControllerList.add(speedController);
     speedControllerList.addAll(Arrays.asList(speedControllers));
-    m_sourceType = sourceType;
-    speedControllerList.forEach(x -> x.setPIDSourceType(m_sourceType));
+    this.sourceType = sourceType;
+    this.leader = leader;
+    speedControllerList.forEach(sc -> {
+      sc.setPIDSourceType(sourceType);
+      sc.follow(this.leader);
+    });
+  }
+
+  @Override
+  public void set(double speed) {
+    if (this.lastSpeed != speed) {
+      leader.set(speed);
+      this.lastSpeed = speed;
+    }
   }
 
 
@@ -43,13 +57,13 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
 
   @Override
   public void setPIDSourceType(PIDSourceType pidSource) {
-    m_sourceType = pidSource;
-    speedControllerList.forEach(x -> x.setPIDSourceType(m_sourceType));
+    sourceType = pidSource;
+    speedControllerList.forEach(x -> x.setPIDSourceType(sourceType));
   }
 
   @Override
   public PIDSourceType getPIDSourceType() {
-    return m_sourceType;
+    return sourceType;
   }
 
   /**
@@ -67,6 +81,6 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
    * @param inverted The inversion value to set for each speed controller in the group
    */
   public void setInverted(boolean inverted) {
-    speedControllerList.forEach(sc -> sc.setInverted(inverted));
+    this.leader.setInverted(inverted);
   }
 }
