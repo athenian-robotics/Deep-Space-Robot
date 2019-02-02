@@ -41,12 +41,10 @@ public class RobotMap {
 
   //Wrist
   public static SparkMax wristMotor = new SparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-  public static DigitalInput wristLowerLimit = new DigitalInput(2);
-  public static DigitalInput wristUpperLimit = new DigitalInput(3);
+  public static InvertedDigitalInput wristLowerLimit = new InvertedDigitalInput(2);
+  public static InvertedDigitalInput wristUpperLimit = new InvertedDigitalInput(3);
   //TODO tune pid values
   public static PIDController wristPIDPosition = new PIDController(0,0,0, wristMotor, wristMotor);
-  public static PIDController wristPIDHold = new PIDController(0,0,0, wristMotor, wristMotor);
-
 
   //Cargo subsystem
   public static SparkMax cargoMotor = new SparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
