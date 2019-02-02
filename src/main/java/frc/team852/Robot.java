@@ -49,11 +49,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     try {
-      gyro = new AHRS(SerialPort.Port.kUSB2);
+      gyro = new AHRS(SerialPort.Port.kUSB);
     } catch (RuntimeException ex ) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
-    new TrackPosition().start();
 
     oi = new OI(); // Must be defined last
   }
@@ -122,6 +121,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+      Scheduler.getInstance().add(new TrackPosition());
   }
 
   /**
