@@ -17,11 +17,11 @@ def detectReflTape(shared_frame: SharedFrame):
     colormask = cv2.inRange(hsv, low, high)  # find tape
     contourmask, contours, hierarchy = cv2.findContours(colormask, cv2.RETR_TREE,
                                                         cv2.CHAIN_APPROX_SIMPLE)  # create a list of contours
-
+    wasDetected1, wasDetected2 = False, False
     if len(contours) > 0:
         ordered = sorted(contours, key=cv2.contourArea, reverse=True)  # arrange contours by area
         if len(ordered) > 1:
-
+            wasDetected1 = True
             contour1 = ordered[0]  # biggest contour
             leftpt1 = sorted(contour1, key=lambda a: a[0][0])[0][
                 0]  # find the point with the smallest x value in the contour
@@ -37,11 +37,12 @@ def detectReflTape(shared_frame: SharedFrame):
                     contour1)  # if there are enough points, find the angle of the contour (using fitEllipse)
             else:
                 angle1 = 0  # default
-            tapeA = ReflectiveTape(angle1, area1, max(leftobj1, rightobj1, key=lambda p: p.y),
+            tapeA = ReflectiveTape(wasDetected1, angle1, area1, max(leftobj1, rightobj1, key=lambda p: p.y),
                                    Point(centroid1[0], centroid1[1]),
                                    min(leftobj1, rightobj1, key=lambda p: p.y))  # jam all values into a tape object
 
             # SAME LOGIC AS ABOVE
+            wasDetected2 = True
             contour2 = ordered[1]  # second largest tape
             leftpt2 = sorted(contour1, key=lambda a: a[0][0])[0][0]
             leftobj2 = Point(leftpt2[0], leftpt2[1])
@@ -53,7 +54,7 @@ def detectReflTape(shared_frame: SharedFrame):
                 (x2, y2), (MA2, ma2), angle2 = cv2.fitEllipse(contour2)
             else:
                 angle2 = 0
-            tapeB = ReflectiveTape(angle2, area2, max(leftobj2, rightobj2, key=lambda p: p.y),
+            tapeB = ReflectiveTape(wasDetected2, angle2, area2, max(leftobj2, rightobj2, key=lambda p: p.y),
                                    Point(centroid2[0], centroid2[1]), min(leftobj2, rightobj2, key=lambda p: p.y))
 
-            return DoubleTape(tapeA, tapeB)  # jam both tape objects into a DoubleTape object
+    return DoubleTape(tapeA, tapeB)  # jam both tape objects into a DoubleTape object

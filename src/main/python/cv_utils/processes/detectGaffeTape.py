@@ -17,6 +17,7 @@ def detectGaffeTape(shared_frame: SharedFrame):
     contourmask, contours, hierarchy = cv2.findContours(colormask, cv2.RETR_TREE,
                                                         cv2.CHAIN_APPROX_SIMPLE)  # create a list of contours
 
+    wasDetected = False
     if len(contours) > 0:
         ordered = sorted(contours, key=cv2.contourArea, reverse=True)  # arrange contours by area
 
@@ -33,5 +34,6 @@ def detectGaffeTape(shared_frame: SharedFrame):
                 contour)  # if there are enough points, find the angle of the contour (using fitEllipse)
         else:
             angle = 0  # default
+        wasDetected = True
 
-        return GaffeTape(angle, topobj, bottomobj, centroid)  # jam all values into a gaffetape object
+    return GaffeTape(wasDetected, angle, topobj, bottomobj, centroid)  # jam all values into a gaffetape object

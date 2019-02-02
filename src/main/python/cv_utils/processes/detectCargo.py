@@ -1,6 +1,7 @@
 import numpy
 
 from cv_utils.stream import *
+from grpc_utils.CVObject import *
 
 # range of values to scan
 low = numpy.array([0, 100, 100])  # TODO find ideal value range
@@ -22,11 +23,13 @@ def detectCargo(shared_frame: SharedFrame):
         points = sorted(ordered[0], key=lambda a: a[0][0])  # pick largest contour and make a sorted list of points
         leftPoint = points[0][0]  # choose the point with the lowest x value
         rightPoint = points[-1][0]  # choose the point with the highest x value
+        wasDetected = True
     else:
+        wasDetected = False
         leftPoint = 0
         rightPoint = 0
 
     centroid = ((leftPoint[0] + rightPoint[0]) / 2, (leftPoint[1] + rightPoint[2]) / 2)
     diameter = rightPoint[0] - leftPoint[0]
 
-    return GameObject(centroid, diameter)
+    return Ball(wasDetected, centroid, diameter)
