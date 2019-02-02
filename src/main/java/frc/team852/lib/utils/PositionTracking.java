@@ -1,5 +1,6 @@
 package frc.team852.lib.utils;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.path.utilities.Pose2D;
@@ -30,43 +31,47 @@ public class PositionTracking implements Runnable {
 
     @Override
     public void run() {
-        try {
-            while (!Thread.interrupted()) {
-                long currTimestamp = System.currentTimeMillis();
-                double currEncValue = (Robot.drivetrain.getRight() - Robot.drivetrain.getLeft()) / 2;
-                double currGyroHeading = Robot.gyro.getFusedHeading();
+        while (!Thread.interrupted()) {
+            Timer.delay(.005);
 
-                if (lastTimestamp == 0 || Robot.gyro.isCalibrating()) {
-                    lastTimestamp = currTimestamp;
-                    lastEncValue = currEncValue;
-                    lastGyroHeading = currGyroHeading;
-                    return;
-                }
+            long currTimestamp = System.currentTimeMillis();
+            double left = -Robot.drivetrain.getLeft();
+            double right = Robot.drivetrain.getRight();
+            double currEncValue = (left + right) / 2;
+            //double currGyroHeading = (right - left) / 2;
+            double currGyroHeading = Robot.gyro.getFusedHeading();
 
-
-                double dt = (currTimestamp - lastTimestamp) / 1000d;
-
-                double denc = currEncValue - lastEncValue;
-                double tpr = getTicksPerRevolution();
-                double dist = denc / tpr * wheelCircumference;
-
-                double angle = currGyroHeading - lastGyroHeading;
-
-                double radius = dist / angle;
-
-                Pose2D nextPose = new Pose2D(radius * (1 - Math.cos(angle)), radius * Math.sin(angle));
-                currPose.accumulateAndGet(nextPose, Pose2D::compose);
-
+            if (lastTimestamp == 0 || Robot.gyro.isCalibrating()) {
                 lastTimestamp = currTimestamp;
                 lastEncValue = currEncValue;
                 lastGyroHeading = currGyroHeading;
-
-                Thread.sleep(5);
+                continue;
             }
+
+
+            double dt = (currTimestamp - lastTimestamp) / 1000d;
+
+            double denc = currEncValue - lastEncValue;
+            double tpr = getTicksPerRevolution();
+            double dist = denc / tpr * wheelCircumference;
+
+            double angle = currGyroHeading - lastGyroHeading;
+
+            Pose2D nextPose;
+            if (angle == 0) {
+                nextPose = new Pose2D(dist, 0);
+            }
+            else {
+                double radius = dist / angle;
+                nextPose = new Pose2D(radius * Math.sin(angle), radius * (1 - Math.cos(angle)), angle);
+            }
+            currPose.accumulateAndGet(nextPose, Pose2D::compose);
+
+            lastTimestamp = currTimestamp;
+            lastEncValue = currEncValue;
+            lastGyroHeading = currGyroHeading;
         }
-        catch (InterruptedException e) {
-            System.out.println("PositionTracking thread interrupted unexpectedly...");
-        }
+        System.out.println("Imma die");
     }
 
     private void reset() {

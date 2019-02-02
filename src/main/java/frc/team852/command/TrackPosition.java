@@ -7,9 +7,6 @@ import frc.team852.lib.path.utilities.Pose2D;
 import frc.team852.lib.utils.PositionTracking;
 import frc.team852.subsystem.Drivetrain;
 
-import static frc.team852.OI.stick1;
-import static frc.team852.OI.stick2;
-
 public class TrackPosition extends Command {
 
     private Drivetrain dt = Robot.drivetrain;
@@ -19,7 +16,8 @@ public class TrackPosition extends Command {
     public TrackPosition() {
         tracker = new PositionTracking();
         thread = new Thread(tracker);
-        thread.run();
+        thread.start();
+        System.out.println("cake is lie");
     }
 
     @Override
@@ -41,9 +39,8 @@ public class TrackPosition extends Command {
     protected void execute() {
         // TODO @Jackson do something with pose data
         Pose2D pose = tracker.currPose.get();
-        SmartDashboard.putNumberArray("Position Tracking Pose", new double[] {
-                pose.getTranslation().getX(),
-                pose.getTranslation().getY(),
-                pose.getRotation().getAngle()});
+        SmartDashboard.putNumber("Position Tracking X", pose.getTranslation().getX());
+        SmartDashboard.putNumber("Position Tracking Y", pose.getTranslation().getY());
+        SmartDashboard.putNumber("Position Tracking Angle", pose.getRotation().getAngle());
     }
 }
