@@ -49,12 +49,11 @@ class RouteClient:
         if response:
             print("Data sent!")
 
-    def sendBall(self, ball: GameObject):
+    def sendBall(self, ball: Ball):
         def newPoint(p: Point):
             return CVData_pb2.Point(x=p.x, y=p.y)
 
-        # TODO Implement to string function
-        def toString(ball: GameObject) -> str:
+        def toString(ball: Ball) -> str:
             return ball
 
         radius = ball.radius
@@ -64,12 +63,11 @@ class RouteClient:
         if response:
             print("Data sent!")
 
-    def sendHatch(self, hatch: GameObject):
+    def sendHatch(self, hatch: Hatch):
         def newPoint(p: Point):
             return CVData_pb2.Point(x=p.x, y=p.y)
 
-        # TODO Implement to string function
-        def toString(hatch: GameObject) -> str:
+        def toString(hatch: Hatch) -> str:
             return hatch
 
         radius = hatch.radius
