@@ -44,7 +44,9 @@ public class PrometheusExample {
             }
         }
 
+
     }
+
 
     //Counter: Used to count things, can only increment ( inc() ) (usually by 1)
 

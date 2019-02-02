@@ -40,11 +40,11 @@ class SharedFrame(object):
 
 
 class Camera:
-    def __init__(self, cameraIndex, shared_frame: SharedFrame):
+    def __init__(self, cameraIndex, shared_frame: SharedFrame, resolution=(200,200)):
         self.capture = cv2.VideoCapture(cameraIndex)
+        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, resolution[0])
+        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, resolution[1])
         self.shared_frame = shared_frame
-
-        # Thread(target=self.sendFrame, args=(shared_frame,)).start()
 
     def start(self):
         while True:
