@@ -1,11 +1,8 @@
 package frc.team852.subsystem;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.WristPositionHold;
-import frc.team852.command.WristTo0;
-import frc.team852.command.WristTo90;
 import frc.team852.lib.utils.SparkMax;
 
 public class WristSubsystem extends Subsystem {
