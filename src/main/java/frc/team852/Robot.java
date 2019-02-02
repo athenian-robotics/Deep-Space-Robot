@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team852.command.TrackPosition;
 import frc.team852.subsystem.*;
 
 /**
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot {
     } catch (RuntimeException ex ) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
+    new TrackPosition().start();
 
     oi = new OI(); // Must be defined last
   }
