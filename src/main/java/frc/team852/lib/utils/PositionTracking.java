@@ -13,7 +13,8 @@ public class PositionTracking implements Runnable {
     private static final double ticksPerRevolution_LG = 630;
     private static final double wheelCircumference = .1524 * Math.PI; // 15.24 cm wheel diameter
 
-    private AtomicReference<Pose2D> currPose = new AtomicReference<>();
+    public AtomicReference<Pose2D> currPose = new AtomicReference<>();
+    private double lastEncValue;
     private double lastGyroHeading;
     private long lastTimestamp;
 
@@ -29,29 +30,43 @@ public class PositionTracking implements Runnable {
 
     @Override
     public void run() {
-        if (lastTimestamp == 0 || Robot.gyro.isCalibrating()) {
-            lastTimestamp = System.currentTimeMillis();
-            return;
+        try {
+            while (!Thread.interrupted()) {
+                long currTimestamp = System.currentTimeMillis();
+                double currEncValue = (Robot.drivetrain.getRight() - Robot.drivetrain.getLeft()) / 2;
+                double currGyroHeading = Robot.gyro.getFusedHeading();
+
+                if (lastTimestamp == 0 || Robot.gyro.isCalibrating()) {
+                    lastTimestamp = currTimestamp;
+                    lastEncValue = currEncValue;
+                    lastGyroHeading = currGyroHeading;
+                    return;
+                }
+
+
+                double dt = (currTimestamp - lastTimestamp) / 1000d;
+
+                double denc = currEncValue - lastEncValue;
+                double tpr = getTicksPerRevolution();
+                double dist = denc / tpr * wheelCircumference;
+
+                double angle = currGyroHeading - lastGyroHeading;
+
+                double radius = dist / angle;
+
+                Pose2D nextPose = new Pose2D(radius * (1 - Math.cos(angle)), radius * Math.sin(angle));
+                currPose.accumulateAndGet(nextPose, Pose2D::compose);
+
+                lastTimestamp = currTimestamp;
+                lastEncValue = currEncValue;
+                lastGyroHeading = currGyroHeading;
+
+                Thread.sleep(5);
+            }
         }
-
-        double tpr = getTicksPerRevolution();
-
-        long currTimestamp = System.currentTimeMillis();
-        double dt = (currTimestamp - lastTimestamp) / 1000d;
-
-        double enc = (Robot.drivetrain.getRight() - Robot.drivetrain.getLeft()) / 2;
-        double dist = enc / tpr * wheelCircumference;
-
-        double currGyroHeading = Robot.gyro.getFusedHeading();
-        double angle = currGyroHeading - lastGyroHeading;
-
-        double radius = dist / angle;
-
-        Pose2D nextPose = new Pose2D(radius * (1 - Math.cos(angle)), radius * Math.sin(angle));
-        currPose.accumulateAndGet(nextPose, Pose2D::compose);
-
-        lastTimestamp = currTimestamp;
-        lastGyroHeading = currGyroHeading;
+        catch (InterruptedException e) {
+            System.out.println("PositionTracking thread interrupted unexpectedly...");
+        }
     }
 
     private void reset() {
