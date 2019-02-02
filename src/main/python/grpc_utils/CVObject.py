@@ -21,6 +21,18 @@ class GaffeTape:
         self.centroid = centroid
 
 
+class Hatch:
+    def __init__(self, centroid: Point, diameter):
+        self.centroid = centroid
+        self.diameter = diameter
+
+
+class Ball:
+    def __init__(self, centroid: Point, diameter):
+        self.centroid = centroid
+        self.diameter = diameter
+
+
 class CVData:
     def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape, gaffeTape: GaffeTape):
         self.leftTape = leftTape
@@ -32,9 +44,3 @@ class DoubleTape:
     def __init__(self, TapeA: ReflectiveTape, TapeB: ReflectiveTape):
         self.tapeA = TapeA
         self.tapeB = TapeB
-
-
-class GameObject:
-    def __init__(self, centroid: Point, radius):
-        self.centroid = centroid
-        self.radius = radius
