@@ -60,7 +60,7 @@ public class OI {
 
     //TODO change target
     xboxA.whenPressed(new SubsystemPID(1000, RobotMap.elevatorPIDPosition, Robot.elevatorSubsystem, 2, RobotMap.elevatorLowerLimit, RobotMap.elevatorUpperLimit));
-
+    xboxB.whenPressed(new SubsystemPID(1000, RobotMap.wristPIDPosition, Robot.wristSubsystem, 2, RobotMap.wristLowerLimit, RobotMap.wristUpperLimit));
 
   }
 

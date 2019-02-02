@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from threading import Event
 from threading import Lock
 
 import cv2
+from arc852.multi_image_server import ImageServer
 
 
 class SharedFrame(object):
@@ -50,3 +50,19 @@ class Camera:
         while True:
             ret, frame = self.capture.read()
             self.shared_frame.setFrame(frame)
+
+
+class StreamServer:
+    def __init__(self, sf0: SharedFrame, sf1: SharedFrame, sf2: SharedFrame):
+        self.sf0 = sf0
+        self.sf1 = sf1
+        self.sf2 = sf2
+
+    def start(self):
+        server = ImageServer('./cv_utils/multi-image.html')
+        server.start()
+
+        while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
+            server.image(self.sf0.getFrame(), "cam0")
+            server.image(self.sf1.getFrame(), "cam1")
+            server.image(self.sf2.getFrame(), "cam2")

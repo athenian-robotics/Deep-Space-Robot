@@ -5,13 +5,13 @@
 <head>
     <meta HTTP-EQUIV="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta HTTP-EQUIV="Pragma" content="no-cache">
-    <META CONTENT="-1" HTTP-EQUIV="Expires">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
 
     <title>_TITLE_</title>
 
     <style>
         body {
-            background-color: #996F51;
+            background-color: #404552;
         }
 
         .header {
@@ -40,13 +40,13 @@
         }
 
         .image:active {
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
+          box-shadow: 0 5px #666;
+          transform: translateY(4px);
         }
 
         .pause {
             color: white;
-            border: 1px solid black;
+            border: 1px white;
             border-radius: 8px;
             padding: 10px 20px;
             text-align: center;
@@ -58,14 +58,14 @@
         }
 
         .pause:active {
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
+          box-shadow: 0 5px #666;
+          transform: translateY(4px);
         }
 
         .refresh {
             color: white;
-            background-color: #CC5706;
-            border: 1px solid black;
+            background-color: #5294e2;
+            border: 1px white;
             border-radius: 8px;
             padding: 10px 20px;
             text-align: center;
@@ -75,8 +75,8 @@
         }
 
         .refresh:active {
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
+          box-shadow: 0 5px #666;
+          transform: translateY(4px);
         }
 
     </style>
@@ -85,6 +85,9 @@
         var paused = false;
         var red = '#FF3B22'
         var green = '#14CC06'
+        var blue = '#5294e2'
+        var white = '#ffffff'
+        var black = '#000000'
 
         window.onload = function () {
             var header = document.getElementById('header_0');
@@ -97,14 +100,14 @@
             if (!paused) {
                 var warning = document.getElementById('status_0')
                 var image = new Image();
-                image.onload = function () {
+                image.onload = function(){
                     warning.innerHTML = "Connected to image server";
                     warning.style.backgroundColor = green
                     img = document.getElementById('image_0');
                     img.getContext('2d').drawImage(image, 0, 0);
                     setTimeout(loadImage, _DELAY_SECS_ * 1000);
                 };
-                image.onerror = function () {
+                image.onerror = function(){
                     warning.innerHTML = "Disconnected from image server";
                     warning.style.backgroundColor = red
                     setTimeout(loadImage, 1000);
@@ -115,11 +118,12 @@
 
         function setButton() {
             var button = document.getElementById('pause_0');
-            button.style.backgroundColor = paused ? red : green;
+            button.style.backgroundColor = paused ? blue : white;
+            button.style.webkitTextFillColor = paused ? white : black;
             button.value = paused ? 'Resume' : 'Pause';
 
             var img = document.getElementById('image_0');
-            img.style.borderColor = paused ? red : green;
+            img.style.borderColor = paused ? blue : white;
         }
 
         function togglePause() {
@@ -132,30 +136,25 @@
             window.location.href = "/image?delay=" + time;
         }
 
+        function changeCamera(name) {
+            window.location.href = "/image?current_camera=" + name
+        }
+
     </script>
 </head>
 
 <body>
 
-<table border="0" class="buttons">
+<table class="buttons" border="0">
     <tr>
         <td>
-            <input class="refresh" onclick="refreshDelay('0')" type="button" value="0 secs">
+            <input class="refresh" onclick="changeCamera('cam0')" type="button" value="cam0">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('0.1')" type="button" value="0.1 secs">
+            <input class="refresh" onclick="changeCamera('cam1')" type="button" value="cam1">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('0.25')" type="button" value="0.25 secs">
-        </td>
-        <td>
-            <input class="refresh" onclick="refreshDelay('0.5')" type="button" value="0.5 secs">
-        </td>
-        <td>
-            <input class="refresh" onclick="refreshDelay('1')" type="button" value="1 secs">
-        </td>
-        <td>
-            <input class="refresh" onclick="refreshDelay('5')" type="button" value="5 secs">
+            <input class="refresh" onclick="changeCamera('cam2')" type="button" value="cam2">
         </td>
     </tr>
 </table>
@@ -172,11 +171,11 @@
 </table>
 
 <div>
-    <canvas class="image" height="_HEIGHT_px" id="image_0" onclick="togglePause()" width="_WIDTH_px"></canvas>
+    <canvas class="image" id="image_0" width="_WIDTH_px" height="_HEIGHT_px" onclick="togglePause()"></canvas>
 </div>
 
 <div>
-    <input class="pause" id="pause_0" onclick="togglePause()" type="button" value="Pause">
+    <input type="button" class="pause" id="pause_0" value="Pause" onclick="togglePause()">
 </div>
 
 </body>
