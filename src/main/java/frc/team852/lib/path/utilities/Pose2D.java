@@ -62,6 +62,18 @@ public class Pose2D implements CSVWritable {
         return new Pose2D(translation.interpolate(other.translation, t), rotation.interpolate(other.rotation, t));
     }
 
+    public Pose2D compose(Pose2D other) {
+        return new Pose2D(translation.compose(other.translation.rotate(rotation)), rotation.compose(other.rotation));
+    }
+
+    public Pose2D translate(Translation2D other) {
+        return new Pose2D(translation.compose(other), rotation);
+    }
+
+    public Pose2D rotate(Rotation2D other) {
+        return new Pose2D(translation, rotation.compose(other));
+    }
+
     public Translation2D getTranslation() {
         return translation;
     }
