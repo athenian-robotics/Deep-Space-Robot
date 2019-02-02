@@ -118,12 +118,12 @@
 
         function setButton() {
             var button = document.getElementById('pause_0');
-            button.style.backgroundColor = paused ? blue : white;
-            button.style.webkitTextFillColor = paused ? white : black;
+            button.style.backgroundColor = paused ? white : blue;
+            button.style.webkitTextFillColor = paused ? black : white;
             button.value = paused ? 'Resume' : 'Pause';
 
             var img = document.getElementById('image_0');
-            img.style.borderColor = paused ? blue : white;
+            img.style.borderColor = paused ? white : blue;
         }
 
         function togglePause() {

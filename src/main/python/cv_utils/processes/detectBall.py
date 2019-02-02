@@ -3,8 +3,10 @@ import imutils
 import numpy as np
 
 from arc852 import camera
-from opencv_utils import BLUE, GREEN, RED, is_raspi, get_center
+from opencv_utils import GREEN, RED, is_raspi, get_center
 
+
+# TODO REWRITE IN CORRECT FORMAT
 
 def main():
     cam = camera.Camera()
