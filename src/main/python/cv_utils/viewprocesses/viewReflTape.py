@@ -8,7 +8,7 @@ low = numpy.array([100, 100, 50])  # TODO find ideal value range
 high = numpy.array([110, 255, 255])
 
 
-def detectReflTape(shared_frame: SharedFrame):
+def viewReflTape(shared_frame: SharedFrame):
     # get the frame from the thread
     frame = shared_frame.getFrame()
 
