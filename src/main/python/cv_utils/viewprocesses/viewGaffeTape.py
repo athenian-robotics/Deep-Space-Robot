@@ -8,7 +8,7 @@ low = numpy.array([0, 100, 50])  # TODO find ideal value range
 high = numpy.array([110, 255, 255])
 
 
-def detectGaffeTape(shared_frame: SharedFrame):
+def viewGaffeTape(shared_frame: SharedFrame):
     frame = shared_frame.getFrame()
 
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
@@ -36,6 +36,7 @@ def detectGaffeTape(shared_frame: SharedFrame):
             angle = 0  # default
         wasDetected = True
 
-        return GaffeTape(wasDetected, angle, topobj, bottomobj, centroid)  # jam all values into a gaffetape object
-    else:
-        return GaffeTape(wasDetected, 0, Point(0,0), Point(0,0), Point(0,0))
+        cv2.drawContours(frame, contour, -1, (255,0,0), 4)
+        cv2.circle(frame, (centroid.x,centroid.y), 7, (0,255,0),8)
+
+    return frame

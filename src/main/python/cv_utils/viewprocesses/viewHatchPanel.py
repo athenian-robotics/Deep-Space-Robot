@@ -8,7 +8,7 @@ low = numpy.array([0, 100, 100])  # TODO find ideal value range
 high = numpy.array([10, 255, 255])
 
 
-def detectHatchPanel(shared_frame: SharedFrame):
+def viewHatchPanel(shared_frame: SharedFrame):
     # get the frame from the thread
     frame = shared_frame.getFrame()
 

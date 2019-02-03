@@ -41,7 +41,7 @@ def detectReflTape(frame):
             # SAME LOGIC AS ABOVE
             wasDetected2 = True
             contour2 = ordered[1]  # second largest tape
-            leftpt2 = sorted(contour1, key=lambda a: a[0][0])[0][0]
+            leftpt2 = sorted(contour2, key=lambda a: a[0][0])[0][0]
             leftobj2 = Point(leftpt2[0], leftpt2[1])
             rightpt2 = sorted(contour2, key=lambda a: a[0][0])[-1][0]
             rightobj2 = Point(rightpt2[0], rightpt2[1])
