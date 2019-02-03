@@ -11,14 +11,13 @@ package utils;
 service OpenCVInfo {
     rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
 
-    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {
-    }
-    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty)
+    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {}
 
-    rpc SendBall (Ball) returns (google.protobuf.Empty) {
-    }
-    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {
-    }
+    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty) {}
+
+    rpc SendBall (Ball) returns (google.protobuf.Empty) {}
+
+    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {}
 }
 
 message FrameSize {
