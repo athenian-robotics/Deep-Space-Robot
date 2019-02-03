@@ -19,7 +19,7 @@ server = StreamServer(sftop, sfmed, sflow)
 # TODO Implement Break Function
 
 # placeholder host and port
-grpc_server = RouteClient(host="localhost", port="5050")
+grpc_client = RouteClient(host="localhost", port="5050")
 
 with ThreadPoolExecutor() as executor:
     executor.submit(topCamera.start)
@@ -30,9 +30,9 @@ with ThreadPoolExecutor() as executor:
     executor.submit(server.start)
 
     # alignment
-    executor.submit(grpc_server.sendHatch, sfmed)
-    executor.submit(grpc_server.sendBall, sfmed)
+    executor.submit(grpc_client.sendHatch, sfmed)
+    executor.submit(grpc_client.sendBall, sfmed)
 
     # game object
-    executor.submit(grpc_server.sendGaffeTape, sflow)
-    executor.submit(grpc_server.sendReflTape, sftop)
+    executor.submit(grpc_client.sendGaffeTape, sflow)
+    executor.submit(grpc_client.sendReflTape, sftop)
