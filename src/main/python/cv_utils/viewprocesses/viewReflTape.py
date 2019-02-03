@@ -1,16 +1,15 @@
 import numpy
-
+5
 from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
-low = numpy.array([100, 100, 50])  # TODO find ideal value range
-high = numpy.array([110, 255, 255])
+low = numpy.array([80, 50, 200])  # TODO find ideal value range
+high = numpy.array([100, 230, 255])
 
 
-def viewReflTape(shared_frame: SharedFrame):
+def viewReflTape(frame):
     # get the frame from the thread
-    frame = shared_frame.getFrame()
 
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
@@ -23,14 +22,11 @@ def viewReflTape(shared_frame: SharedFrame):
         if len(ordered) > 1:
             wasDetected1 = True
             contour1 = ordered[0]  # biggest contour
-            leftpt1 = sorted(contour1, key=lambda a: a[0][0])[0][
-                0]  # find the point with the smallest x value in the contour
+            leftpt1 = sorted(contour1, key=lambda a: a[0][0])[0][0]  # find the point with the smallest x value in the contour
             leftobj1 = Point(leftpt1[0], leftpt1[1])  # create Point object ^^^
-            rightpt1 = sorted(contour1, key=lambda a: a[0][0])[-1][
-                0]  # find the point with the largest x value in the contour
+            rightpt1 = sorted(contour1, key=lambda a: a[0][0])[-1][0]  # find the point with the largest x value in the contour
             rightobj1 = Point(rightpt1[0], rightpt1[1])  # create Point object ^^^
-            centroid1 = (int((leftpt1[0] + rightpt1[0]) / 2),
-                         int((leftpt1[1] + rightpt1[1]) / 2))  # find centroid as the average of ^^^
+            centroid1 = (int((leftpt1[0] + rightpt1[0]) / 2), int((leftpt1[1] + rightpt1[1]) / 2))  # find centroid as the average of ^^^
             area1 = cv2.contourArea(contour1)  # find area of contour
             if len(contour1) > 5:
                 (x1, y1), (MA1, ma1), angle1 = cv2.fitEllipse(
@@ -44,7 +40,7 @@ def viewReflTape(shared_frame: SharedFrame):
             # SAME LOGIC AS ABOVE
             wasDetected2 = True
             contour2 = ordered[1]  # second largest tape
-            leftpt2 = sorted(contour1, key=lambda a: a[0][0])[0][0]
+            leftpt2 = sorted(contour2, key=lambda a: a[0][0])[0][0]
             leftobj2 = Point(leftpt2[0], leftpt2[1])
             rightpt2 = sorted(contour2, key=lambda a: a[0][0])[-1][0]
             rightobj2 = Point(rightpt2[0], rightpt2[1])
@@ -54,13 +50,18 @@ def viewReflTape(shared_frame: SharedFrame):
                 (x2, y2), (MA2, ma2), angle2 = cv2.fitEllipse(contour2)
             else:
                 angle2 = 0
-            tapeB = ReflectiveTape(wasDetected2, angle2, area2, max(leftobj2, rightobj2, key=lambda p: p.y),
-                                   Point(centroid2[0], centroid2[1]), min(leftobj2, rightobj2, key=lambda p: p.y))
+            tapeB = ReflectiveTape(wasDetected2, angle2, area2, max(leftobj2, rightobj2, key=lambda p: p.y),Point(centroid2[0], centroid2[1]), min(leftobj2, rightobj2, key=lambda p: p.y))
             cv2.drawContours(frame, [contour1, contour2], -1, (0,255,0), 4)
             cv2.circle(frame, (centroid1[0], centroid1[1]), 7, (0,0,255), 8)
-            cv2.circle(frame, (centroid2[0], centroid2[1]), 7, (0, 0, 255), 8)
+            cv2.circle(frame, (centroid2[0], centroid2[1]), 7, (255, 0, 0), 8)
+            cv2.circle(frame, tuple(leftpt1), 7, (255, 0, 0), 8)
+            cv2.circle(frame, tuple(rightpt1), 7, (0, 0, 0), 8)
+            cv2.circle(frame, tuple(leftpt2), 7, (0, 0, 0), 8)
+            cv2.circle(frame, tuple(rightpt2), 7, (0, 0, 0), 8)
     else:
         tapeA = ReflectiveTape(wasDetected1, 0, 0, Point(0,0), Point(0,0), Point(0,0))
         tapeB = ReflectiveTape(wasDetected2, 0, 0, Point(0, 0), Point(0, 0), Point(0, 0))
 
+
     return frame
+
