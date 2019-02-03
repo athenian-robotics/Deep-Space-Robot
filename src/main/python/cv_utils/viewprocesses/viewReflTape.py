@@ -8,8 +8,9 @@ low = numpy.array([80, 50, 200])  # TODO find ideal value range
 high = numpy.array([100, 230, 255])
 
 
-def viewReflTape(frame):
+def viewReflTape(shared_frame: SharedFrame):
     # get the frame from the thread
+    frame = shared_frame.getFrame()
 
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
