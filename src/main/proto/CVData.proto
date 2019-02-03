@@ -11,9 +11,9 @@ package utils;
 service OpenCVInfo {
     rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
     rpc SendCVData (CVData) returns (google.protobuf.Empty) {}
-    rpc SendBall (Hatch) returns (google.protobuf.Empty) {
+    rpc SendBall (Ball) returns (google.protobuf.Empty) {
     }
-    rpc SendHatch (Ball) returns (google.protobuf.Empty) {
+    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {
     }
 
 
