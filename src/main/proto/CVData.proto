@@ -10,13 +10,15 @@ package utils;
 
 service OpenCVInfo {
     rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
-    rpc SendCVData (CVData) returns (google.protobuf.Empty) {}
+
+    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {
+    }
+    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty)
+
     rpc SendBall (Ball) returns (google.protobuf.Empty) {
     }
     rpc SendHatch (Hatch) returns (google.protobuf.Empty) {
     }
-
-
 }
 
 message FrameSize {
@@ -34,10 +36,15 @@ message Ball {
     double diameter = 2;
 }
 
-message CVData {
-    ReflTape left = 1;
-    ReflTape right = 2;
-    GaffeTape tape = 3;
+// message CVData {
+//    ReflTape left = 1;
+//    ReflTape right = 2;
+//    GaffeTape tape = 3;
+// }
+
+message ReflTapePair {
+    ReflTape leftTape = 1;
+    ReflTape rightTape = 2;
 }
 
 message ReflTape {
@@ -49,7 +56,7 @@ message ReflTape {
 }
 
 message GaffeTape {
-    Point front = 1;
+    Point ront = 1;
     Point centroid = 2;
     Point back = 3;
     double degrees = 4;

@@ -1,5 +1,10 @@
 import sys
 
+from cv_utils.processes.detectCargo import *
+from cv_utils.processes.detectGaffeTape import *
+from cv_utils.processes.detectHatchPanel import *
+from cv_utils.processes.detectReflTape import *
+from cv_utils.stream import *
 from grpc_utils import grpc_info
 from grpc_utils.CVObject import *
 
@@ -12,67 +17,49 @@ class RouteClient:
     def __init__(self, host: str, port):
         self.grpcInfo = grpc_info.GrpcInfo(host=host, port=port)
 
+    def newPoint(self, p: Point):
+        return CVData_pb2.Point(x=p.x, y=p.y)
+
     def sendFrameSize(self, width: int, height: int):
         data = CVData_pb2.FrameSize(x=width, y=height)
-        response = self.grpcInfo.stub.SendFrameSize(data)
-        if response:
-            print("Data sent!")
-            print(data)
+        self.grpcInfo.stub.SendFrameSize(data)
 
-    def sendCVData(self, CVBulk: CVData):
-        def newPoint(p: Point):
-            return CVData_pb2.Point(x=p.x, y=p.y)
+    def sendReflTape(self, shared_frame: SharedFrame):
+        ReflTape = detectReflTape(shared_frame.getFrame())
+        glt = CVData_pb2.ReflTape(degrees=ReflTape.leftTape.degree,
+                                  size=ReflTape.leftTape.size,
+                                  topInside=self.newPoint(ReflTape.leftTape.topInside),
+                                  centroid=self.newPoint(ReflTape.leftTape.centroid),
+                                  bottomOutside=self.newPoint(ReflTape.leftTape.bottomOutside))
 
-        # TODO Implement to string function
-        def toString(bulk: CVData) -> str:
-            return bulk
+        grt = CVData_pb2.ReflTape(degrees=ReflTape.rightTape.degree,
+                                  size=ReflTape.rightTape.size,
+                                  topInside=self.newPoint(ReflTape.rightTape.topInside),
+                                  centroid=self.newPoint(ReflTape.rightTape.centroid),
+                                  bottomOutside=self.newPoint(ReflTape.rightTape.bottomOutside))
 
-        glt = CVData_pb2.ReflTape(degrees=CVBulk.leftTape.degree,
-                                       size=CVBulk.leftTape.size,
-                                       topInside=newPoint(CVBulk.leftTape.topInside),
-                                       centroid=newPoint(CVBulk.leftTape.centroid),
-                                       bottomOutside=newPoint(CVBulk.leftTape.bottomOutside))
+        pair = CVData_pb2.ReflTapePair(leftTape=glt, rightTape=grt)
+        self.grpcInfo.stub.SendReflTape(pair)
 
-        grt = CVData_pb2.ReflTape(degrees=CVBulk.rightTape.degree,
-                                       size=CVBulk.rightTape.size,
-                                       topInside=newPoint(CVBulk.rightTape.topInside),
-                                       centroid=newPoint(CVBulk.rightTape.centroid),
-                                       bottomOutside=newPoint(CVBulk.rightTape.bottomOutside))
+    def sendGaffeTape(self, shared_frame: SharedFrame):
+        gaffeTape = detectGaffeTape(shared_frame.getFrame())
+        ggt = CVData_pb2.GaffeTape(degrees=gaffeTape.degree,
+                                   front=self.newPoint(gaffeTape.front),
+                                   centroid=self.newPoint(gaffeTape.centroid),
+                                   back=self.newPoint(gaffeTape.back))
 
-        ggt = CVData_pb2.GaffeTape(degrees=CVBulk.gaffeTape.degree,
-                                        front=newPoint(CVBulk.gaffeTape.front),
-                                        centroid=newPoint(CVBulk.gaffeTape.centroid),
-                                        back=newPoint(CVBulk.gaffeTape.back))
+        self.grpcInfo.stub.SendCVData(ggt)
 
-        data = CVData_pb2.CVData(left=glt, right=grt, tape=ggt)
-        response = self.grpcInfo.stub.SendCVData(data)
-        if response:
-            print("Data sent!")
+    def sendBall(self, shared_frame: SharedFrame):
+        ball = detectCargo(shared_frame.getFrame())
+        gB = CVData_pb2.Ball(centroid=self.newPoint(ball.centroid),
+                             diameter=ball.diameter)
 
-    def sendBall(self, ball: Ball):
-        def newPoint(p: Point):
-            return CVData_pb2.Point(x=p.x, y=p.y)
+        self.grpcInfo.stub.SendBall(gB)
 
-        def toString(ball: Ball) -> str:
-            return ball
+    def sendHatch(self, shared_frame: SharedFrame):
+        hatch = detectHatchPanel(shared_frame.getFrame())
+        gH = CVData_pb2.Hatch(centroid=self.newPoint(hatch.centroid),
+                              diameter=hatch.diameter)
 
-        radius = ball.radius
-        centroid = newPoint(ball.centroid)
-        obj = CVData_pb2.GameObject(radius=radius, centroid=centroid)
-        response = self.grpcInfo.stub.SendBall(obj)
-        if response:
-            print("Data sent!")
-
-    def sendHatch(self, hatch: Hatch):
-        def newPoint(p: Point):
-            return CVData_pb2.Point(x=p.x, y=p.y)
-
-        def toString(hatch: Hatch) -> str:
-            return hatch
-
-        radius = hatch.radius
-        centroid = newPoint(hatch.centroid)
-        obj = CVData_pb2.GameObject(radius=radius, centroid=centroid)
-        response = self.grpcInfo.stub.SendHatch(obj)
-        if response:
-            print("Data sent!")
+        self.grpcInfo.stub.SendHatch(gH)

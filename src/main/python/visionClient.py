@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 from cv_utils.stream import *
+from grpc_utils.routeClient import *
 
 # CONVENTION: INDEX STARTS AT 0
 
@@ -14,15 +15,12 @@ lowCamera = Camera(cameraIndex=2, shared_frame=sfl, resolution=(500, 500))
 
 server = StreamServer(sft, sfm, sfl)
 
-# TODO Implement Processes
 # TODO get rpc from button press
-
-
-# TODO Implement Frame Executor
-
 
 # TODO Implement Break Function
 
+# placeholder host and port
+grpc_server = RouteClient(host="localhost", port="5050")
 
 with ThreadPoolExecutor() as executor:
     executor.submit(topCamera.start)
@@ -32,5 +30,10 @@ with ThreadPoolExecutor() as executor:
     # stream started
     executor.submit(server.start)
 
-    executor.submit()
-    # processes started
+    # alignment
+    executor.submit(grpc_server.sendHatch(sfm))
+    executor.submit(grpc_server.sendBall(sfm))
+
+    # game object
+    executor.submit(grpc_server.sendGaffeTape(sfl))
+    executor.submit(grpc_server.sendReflTape(sft))

@@ -8,9 +8,7 @@ low = numpy.array([0, 100, 50])  # TODO find ideal value range
 high = numpy.array([110, 255, 255])
 
 
-def detectGaffeTape(shared_frame: SharedFrame):
-    frame = shared_frame.getFrame()
-
+def detectGaffeTape(frame):
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
     colormask = cv2.inRange(hsv, low, high)  # find tape

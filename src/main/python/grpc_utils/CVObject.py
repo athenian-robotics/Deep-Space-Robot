@@ -6,7 +6,6 @@ class Point:
 
 class ReflectiveTape:
     def __init__(self, wasDetected, degree, size, topInside: Point, centroid: Point, bottomOutside: Point):
-        self.wasDetected = wasDetected
         self.degree = degree
         self.size = size
         self.topInside = topInside
@@ -16,7 +15,6 @@ class ReflectiveTape:
 
 class GaffeTape:
     def __init__(self, wasDetected, degree, front: Point, back: Point, centroid: Point):
-        self.wasDetected = wasDetected
         self.degree = degree
         self.front = front
         self.back = back
@@ -25,26 +23,23 @@ class GaffeTape:
 
 class Hatch:
     def __init__(self, wasDetected, centroid: Point, diameter):
-        self.wasDetected = wasDetected
         self.centroid = centroid
         self.diameter = diameter
 
 
 class Ball:
     def __init__(self, wasDetected, centroid: Point, diameter):
-        self.wasDetected = wasDetected
         self.centroid = centroid
         self.diameter = diameter
 
 
-class CVData:
-    def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape, gaffeTape: GaffeTape):
-        self.leftTape = leftTape
-        self.rightTape = rightTape
-        self.gaffeTape = gaffeTape
-
-
-class DoubleTape:
+class ReflTapePair:
     def __init__(self, TapeA: ReflectiveTape, TapeB: ReflectiveTape):
-        self.tapeA = TapeA
-        self.tapeB = TapeB
+        self.leftTape = TapeA
+        self.rightTape = TapeB
+
+# class CVData:
+#     def __init__(self, leftTape: ReflectiveTape, rightTape: ReflectiveTape, gaffeTape: GaffeTape):
+#         self.leftTape = leftTape
+#         self.rightTape = rightTape
+#         self.gaffeTape = gaffeTape

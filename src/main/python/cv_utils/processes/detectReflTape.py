@@ -8,10 +8,7 @@ low = numpy.array([100, 100, 50])  # TODO find ideal value range
 high = numpy.array([110, 255, 255])
 
 
-def detectReflTape(shared_frame: SharedFrame):
-    # get the frame from the thread
-    frame = shared_frame.getFrame()
-
+def detectReflTape(frame):
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
     colormask = cv2.inRange(hsv, low, high)  # find tape
@@ -60,4 +57,4 @@ def detectReflTape(shared_frame: SharedFrame):
         tapeA = ReflectiveTape(wasDetected1, 0, 0, Point(0,0), Point(0,0), Point(0,0))
         tapeB = ReflectiveTape(wasDetected2, 0, 0, Point(0, 0), Point(0, 0), Point(0, 0))
 
-    return DoubleTape(tapeA, tapeB)  # jam both tape objects into a DoubleTape object
+    return ReflTapePair(tapeA, tapeB)  # jam both tape objects into a DoubleTape object

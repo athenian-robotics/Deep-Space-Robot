@@ -1,23 +1,50 @@
-from prometheus_client import start_http_server, Summary, Counter, Gauge
-import random
-import time
+from prometheus_client import Counter
+from prometheus_client import Gauge
 
-REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
-c = Counter('counter', 'thisCounts')
-g = Gauge('gauge', 'thisGauges')
+# Two types of Prometheus objects: Counters and Gauges
 
-
-def process_request(t):
-    """A dummy function that takes some time."""
-    time.sleep(t)
-    c.inc()
-    g.set(random.randint(1,100))
-    print(c._value.get())
+# Counter: Only used to increment, usually by 1
+c = Counter('my_failures', 'Description of counter')
+c.inc()  # Increment by 1
+c.inc(1.6)  # Increment by given value
 
 
-if __name__ == '__main__':
-    # Start up the server to expose the metrics.
-    start_http_server(8001)
-    # Generate some requests.
-    while True:
-        process_request(random.random())
+# Here's a more advanced example of count: number of exceptions
+
+# With annotation
+@c.count_exceptions()
+def f():
+    pass
+
+
+# Within your code
+with c.count_exceptions():
+    pass
+
+# Count only one type of exception
+with c.count_exceptions(ValueError):
+    pass
+
+# Gauges: Used to track any value, anything that's not counting will be here (e.g. temperature, cpu usage, ...)
+# Can inc, dec, and set
+g = Gauge('my_inprogress_requests', 'Description of gauge')
+g.inc()  # Increment by 1
+g.dec(10)  # Decrement by given value
+g.set(4.2)  # Set to a given value
+
+g.set_to_current_time()  # Set to current unixtime
+
+
+# Another use case: Increment when entered, decrement when exited.
+@g.track_inprogress()
+def f():
+    pass
+
+
+with g.track_inprogress():
+    pass
+
+# A gauge can also take its value from a callback
+d = Gauge('data_objects', 'Number of objects')
+my_dict = {}
+d.set_function(lambda: len(my_dict))

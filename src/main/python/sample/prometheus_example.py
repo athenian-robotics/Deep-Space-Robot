@@ -14,16 +14,16 @@ c.inc(1.6)  # Increment by given value
 # With annotation
 @c.count_exceptions()
 def f():
-  pass
+    pass
 
 
 # Within your code
 with c.count_exceptions():
-  pass
+    pass
 
 # Count only one type of exception
 with c.count_exceptions(ValueError):
-  pass
+    pass
 
 # Gauges: Used to track any value, anything that's not counting will be here (e.g. temperature, cpu usage, ...)
 # Can inc, dec, and set
@@ -38,13 +38,12 @@ g.set_to_current_time()   # Set to current unixtime
 # Another use case: Increment when entered, decrement when exited.
 @g.track_inprogress()
 def f():
-  pass
+    pass
 
 with g.track_inprogress():
-  pass
+    pass
 
 # A gauge can also take its value from a callback
 d = Gauge('data_objects', 'Number of objects')
 my_dict = {}
 d.set_function(lambda: len(my_dict))
-
