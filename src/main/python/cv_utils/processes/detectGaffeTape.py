@@ -36,4 +36,6 @@ def detectGaffeTape(shared_frame: SharedFrame):
             angle = 0  # default
         wasDetected = True
 
-    return GaffeTape(wasDetected, angle, topobj, bottomobj, centroid)  # jam all values into a gaffetape object
+        return GaffeTape(wasDetected, angle, topobj, bottomobj, centroid)  # jam all values into a gaffetape object
+    else:
+        return GaffeTape(wasDetected, 0, Point(0,0), Point(0,0), Point(0,0))

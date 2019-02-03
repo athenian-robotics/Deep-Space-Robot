@@ -56,5 +56,8 @@ def detectReflTape(shared_frame: SharedFrame):
                 angle2 = 0
             tapeB = ReflectiveTape(wasDetected2, angle2, area2, max(leftobj2, rightobj2, key=lambda p: p.y),
                                    Point(centroid2[0], centroid2[1]), min(leftobj2, rightobj2, key=lambda p: p.y))
+    else:
+        tapeA = ReflectiveTape(wasDetected1, 0, 0, Point(0,0), Point(0,0), Point(0,0))
+        tapeB = ReflectiveTape(wasDetected2, 0, 0, Point(0, 0), Point(0, 0), Point(0, 0))
 
     return DoubleTape(tapeA, tapeB)  # jam both tape objects into a DoubleTape object

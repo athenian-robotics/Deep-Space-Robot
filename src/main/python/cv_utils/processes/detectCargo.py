@@ -29,7 +29,7 @@ def detectCargo(shared_frame: SharedFrame):
         leftPoint = 0
         rightPoint = 0
 
-    centroid = ((leftPoint[0] + rightPoint[0]) / 2, (leftPoint[1] + rightPoint[2]) / 2)
+    centroid = Point((leftPoint[0] + rightPoint[0]) / 2, (leftPoint[1] + rightPoint[2]) / 2)
     diameter = rightPoint[0] - leftPoint[0]
 
     return Ball(wasDetected, centroid, diameter)
