@@ -56,7 +56,7 @@ def detectReflTape(shared_frame: SharedFrame):
                 angle2 = 0
             tapeB = ReflectiveTape(wasDetected2, angle2, area2, max(leftobj2, rightobj2, key=lambda p: p.y),
                                    Point(centroid2[0], centroid2[1]), min(leftobj2, rightobj2, key=lambda p: p.y))
-            cv2.drawContours(frame, [contour1, contour2], 0, (0,255,0), 4)
+            cv2.drawContours(frame, [contour1, contour2], -1, (0,255,0), 4)
             cv2.circle(frame, (centroid1[0], centroid1[1]), 7, (0,0,255), 8)
             cv2.circle(frame, (centroid2[0], centroid2[1]), 7, (0, 0, 255), 8)
     else:
