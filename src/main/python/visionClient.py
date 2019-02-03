@@ -1,19 +1,18 @@
 from concurrent.futures import ThreadPoolExecutor
 
-from cv_utils.stream import *
 from grpc_utils.routeClient import *
 
 # CONVENTION: INDEX STARTS AT 0
 
-sft = SharedFrame()
-sfm = SharedFrame()
-sfl = SharedFrame()
+sftop = SharedFrame()
+sfmed = SharedFrame()
+sflow = SharedFrame()
 
-topCamera = Camera(cameraIndex=0, shared_frame=sft, resolution=(500, 500))
-medCamera = Camera(cameraIndex=1, shared_frame=sfm, resolution=(500, 500))
-lowCamera = Camera(cameraIndex=2, shared_frame=sfl, resolution=(500, 500))
+topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(500, 500))
+medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(500, 500))
+lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(500, 500))
 
-server = StreamServer(sft, sfm, sfl)
+server = StreamServer(sftop, sfmed, sflow)
 
 # TODO get rpc from button press
 
@@ -31,9 +30,9 @@ with ThreadPoolExecutor() as executor:
     executor.submit(server.start)
 
     # alignment
-    executor.submit(grpc_server.sendHatch(sfm))
-    executor.submit(grpc_server.sendBall(sfm))
+    executor.submit(grpc_server.sendHatch, sfmed)
+    executor.submit(grpc_server.sendBall, sfmed)
 
     # game object
-    executor.submit(grpc_server.sendGaffeTape(sfl))
-    executor.submit(grpc_server.sendReflTape(sft))
+    executor.submit(grpc_server.sendGaffeTape, sflow)
+    executor.submit(grpc_server.sendReflTape, sftop)

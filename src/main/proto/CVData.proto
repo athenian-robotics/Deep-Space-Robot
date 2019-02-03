@@ -9,7 +9,8 @@ option java_outer_classname = "Proto";
 package utils;
 
 service OpenCVInfo {
-    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
+    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {
+    }
 
     rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {
     }
