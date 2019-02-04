@@ -4,8 +4,8 @@ from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
-low = numpy.array([0, 100, 50])  # TODO find ideal value range
-high = numpy.array([110, 255, 255])
+low = numpy.array([0, 100, 40])  # TODO find ideal value range
+high = numpy.array([180, 190, 100])
 
 
 def viewGaffeTape(shared_frame: SharedFrame):
