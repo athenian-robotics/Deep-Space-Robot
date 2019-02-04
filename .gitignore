@@ -4,6 +4,7 @@ build
 .idea
 .gradle
 *.jar
+__pycache__
 
 # Project files
 *.iml

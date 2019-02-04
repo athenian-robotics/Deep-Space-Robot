@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team852.lib.CVDataStore;
+import frc.team852.lib.grpc.CVDataServer;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.subsystem.*;
+
+import java.io.IOException;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +34,9 @@ public class Robot extends TimedRobot {
 
   public static SerialLidar elevatorLidar;
   public static AHRS gyro;
+
+  public static CVDataServer dataServer;
+  public static CVDataStore dataStore;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -57,11 +64,22 @@ public class Robot extends TimedRobot {
 
     gyro = new AHRS(SerialPort.Port.kUSB);
 
+    dataStore = new CVDataStore();
+    dataServer = new CVDataServer();
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     oi = new OI(); // Must be defined last
+
+    try {
+      dataServer.start();
+      SmartDashboard.putString("GRPC_STATUS", "Vision Driver assist available");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+      SmartDashboard.putString("GRPC status", "Vision Driver assist unavailable");
+    }
   }
 
   /**
