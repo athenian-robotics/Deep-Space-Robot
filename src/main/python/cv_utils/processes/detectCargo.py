@@ -4,11 +4,12 @@ from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
-low = numpy.array([0, 100, 100])  # TODO find ideal value range
-high = numpy.array([10, 255, 255])
+low = numpy.array([0, 230, 0])  # TODO find ideal value range
+high = numpy.array([7, 255, 150])
 
 
 def detectCargo(frame):
+
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
     colormask = cv2.inRange(hsv, low, high)  # find tape
@@ -26,7 +27,7 @@ def detectCargo(frame):
         leftPoint = 0
         rightPoint = 0
 
-    centroid = Point((leftPoint[0] + rightPoint[0]) / 2, (leftPoint[1] + rightPoint[2]) / 2)
+    centroid = Point((leftPoint[0] + rightPoint[0]) / 2, (leftPoint[1] + rightPoint[1]) / 2)
     diameter = rightPoint[0] - leftPoint[0]
 
     return Ball(wasDetected, centroid, diameter)
