@@ -9,9 +9,7 @@ high = numpy.array([100, 230, 255])
 
 
 def viewReflTape(shared_frame: SharedFrame):
-    # get the frame from the thread
     frame = shared_frame.getFrame()
-
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
     colormask = cv2.inRange(hsv, low, high)  # find tape
@@ -55,7 +53,7 @@ def viewReflTape(shared_frame: SharedFrame):
             cv2.drawContours(frame, [contour1, contour2], -1, (0,255,0), 4)
             cv2.circle(frame, (centroid1[0], centroid1[1]), 7, (0,0,255), 8)
             cv2.circle(frame, (centroid2[0], centroid2[1]), 7, (255, 0, 0), 8)
-            cv2.circle(frame, tuple(leftpt1), 7, (255, 0, 0), 8)
+            cv2.circle(frame, tuple(leftpt1), 7, (0,0, 0), 8)
             cv2.circle(frame, tuple(rightpt1), 7, (0, 0, 0), 8)
             cv2.circle(frame, tuple(leftpt2), 7, (0, 0, 0), 8)
             cv2.circle(frame, tuple(rightpt2), 7, (0, 0, 0), 8)
@@ -65,4 +63,3 @@ def viewReflTape(shared_frame: SharedFrame):
 
 
     return frame
-

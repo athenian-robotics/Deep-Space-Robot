@@ -9,16 +9,15 @@ option java_outer_classname = "Proto";
 package utils;
 
 service OpenCVInfo {
-    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {
-    }
-    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {
-    }
-    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty)
+    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
 
-    rpc SendBall (Ball) returns (google.protobuf.Empty) {
-    }
-    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {
-    }
+    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {}
+
+    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty) {}
+
+    rpc SendBall (Ball) returns (google.protobuf.Empty) {}
+
+    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {}
 }
 
 message FrameSize {
@@ -35,6 +34,12 @@ message Ball {
     Point centroid = 1;
     double diameter = 2;
 }
+
+// message CVData {
+//    ReflTape left = 1;
+//    ReflTape right = 2;
+//    GaffeTape tape = 3;
+// }
 
 message ReflTapePair {
     ReflTape leftTape = 1;
