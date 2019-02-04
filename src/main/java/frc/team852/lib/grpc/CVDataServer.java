@@ -1,6 +1,7 @@
 package frc.team852.lib.grpc;
 
-import frc.team852.lib.callbacks.BallListener;
+import frc.team852.DeepSpaceRobot.FrameSize;
+import frc.team852.lib.callbacks.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -56,8 +57,24 @@ public class CVDataServer {
     }
   }
 
-  public void registerBallListener(BallListener listener) {
-    this.dataImpl.registerBallListener(listener);
+  public void registerCallback(BallListener listener) {
+    this.dataImpl.registerCallback(listener);
+  }
+
+  public void registerCallback(FrameSizeListener listener) {
+    this.dataImpl.registerCallback(listener);
+  }
+
+  public void registerCallback(GaffeListener listener) {
+    this.dataImpl.registerCallback(listener);
+  }
+
+  public void registerCallback(HatchListener listener) {
+    this.dataImpl.registerCallback(listener);
+  }
+
+  public void registerCallback(ReflTapeListener listener) {
+    this.dataImpl.registerCallback(listener);
   }
 
 }

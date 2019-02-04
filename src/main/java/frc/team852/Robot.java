@@ -50,6 +50,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     new RobotMap(); // Empty declaration
+    dataServer = new CVDataServer();
+    dataStore = new CVDataStore();
+
     drivetrain = new Drivetrain();
     elevatorSubsystem = new ElevatorSubsystem();
     wristSubsystem = new WristSubsystem();
@@ -64,8 +67,6 @@ public class Robot extends TimedRobot {
 
     gyro = new AHRS(SerialPort.Port.kUSB);
 
-    dataStore = new CVDataStore();
-    dataServer = new CVDataServer();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
