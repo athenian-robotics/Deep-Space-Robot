@@ -1,5 +1,6 @@
 import sys
 
+sys.path.append("src/main/python")
 from cv_utils.processes.detectCargo import *
 from cv_utils.processes.detectGaffeTape import *
 from cv_utils.processes.detectHatchPanel import *
