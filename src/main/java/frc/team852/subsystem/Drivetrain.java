@@ -64,7 +64,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public enum DriveMode {
-    Tank, Cheezy, GTA, CheezyPad, SmoothedTriggersGTA, SmoothedTurnGTA, SmoothedBothGTA, ArcadeJoy, ArcadePad;
+    Tank, Cheezy, GTA, CheezyPad, SmoothedTriggersGTA, SmoothedTurnGTA, SmoothedBothGTA, ArcadeJoy, ArcadePad
   }
 
 }
