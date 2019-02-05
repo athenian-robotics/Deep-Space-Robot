@@ -8,7 +8,8 @@ low = numpy.array([0, 230, 0])  # TODO find ideal value range
 high = numpy.array([7, 255, 150])
 
 
-def detectCargo(frame):
+def detectCargo(shared_frame: SharedFrame):
+    frame = shared_frame.getFrame()
 
     blurredframe = cv2.blur(frame, (5, 5))  # blur image
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)  # change colorspace to HSV
