@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
-import frc.team852.command.DriveTank;
+import frc.team852.command.DriveChangable;
 import frc.team852.lib.utils.SparkMaxGroup;
 
 public class Drivetrain extends Subsystem {
   private SparkMaxGroup leftDrive = RobotMap.leftDrive;
   private SparkMaxGroup rightDrive = RobotMap.rightDrive;
   private DoubleSolenoid gearbox = RobotMap.gearbox;
-  private DoubleSolenoid.Value gearing = RobotMap.LOW_GEAR;
+  private DoubleSolenoid.Value gearing = RobotMap.SLOW;
 
   public Drivetrain(){
     super();
@@ -23,7 +23,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new DriveTank());
+    setDefaultCommand(new DriveChangable());
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
@@ -61,6 +61,10 @@ public class Drivetrain extends Subsystem {
   public void stop() {
     leftDrive.set(0);
     rightDrive.set(0);
+  }
+
+  public enum DriveMode {
+    Tank, Cheezy, GTA, CheezyPad, SmoothedTriggersGTA, SmoothedTurnGTA, SmoothedBothGTA, ArcadeJoy, ArcadePad;
   }
 
 }

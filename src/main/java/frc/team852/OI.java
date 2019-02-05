@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team852.command.ChangeDriveMode;
+import frc.team852.command.DriveDistance;
 import frc.team852.command.DrivePathBasic;
 import frc.team852.command.ToggleGearbox;
 
@@ -56,11 +58,16 @@ public class OI {
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
     new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
-    new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
+    new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
+    //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
 
     FieldPaths.genPaths();
     xboxA.whenPressed(new DrivePathBasic(FieldPaths.testPath));
-
+    xboxLB.whenPressed(new ToggleGearbox());
+    xboxRB.whenPressed(new ToggleGearbox());
+    if(xbox.getPOV() == 90)
+      new ChangeDriveMode();
+    xboxY.whenPressed(new DriveDistance(157.48));
 
   }
 

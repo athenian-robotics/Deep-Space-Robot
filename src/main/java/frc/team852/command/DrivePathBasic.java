@@ -48,8 +48,8 @@ public class DrivePathBasic extends Command {
     @Override
     protected void initialize() {
         // Make sure drivetrain is in high gear
-        if (dt.getGearing() == RobotMap.HIGH_GEAR) {
-            dt.setGearbox(RobotMap.HIGH_GEAR);
+        if (dt.getGearing() == RobotMap.SLOW) {
+            dt.setGearbox(RobotMap.SLOW);
             System.out.println("IN HIGH GEAR");
         }
         // Emulate an encoder reset

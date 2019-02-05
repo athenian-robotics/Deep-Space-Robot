@@ -45,8 +45,8 @@ public class DriveTank extends Command {
 
   @Override
   protected void execute() {
-    double leftSpeed = dedband(stick1.getY());
-    double rightSpeed = dedband(stick2.getY());
+    double leftSpeed = deadband(stick1.getY());
+    double rightSpeed = deadband(stick2.getY());
     if (squareInputs) {
       leftSpeed = sign(leftSpeed) * (leftSpeed * leftSpeed);
       rightSpeed = sign(rightSpeed) * (rightSpeed * rightSpeed);
@@ -55,7 +55,8 @@ public class DriveTank extends Command {
   }
 
 
-  private double dedband(double value) {
+
+  private double deadband(double value) {
     return Math.abs(value) > 0.1 ? value : 0;
   }
 

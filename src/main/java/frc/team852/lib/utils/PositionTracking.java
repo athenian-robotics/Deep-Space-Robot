@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.path.utilities.Pose2D;
-import frc.team852.lib.path.utilities.Rotation2D;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -80,6 +79,6 @@ public class PositionTracking implements Runnable {
     }
 
     private double getTicksPerRevolution() {
-        return (Robot.gearstate == RobotMap.HIGH_GEAR) ? ticksPerRevolution_HG : ticksPerRevolution_LG;
+        return (Robot.gearstate == RobotMap.SLOW) ? ticksPerRevolution_HG : ticksPerRevolution_LG;
     }
 }
