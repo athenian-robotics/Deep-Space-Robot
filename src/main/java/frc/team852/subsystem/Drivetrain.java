@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
-import frc.team852.command.DriveChangable;
+import frc.team852.command.DriveChangeable;
 import frc.team852.lib.utils.SparkMaxGroup;
 
 public class Drivetrain extends Subsystem {
@@ -23,7 +23,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new DriveChangable());
+    setDefaultCommand(new DriveChangeable());
   }
 
   public void drive(double leftSpeed, double rightSpeed) {

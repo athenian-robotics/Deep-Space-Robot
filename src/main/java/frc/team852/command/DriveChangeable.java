@@ -13,13 +13,13 @@ import static frc.team852.OI.stick1;
 import static frc.team852.OI.stick2;
 import static frc.team852.OI.xbox;
 
-public class DriveChangable extends Command {
+public class DriveChangeable extends Command {
 
   private Drivetrain dt = Robot.drivetrain;
   private DifferentialDrive drive = new DifferentialDrive(RobotMap.leftDrive, RobotMap.rightDrive);
   private boolean squareInputs;
 
-  public DriveChangable() {
+  public DriveChangeable() {
     requires(Robot.drivetrain);
   }
 
