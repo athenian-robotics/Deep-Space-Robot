@@ -57,24 +57,9 @@ public class CVDataServer {
     }
   }
 
-  public void registerCallback(BallListener listener) {
+  public void registerCallback(GenericListener listener) {
     this.dataImpl.registerCallback(listener);
   }
 
-  public void registerCallback(FrameSizeListener listener) {
-    this.dataImpl.registerCallback(listener);
-  }
-
-  public void registerCallback(GaffeListener listener) {
-    this.dataImpl.registerCallback(listener);
-  }
-
-  public void registerCallback(HatchListener listener) {
-    this.dataImpl.registerCallback(listener);
-  }
-
-  public void registerCallback(ReflTapeListener listener) {
-    this.dataImpl.registerCallback(listener);
-  }
 
 }

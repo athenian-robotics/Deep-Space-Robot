@@ -2,23 +2,37 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.DeepSpaceRobot.GaffeTape;
+import frc.team852.DeepSpaceRobot.ReflTapePair;
 import frc.team852.Robot;
 import frc.team852.lib.callbacks.GaffeListener;
+import frc.team852.lib.callbacks.HatchListener;
+import frc.team852.lib.callbacks.ReflTapeListener;
+import frc.team852.lib.callbacks.CallbackDataContainer;
 import frc.team852.subsystem.Drivetrain;
 
 
 // TODO implement
-public class FollowFloorTape extends Command implements GaffeListener {
-  private boolean freshData = false;
-  private int cyclesSinceFresh = 0;
+public class FollowFloorTape extends Command {
+  private CallbackDataContainer<GaffeTape> gaffeTape = new CallbackDataContainer<>();
+  private CallbackDataContainer<ReflTapePair> reflTapePair = new CallbackDataContainer<>();
   private double fwdPower = 0.25;
-  private GaffeTape tape;
   private Drivetrain dt;
 
-  public FollowFloorTape(){
+  public FollowFloorTape() {
     requires(Robot.drivetrain);
     // Register ourselves with the dataServer
-    Robot.dataServer.registerCallback(this);
+    Robot.dataServer.registerCallback(new GaffeListener() {
+      @Override
+      public void onNewData(GaffeTape data) {
+        gaffeTape.update(data);
+      }
+    });
+    Robot.dataServer.registerCallback(new ReflTapeListener() {
+      @Override
+      public void onNewData(ReflTapePair data) {
+        reflTapePair.update(data);
+      }
+    });
     dt = Robot.drivetrain;
   }
 
@@ -29,20 +43,11 @@ public class FollowFloorTape extends Command implements GaffeListener {
 
   @Override
   protected void execute() {
-    if(freshData){
-      freshData = false;
-    }
+    // TODO implement
   }
 
   @Override
   protected boolean isFinished() {
     return false;
-  }
-
-  @Override
-  public void onNewData(GaffeTape data) {
-    this.tape = data;
-    this.freshData = true;
-    this.cyclesSinceFresh = 0;
   }
 }

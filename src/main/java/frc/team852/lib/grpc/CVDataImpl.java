@@ -5,27 +5,25 @@ import frc.team852.DeepSpaceRobot.*;
 import frc.team852.Robot;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.callbacks.*;
-import io.grpc.internal.ReflectionLongAdderCounter;
 import io.grpc.stub.StreamObserver;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
   CVDataStore store = Robot.dataStore;
-  private List<BallListener> ballCallbacks = new ArrayList<>();
-  private List<HatchListener> hatchCallbacks = new ArrayList<>();
-  private List<FrameSizeListener> frameSizeCallbacks = new ArrayList<>();
-  private List<GaffeListener> gaffeCallbacks = new ArrayList<>();
-  private List<ReflTapeListener> reflCallbacks = new ArrayList<>();
+  private Map<Class, ConcurrentLinkedQueue<GenericListener>> allCallbacks = new ConcurrentHashMap<>();
 
   @Override
   public void sendBall(Ball request, StreamObserver<Empty> responseObserver) {
     Empty reply = Empty.newBuilder().build();
     System.out.print(request);
     this.store.ballRef.set(request);
+    allCallbacks.computeIfAbsent(Ball.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      ballCallbacks.forEach(bc -> bc.onNewData(request));
+      allCallbacks.get(BallListener.class).forEach(callback -> callback.onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("FIX YOUR CALLBACK YOU LOUT");
@@ -39,8 +37,9 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     Empty reply = Empty.newBuilder().build();
     System.out.print(request);
     this.store.hatchRef.set(request);
+    allCallbacks.computeIfAbsent(Hatch.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      hatchCallbacks.forEach(hc -> hc.onNewData(request));
+      allCallbacks.get(HatchListener.class).forEach(callback -> callback.onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("HEY BURRITO BRAINS, FIX YOUR CALLBACK");
@@ -54,8 +53,9 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     Empty reply = Empty.newBuilder().build();
     System.out.print(request);
     this.store.frameSize.set(request);
+    allCallbacks.computeIfAbsent(FrameSize.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      frameSizeCallbacks.forEach(fsc -> fsc.onNewData(request));
+      allCallbacks.get(FrameSizeListener.class).forEach(c -> c.onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("THIS CAUSES ME PHYSICAL PAIN, FIX YOUR CALLBACK");
@@ -70,8 +70,9 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     Empty reply = Empty.newBuilder().build();
     System.out.print(request);
     this.store.reflTapeRef.set(request);
+    allCallbacks.computeIfAbsent(ReflTapePair.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      reflCallbacks.forEach(rflc -> rflc.onNewData(request));
+      allCallbacks.get(ReflTapeListener.class).forEach(c -> c.onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("GO REFLECT ON HOW YOUR CALLBACK SUCKS");
@@ -85,8 +86,9 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     Empty reply = Empty.newBuilder().build();
     System.out.print(request);
     this.store.gaffeRef.set(request);
+    allCallbacks.computeIfAbsent(GaffeTape.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      gaffeCallbacks.forEach(gtl -> gtl.onNewData(request));
+      allCallbacks.get(GenericListener.class).forEach(c -> c.onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("YOUR CODE IS A GAFFE, FIX YOUR CALLBACK");
@@ -95,25 +97,11 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     responseObserver.onCompleted();
   }
 
-  public void registerCallback(BallListener listener) {
-    this.ballCallbacks.add(listener);
+  public synchronized void registerCallback(GenericListener listener) {
+    if (listener.msgType == null) {
+      throw new RuntimeException("Listener's message type is null");
+    }
+    allCallbacks.computeIfAbsent(listener.msgType, k -> new ConcurrentLinkedQueue<>());
+    allCallbacks.get(listener.msgType).add(listener);
   }
-
-  public void registerCallback(HatchListener listener) {
-    this.hatchCallbacks.add(listener);
-  }
-
-  public void registerCallback(GaffeListener listener) {
-    this.gaffeCallbacks.add(listener);
-  }
-
-  public void registerCallback(ReflTapeListener listener) {
-    this.reflCallbacks.add(listener);
-  }
-
-  public void registerCallback(FrameSizeListener listener) {
-    this.frameSizeCallbacks.add(listener);
-  }
-
-
 }
