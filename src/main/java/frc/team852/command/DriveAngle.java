@@ -8,33 +8,29 @@ import frc.team852.subsystem.Drivetrain;
 
 public class DriveAngle extends Command {
 
-    private double targetDist, inches;
+    private double targetAngle, error;
     private Drivetrain dt = Robot.drivetrain;
-    private PIDController leftPID = new PIDController(0.01,0,0,Robot.gyro, RobotMap.leftDrive);
-    private PIDController rightPID = new PIDController(0.01,0,0, Robot.gyro,RobotMap.rightDrive);
-
-    //1 revolution = 18.84 inches
-    //1 revolution = 6.601 high gear, 15 low gear
+    private PIDController pid = new PIDController(0.01,0,0,Robot.gyro, RobotMap.leftDrive);
 
     public DriveAngle(double angle){
         requires(dt);
-        this.inches = angle;
+        this.targetAngle = angle;
     }
 
     @Override
     protected void initialize(){
-        leftPID.setContinuous();
+        pid.setContinuous(false);
+        pid.setSetpoint(Robot.gyro.getAngle() + targetAngle);
+        pid.setAbsoluteTolerance(2);
     }
 
     @Override
     protected boolean isFinished() {
-        return leftPID.onTarget() && rightPID.onTarget();
+        return pid.onTarget();
     }
 
     @Override
     protected void end() {
-        leftPID.setEnabled(false);
-        rightPID.setEnabled(false);
         dt.stop();
     }
 
@@ -45,15 +41,13 @@ public class DriveAngle extends Command {
 
     @Override
     protected void execute() {
-        if(!leftPID.isEnabled())
-            leftPID.setEnabled(true);
-        if(!rightPID.isEnabled())
-            rightPID.setEnabled(true);
-
-        System.out.println("leftPID error = " + leftPID.getError());
-        System.out.println("rightPID error = " + rightPID.getError());
-        //System.out.println("RobotMap.leftDrive.pidGet() = " + RobotMap.leftDrive.pidGet());
-        //System.out.println("RobotMap.rightDrive.pidGet() = " + RobotMap.rightDrive.pidGet());
-        //System.out.println("targetDist = " + targetDist);
+        error = pid.getError();
+        System.out.println("pid error = " + error);
+        if(error < 0){
+            dt.drive(-error, error);
+        }
+        else{
+            dt.drive(error, -error);
+        }
     }
 }
