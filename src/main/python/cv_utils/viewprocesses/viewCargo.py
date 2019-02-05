@@ -4,8 +4,8 @@ from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
-low = numpy.array([0, 100, 100])  # TODO find ideal value range
-high = numpy.array([10, 255, 255])
+low = numpy.array([0, 230, 0])
+high = numpy.array([7, 255, 150])
 
 
 def viewCargo(shared_frame: SharedFrame):

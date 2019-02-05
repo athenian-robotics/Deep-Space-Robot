@@ -4,7 +4,7 @@ from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
-low = numpy.array([0, 230, 0])  # TODO find ideal value range
+low = numpy.array([0, 230, 0])
 high = numpy.array([7, 255, 150])
 
 

@@ -4,8 +4,8 @@ from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
-low = numpy.array([100, 100, 50])  # TODO find ideal value range
-high = numpy.array([110, 255, 255])
+low = numpy.array([50, 100, 50])
+high = numpy.array([70, 200, 200])
 
 
 def detectReflTape(shared_frame: SharedFrame):
