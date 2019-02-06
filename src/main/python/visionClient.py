@@ -30,9 +30,9 @@ with ThreadPoolExecutor() as executor:
     executor.submit(server.start)
 
     # alignment
-    executor.submit(grpc_client.sendHatch, sfmed)
-    executor.submit(grpc_client.sendBall, sfmed)
+    # executor.submit(grpc_client.sendHatch, sfmed)
+    # executor.submit(grpc_client.sendBall, sfmed)
 
     # game object
-    executor.submit(grpc_client.sendGaffeTape, sflow)
-    executor.submit(grpc_client.sendReflTape, sftop)
+    # executor.submit(grpc_client.sendGaffeTape, sflow)
+    # executor.submit(grpc_client.sendReflTape, sftop)

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-webcam = cv2.VideoCapture(0)
+webcam = cv2.VideoCapture(1)
 
 
 def nothing(x):

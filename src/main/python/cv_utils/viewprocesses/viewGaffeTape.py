@@ -36,7 +36,7 @@ def viewGaffeTape(shared_frame: SharedFrame):
             angle = 0  # default
         wasDetected = True
 
-        cv2.drawContours(frame, contour, -1, (255,0,0), 4)
-        cv2.circle(frame, (centroid.x,centroid.y), 7, (0,255,0),8)
+        cv2.drawContours(frame, contour, -1, (255, 0, 0), 4)
+        cv2.circle(frame, (centroid.x, centroid.y), 7, (0, 255, 0), 8)
 
     return frame
