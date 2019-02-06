@@ -1,15 +1,11 @@
 package frc.team852.command;
 
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
-import frc.team852.subsystem.Drivetrain;
 
 public class DriveVelocity extends Command {
     private PIDController leftControl;
@@ -23,29 +19,25 @@ public class DriveVelocity extends Command {
     private PIDSourceType leftSourceType;
     private PIDSourceType rightSourceType;
 
-    public DriveVelocity(double kp, double ki, double kd) {
+    public DriveVelocity(double kp, double ki, double kd, double kf) {
         Kp = kp;
         Ki = ki;
         Kd = kd;
+        Kf = kf;
         leftSetpoint = 0;
         rightSetpoint = 0;
-        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.leftDrive, RobotMap.leftDrive);
-        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.rightDrive, RobotMap.rightDrive);
+        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.leftGrayhill, RobotMap.leftDrive);
+        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.rightGrayhill, RobotMap.rightDrive);
         requires(Robot.drivetrain);
     }
 
 
     @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
     protected void initialize() {
-        leftSourceType = RobotMap.leftDrive.getPIDSourceType();
-        rightSourceType = RobotMap.rightDrive.getPIDSourceType();
-        RobotMap.leftDrive.setPIDSourceType(PIDSourceType.kRate);
-        RobotMap.rightDrive.setPIDSourceType(PIDSourceType.kRate);
+        leftSourceType = RobotMap.leftGrayhill.getPIDSourceType();
+        rightSourceType = RobotMap.rightGrayhill.getPIDSourceType();
+        RobotMap.leftGrayhill.setPIDSourceType(PIDSourceType.kRate);
+        RobotMap.rightGrayhill.setPIDSourceType(PIDSourceType.kRate);
 
         leftControl.enable();
         rightControl.enable();
@@ -59,9 +51,14 @@ public class DriveVelocity extends Command {
     }
 
     @Override
+    protected boolean isFinished() {
+        return false;
+    }
+
+    @Override
     protected void end() {
-        RobotMap.leftDrive.setPIDSourceType(leftSourceType);
-        RobotMap.rightDrive.setPIDSourceType(rightSourceType);
+        RobotMap.leftGrayhill.setPIDSourceType(leftSourceType);
+        RobotMap.leftGrayhill.setPIDSourceType(rightSourceType);
 
         leftControl.reset();
         rightControl.reset();
@@ -91,20 +88,34 @@ public class DriveVelocity extends Command {
 
     public void setKi(double ki) {
         Ki = ki;
-        leftControl.setP(ki);
-        rightControl.setP(ki);
+        leftControl.setI(ki);
+        rightControl.setI(ki);
     }
 
     public void setKd(double kd) {
         Kd = kd;
-        leftControl.setP(kd);
-        rightControl.setP(kd);
+        leftControl.setD(kd);
+        rightControl.setD(kd);
+    }
+
+    public void setKf(double kf) {
+        Kd = kf;
+        leftControl.setF(kf);
+        rightControl.setF(kf);
+    }
+
+    public void setAll(double kp, double ki, double kd, double kf) {
+        setKp(kp);
+        setKi(ki);
+        setKd(kd);
+        setKf(kf);
     }
 
     public void writeDashboard() {
         SmartDashboard.putNumber("DriveVelocity Kp", Kp);
         SmartDashboard.putNumber("DriveVelocity Ki", Ki);
         SmartDashboard.putNumber("DriveVelocity Kd", Kd);
+        SmartDashboard.putNumber("DriveVelocity Kf", Kd);
         SmartDashboard.putNumber("DriveVelocity Left Setpoint", leftSetpoint);
         SmartDashboard.putNumber("DriveVelocity Right Setpoint", rightSetpoint);
     }
