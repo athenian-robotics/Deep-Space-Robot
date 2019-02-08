@@ -26,7 +26,7 @@ public class WristSubsystem extends PIDSubsystem {
     setDefaultCommand(new WristHold());
   }
 
-  public void stop() {
+  public void stopMotors() {
     this.motor.stopMotor();
   }
 
