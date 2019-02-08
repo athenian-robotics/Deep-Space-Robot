@@ -60,7 +60,7 @@ public class OI {
     //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
 
     FieldPaths.genPaths();
-    xboxA.whenPressed(new DrivePathBasic(FieldPaths.testPath));
+    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
     xboxBack.whenPressed(new ToggleGearbox());
     xboxStart.whenPressed(new ToggleGearbox());
     xboxRB.whenPressed(new ToggleGearbox());

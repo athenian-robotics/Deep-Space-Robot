@@ -4,6 +4,7 @@ import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.path.utilities.Pose2D;
+import frc.team852.subsystem.Drivetrain;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PositionTracking implements Runnable {
 
     public static final double ONE_METER = 2868d;
-    public static final double trackDistance = .6112;  // 61.12 cm distance between wheel sides
+    public static final double trackDistance = Drivetrain.trackDistance;  // 61.12 cm distance between wheel sides
 
     public static final boolean logging = true;
     public static final boolean pure = true;

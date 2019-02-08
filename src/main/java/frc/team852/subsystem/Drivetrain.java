@@ -9,6 +9,9 @@ import frc.team852.command.DriveChangeable;
 import frc.team852.lib.utils.SparkMaxGroup;
 
 public class Drivetrain extends Subsystem {
+
+  public static final double trackDistance = .6112;  // 61.12 cm distance between wheel sides
+
   private SparkMaxGroup leftDrive = RobotMap.leftDrive;
   private SparkMaxGroup rightDrive = RobotMap.rightDrive;
 

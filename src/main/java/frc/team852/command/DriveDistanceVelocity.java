@@ -7,12 +7,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.team852.Robot;
 
-import java.rmi.UnexpectedException;
-
 public class DriveDistanceVelocity extends Command {
     // https://www.desmos.com/calculator/d7p5kcfj7j
 
     public static final double maxAcceleration = 1; // TODO idk what this should be
+    public static final double decelRate = Math.sqrt(2 * maxAcceleration);  // Coefficient used in deceleration phase
     public static final double decelThreshold = 0.5 / maxAcceleration;  // starting distance for deceleration relative to target distance
 
     // TODO idk what these should be
@@ -26,7 +25,7 @@ public class DriveDistanceVelocity extends Command {
 
     private DriveVelocity driveVelocity;
     private double targetDistance;
-    private double targetSpeed;
+    private double targetVelocity;
 
     private double startTime;
     private double startDistance;
@@ -49,11 +48,11 @@ public class DriveDistanceVelocity extends Command {
             .getEntry();
 
 
-    public DriveDistanceVelocity(double targetDistance, double targetSpeed) {
+    public DriveDistanceVelocity(double targetDistance, double targetVelocity) {
 
         driveVelocity = new DriveVelocity(0, 0, 0, 0);
         this.targetDistance = Math.max(0, targetDistance);
-        this.targetSpeed = Math.max(0, targetSpeed);
+        this.targetVelocity = Math.max(0, targetVelocity);
     }
 
     public DriveDistanceVelocity(double targetDistance) {
@@ -78,6 +77,7 @@ public class DriveDistanceVelocity extends Command {
         double forwardVelocity = 0;
         double angularVelocity = 0;
 
+        // Calculate distance and heading relative to start
         double distanceTraveled = Robot.drivetrain.getDistance() - startDistance;
         double headingError = Robot.gyro.getAngle() - startHeading;
 
@@ -88,21 +88,35 @@ public class DriveDistanceVelocity extends Command {
                 kdEntry.getDouble(0),
                 kfEntry.getDouble(0));
 
+
         // Update drivetrain values
         switch (state) {
             case STATE_ACCEL:
-                //forwardVelocity = maxAcceleration * (System.currentTimeMillis() - startTime) / 1000;
+                // Ramp up velocity over time at the rate given by maxAcceleration
+                forwardVelocity = maxAcceleration * (System.currentTimeMillis() - startTime) / 1000;
+                // Hold it constant once target velocity reached
+                forwardVelocity = Math.max(targetVelocity, forwardVelocity);
                 break;
             case STATE_CONST:
-                //
+                // Keep velocity at target velocity
+                forwardVelocity = targetVelocity;
                 break;
             case STATE_DECEL:
-                //
+                // Ramp down velocity over distance as a function of the offset from the target distance
+                double distanceOffset = targetDistance - distanceTraveled;
+                // Velocity determined by square root of error from target distance, scaled by a deceleration constant
+                // If overshoot, go backwards with negative velocity (accomplished with copySign)
+                forwardVelocity = decelRate * Math.copySign(Math.sqrt(Math.abs(distanceOffset)), distanceOffset);
                 break;
         }
+
+        // Cheap proportional angle correction - TODO replace with PID if it doesn't work - also use trackDistance somewhere
+        angularVelocity = -headingError;
+
         driveVelocity.setSetpoints(
-                forwardVelocity - angularVelocity,
-                forwardVelocity + angularVelocity);
+                forwardVelocity * (1 - angularVelocity),
+                forwardVelocity * (1 + angularVelocity));
+
 
         // Check for state transitions
         switch (state) {
