@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.WristHold;
 
@@ -55,7 +56,8 @@ public class WristSubsystem extends PIDSubsystem {
   }
 
   public boolean canMove() {
-    return lowerLimit.get() || upperLimit.get();
+    double elevatorHeight = Robot.elevatorLidar.getLidarDistance()[0];
+    return !(elevatorHeight <= RobotMap.elevatorUpperSafeDist);
   }
 
 

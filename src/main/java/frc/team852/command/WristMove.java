@@ -1,11 +1,8 @@
 package frc.team852.command;
 
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
-import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.subsystem.WristSubsystem;
 
 public class WristMove extends Command {
@@ -27,15 +24,16 @@ public class WristMove extends Command {
 
   @Override
   protected void execute() {
-    if (OI.POVUp.get())
-      setpoint = wrist.canMoveUp() ? setpoint + moveDist : setpoint;
-    else if (OI.POVDown.get())
-      setpoint = wrist.canMoveDown() ? setpoint - moveDist : setpoint;
-    if (oldSetpoint != setpoint) {
-      wrist.setSetpoint(setpoint);
-      oldSetpoint = setpoint;
+    if (wrist.canMove()) {
+      if (OI.POVUp.get())
+        setpoint = wrist.canMoveUp() ? setpoint + moveDist : setpoint;
+      else if (OI.POVDown.get())
+        setpoint = wrist.canMoveDown() ? setpoint - moveDist : setpoint;
+      if (oldSetpoint != setpoint) {
+        wrist.setSetpoint(setpoint);
+        oldSetpoint = setpoint;
+      }
     }
-
   }
 
   @Override
