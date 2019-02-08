@@ -28,7 +28,7 @@ public class CargoIntakeMove extends Command {
 
     @Override
     protected boolean isFinished() {
-        //We can change this later if we need to but this basically never stops
+        //TODO limit switch, not critical (hard stop) but should be added. May pop ball without.
         return false;
     }
 
