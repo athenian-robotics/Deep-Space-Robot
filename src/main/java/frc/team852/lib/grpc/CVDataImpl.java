@@ -23,7 +23,7 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     this.store.ballRef.set(request);
     allCallbacks.computeIfAbsent(Ball.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      allCallbacks.get(BallListener.class).forEach(callback -> callback.onNewData(request));
+      allCallbacks.get(BallListener.class).forEach(c -> ((BallListener) c).onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("FIX YOUR CALLBACK YOU LOUT");
@@ -39,7 +39,7 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     this.store.hatchRef.set(request);
     allCallbacks.computeIfAbsent(Hatch.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      allCallbacks.get(HatchListener.class).forEach(callback -> callback.onNewData(request));
+      allCallbacks.get(HatchListener.class).forEach(c -> ((HatchListener) c).onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("HEY BURRITO BRAINS, FIX YOUR CALLBACK");
@@ -55,7 +55,7 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     this.store.frameSize.set(request);
     allCallbacks.computeIfAbsent(FrameSize.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      allCallbacks.get(FrameSizeListener.class).forEach(c -> c.onNewData(request));
+      allCallbacks.get(FrameSizeListener.class).forEach(c -> ((FrameSizeListener) c).onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("THIS CAUSES ME PHYSICAL PAIN, FIX YOUR CALLBACK");
@@ -72,7 +72,7 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     this.store.reflTapeRef.set(request);
     allCallbacks.computeIfAbsent(ReflTapePair.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      allCallbacks.get(ReflTapeListener.class).forEach(c -> c.onNewData(request));
+      allCallbacks.get(ReflTapeListener.class).forEach(c -> ((ReflTapeListener) c).onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("GO REFLECT ON HOW YOUR CALLBACK SUCKS");
@@ -88,7 +88,7 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     this.store.gaffeRef.set(request);
     allCallbacks.computeIfAbsent(GaffeTape.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      allCallbacks.get(GenericListener.class).forEach(c -> c.onNewData(request));
+      allCallbacks.get(GaffeListener.class).forEach(c -> ((GaffeListener) c).onNewData(request));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("YOUR CODE IS A GAFFE, FIX YOUR CALLBACK");
