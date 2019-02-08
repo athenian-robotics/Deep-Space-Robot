@@ -1,6 +1,7 @@
 package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
@@ -10,6 +11,10 @@ import frc.team852.lib.utils.SparkMaxGroup;
 public class Drivetrain extends Subsystem {
   private SparkMaxGroup leftDrive = RobotMap.leftDrive;
   private SparkMaxGroup rightDrive = RobotMap.rightDrive;
+
+  private Encoder leftGrayhill = RobotMap.leftGrayhill;
+  private Encoder rightGrayhill = RobotMap.rightGrayhill;
+
   private DoubleSolenoid gearbox = RobotMap.gearbox;
   private DoubleSolenoid.Value gearing = RobotMap.SLOW;
 
@@ -50,12 +55,31 @@ public class Drivetrain extends Subsystem {
     return leftDrive.pidGet();
   }
 
+  public double getRight() {
+    return rightDrive.pidGet();
+  }
+
   public void resetEncoders(){
     rightDrive.resetEncoders();
     leftDrive.resetEncoders();
   }
-  public double getRight() {
-    return rightDrive.pidGet();
+
+  // TODO should we use the grayhills for everything and take out the SparkMax encoder methods?
+  public double getLeftGrayhill() {
+    return leftGrayhill.getDistance();
+  }
+
+  public double getRightGrayhill() {
+    return rightGrayhill.getDistance();
+  }
+
+  public double getDistance() {
+    return (getLeftGrayhill() + getRightGrayhill()) / 2;
+  }
+
+  public void resetGrayhills() {
+    leftGrayhill.reset();
+    rightGrayhill.reset();
   }
 
   public void stop() {

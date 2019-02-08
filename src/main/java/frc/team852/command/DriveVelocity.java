@@ -62,6 +62,7 @@ public class DriveVelocity extends Command {
 
         leftControl.reset();
         rightControl.reset();
+        Robot.drivetrain.stop();
         System.out.println("DriveVelocity ended.");
 
     }
@@ -109,6 +110,12 @@ public class DriveVelocity extends Command {
         setKi(ki);
         setKd(kd);
         setKf(kf);
+    }
+
+    public double getAbsError() {
+        return Math.max(
+                Math.abs(leftControl.getError()),
+                Math.abs(rightControl.getError()));
     }
 
     public void writeDashboard() {
