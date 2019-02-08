@@ -7,7 +7,6 @@ from grpc_utils.CVObject import *
 low = numpy.array([0, 100, 40])
 high = numpy.array([180, 190, 100])
 
-
 def detectGaffeTape(shared_frame: SharedFrame):
     frame = shared_frame.getFrame()
     # blur image

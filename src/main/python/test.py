@@ -9,12 +9,12 @@ from cv_utils.stream import *
 # high = numpy.array([70, 200, 200])
 
 # hsv
-# low = numpy.array([77, 0, 0])
-# high = numpy.array([169, 255, 255])
+low = numpy.array([77, 100, 100])
+high = numpy.array([169, 255, 200])
 
 # bgr
-low = numpy.array([70, 0, 0])
-high = numpy.array([255, 200, 200])
+#low = numpy.array([70, 0, 0])
+#high = numpy.array([255, 200, 200])
 
 # Constants
 deadZone = 50
