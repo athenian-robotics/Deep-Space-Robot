@@ -8,7 +8,8 @@ low = numpy.array([0, 100, 40])
 high = numpy.array([180, 190, 100])
 
 
-def viewGaffeTape(frame):
+def viewGaffeTape(shared_frame: SharedFrame):
+    frame = shared_frame.getFrame()
     # blur image
     blurredframe = cv2.blur(frame, (5, 5))
     # change colorspace to HSV
