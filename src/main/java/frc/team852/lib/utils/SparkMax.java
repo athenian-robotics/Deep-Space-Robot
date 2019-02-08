@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput{
+public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
 
   private double resetOffset, lastPos, val;
   private CANEncoder enc;
   private PIDSourceType m_sourceType;
+  private double lastSpeed = 0;
 
   /**
    * <p>Defaults to displacement readings for the encoder</p>
@@ -30,6 +31,7 @@ public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput{
   public SparkMax(int channel, MotorType motorType, PIDSourceType sourceType) {
     this(channel, motorType, sourceType, false);
   }
+
   /**
    * @param channel    CAN id of the SparkMax
    * @param motorType  Brushed or Brushless motor connected (Really important)
@@ -93,6 +95,18 @@ public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput{
         return enc.getVelocity();
       default:
         return 0.0;
+    }
+  }
+
+  /**
+   * Lazily set the speed
+   * @param speed The speed to drive the motor at
+   */
+  @Override
+  public void set(double speed) {
+    if (speed != lastSpeed) {
+      super.set(speed);
+      lastSpeed = speed;
     }
   }
 }
