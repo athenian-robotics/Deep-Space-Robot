@@ -3,10 +3,8 @@ package frc.team852.subsystem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.ClimberMove;
-import frc.team852.lib.utils.SparkMax;
 
 public class ClimberSubsystem extends PIDSubsystem {
 
@@ -34,7 +32,10 @@ public class ClimberSubsystem extends PIDSubsystem {
   }
 
   public void setSpeed(double speed) {
-    this.climberMotor.set(speed);
+  	if (speed != 0)
+    	this.climberMotor.set(speed);
+  	else
+  		stopMotors();
   }
 
   public double getEncoderPos() {

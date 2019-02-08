@@ -10,7 +10,7 @@ import frc.team852.subsystem.WristSubsystem;
 
 public class WristMove extends Command {
   private WristSubsystem wrist;
-  private final int moveDist = 5; // TODO set on receval of robot and tuning of PID
+  private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
   private double setpoint, oldSetpoint;
 
   public WristMove() {
