@@ -9,7 +9,7 @@ import frc.team852.lib.utils.SerialLidar;
 
 public class ElevatorSubsystem extends PIDSubsystem {
   private final WPI_TalonSRX motor;
-  private final SerialLidar lidar;
+  private final SerialLidar lidar; //TODO replace with i2c lidar when jacob finishes
   private final DigitalInput lowerLimit, upperLimit;
 
   public ElevatorSubsystem() {
@@ -21,10 +21,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
     this.lowerLimit = RobotMap.elevatorLowerLimit;
     this.upperLimit = RobotMap.elevatorUpperLimit;
   }
-
-  public double getWristSpeed() {
-    return this.motor.get();
-  }
+  
 
   @Override
   protected double returnPIDInput() {

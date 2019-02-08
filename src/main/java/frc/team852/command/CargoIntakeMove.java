@@ -1,12 +1,14 @@
 package frc.team852.command;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.subsystem.CargoSubsystem;
 
 
 public class CargoIntakeMove extends Command {
-
+	private final CargoSubsystem cargoSubsystem;
     final double speed;
 
 
@@ -14,6 +16,7 @@ public class CargoIntakeMove extends Command {
         super();
         //Allows for values to be passed through
         this.speed = speed;
+        this.cargoSubsystem = Robot.cargoSubsystem;
     }
 
     public CargoIntakeMove() {
@@ -23,12 +26,12 @@ public class CargoIntakeMove extends Command {
 
     @Override
     protected void initialize() {
-        requires(Robot.cargoSubsystem);
+        requires(cargoSubsystem);
     }
 
     @Override
     protected boolean isFinished() {
-        //We can change this later if we need to but this basically never stops
+        //TODO limit switch, not critical (hard stop) but should be added. May pop ball without.
         return false;
     }
 
@@ -41,12 +44,12 @@ public class CargoIntakeMove extends Command {
     @Override
     protected void end() {
         //Stop motors
-        Robot.cargoSubsystem.stopMotors();
+        cargoSubsystem.stopMotors();
     }
 
     @Override
     protected void execute() {
         //Sets the speed to a given value when button is pressed
-        Robot.cargoSubsystem.setSpeed(speed);
+        cargoSubsystem.setSpeed(speed);
     }
 }
