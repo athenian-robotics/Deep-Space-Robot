@@ -14,6 +14,14 @@ public class SerialLidar extends SerialPort implements PIDSource {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private AtomicBoolean running;
 
+    /**
+     * Create a new serial lidar and spin off into it's own thread
+     * @param baudRate Baud rate of the lidar
+     * @param port port of the lidar
+     * @param dataBits Number of data bits per transfer
+     * @param parity The type of parity checking to use
+     * @param stopBits The number of stop bits to use
+     */
     public SerialLidar(int baudRate, Port port, int dataBits, Parity parity, StopBits stopBits) {
         super(baudRate, port, dataBits, parity, stopBits);
         this.startUpLidar();
@@ -47,6 +55,10 @@ public class SerialLidar extends SerialPort implements PIDSource {
         return ans;
     }
 
+    /**
+     * Retrieve the distance from the lidar thread
+     * @return 2 int array of [distance, signal strength]
+     */
     public int[] getLidarDistance(){
         if (currVal == badVal) return lastVal;
         return currVal;

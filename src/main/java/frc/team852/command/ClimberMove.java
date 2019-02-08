@@ -34,7 +34,7 @@ public class ClimberMove extends Command {
 
     //Reset encoders, reset motors, put everything back to where it was.
     protected void end() {
-        RobotMap.climberMotor.resetEncoder(); //TODO what do we want to do about this
+        climber.resetEncoder();
         climber.stopMotors();
         //TODO return to hold command
     }
