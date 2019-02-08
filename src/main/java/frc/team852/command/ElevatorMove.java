@@ -9,7 +9,7 @@ import frc.team852.subsystem.ElevatorSubsystem;
 public class ElevatorMove extends Command {
 
   private ElevatorSubsystem elevator;
-  private final int moveDist = 5; // TODO set on receval of robot and tuning of PID
+  private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
   private double setpoint, oldSetpoint;
 
   public ElevatorMove() {
