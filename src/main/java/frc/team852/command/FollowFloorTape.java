@@ -4,10 +4,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.DeepSpaceRobot.GaffeTape;
 import frc.team852.DeepSpaceRobot.ReflTapePair;
 import frc.team852.Robot;
-import frc.team852.lib.callbacks.GaffeListener;
-import frc.team852.lib.callbacks.HatchListener;
-import frc.team852.lib.callbacks.ReflTapeListener;
 import frc.team852.lib.callbacks.CallbackDataContainer;
+import frc.team852.lib.callbacks.GaffeListener;
+import frc.team852.lib.callbacks.ReflTapeListener;
 import frc.team852.subsystem.Drivetrain;
 
 

@@ -1,15 +1,15 @@
 package frc.team852.command;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.team852.lib.utils.InvertedDigitalInput;
 
 public class SubsystemPID extends Command {
 
     private boolean usingLimits, hold;
-    private InvertedDigitalInput limitLower, limitUpper;
+    private DigitalInput limitLower, limitUpper;
     private PIDController pid;
     private Subsystem subsystem;
     private PIDSource source;
@@ -39,7 +39,7 @@ public class SubsystemPID extends Command {
      * @param limitUpper upper subsystem limit switch
      */
 
-    public SubsystemPID(double target, PIDController pid, Subsystem subsystem, double percentTolerance, InvertedDigitalInput limitLower, InvertedDigitalInput limitUpper){
+    public SubsystemPID(double target, PIDController pid, Subsystem subsystem, double percentTolerance, DigitalInput limitLower, DigitalInput limitUpper){
         this(target, pid, subsystem, percentTolerance, limitLower, limitUpper, false, null);
     }
 
@@ -56,7 +56,7 @@ public class SubsystemPID extends Command {
      * @param source PIDSource to reset setpoint upon initialization
      */
 
-    public SubsystemPID(double target, PIDController pid, Subsystem subsystem, double percentTolerance, InvertedDigitalInput limitLower, InvertedDigitalInput limitUpper, boolean hold, PIDSource source){
+    public SubsystemPID(double target, PIDController pid, Subsystem subsystem, double percentTolerance, DigitalInput limitLower, DigitalInput limitUpper, boolean hold, PIDSource source){
         requires(subsystem);
         this.subsystem = subsystem;
         this.usingLimits = (limitLower == null) || (limitUpper == null);
@@ -73,6 +73,7 @@ public class SubsystemPID extends Command {
     @Override
     protected void initialize(){
         pid.reset();
+        pid.setEnabled(true);
         if(hold) pid.setSetpoint(source.pidGet());
     }
 
