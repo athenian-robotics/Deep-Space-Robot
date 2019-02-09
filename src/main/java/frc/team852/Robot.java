@@ -1,6 +1,5 @@
 package frc.team852;
 
-import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -9,7 +8,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.command.TrackPosition;
-import frc.team852.subsystem.*;
+import frc.team852.lib.utils.AHRS_PID;
+import frc.team852.subsystem.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   public static OI oi;
   public static Drivetrain drivetrain;
   public static DoubleSolenoid.Value gearstate;
-  public static AHRS gyro;
+  public static AHRS_PID gyro;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -49,10 +49,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     try {
-      gyro = new AHRS(SerialPort.Port.kUSB);
+      gyro = new AHRS_PID(SerialPort.Port.kUSB);
     } catch (RuntimeException ex ) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
+    RobotMap.gearbox.set(RobotMap.SLOW);
 
     oi = new OI(); // Must be defined last
   }
@@ -121,7 +122,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-      Scheduler.getInstance().add(new TrackPosition());
+    RobotMap.gearbox.set(RobotMap.SLOW);
+    Scheduler.getInstance().add(new TrackPosition());
   }
 
   /**

@@ -1,17 +1,25 @@
 package frc.team852.subsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
-import frc.team852.command.DriveTank;
+import frc.team852.command.DriveChangeable;
 import frc.team852.lib.utils.SparkMaxGroup;
 
 public class Drivetrain extends Subsystem {
+
+  public static final double trackDistance = .6112;  // 61.12 cm distance between wheel sides
+
   private SparkMaxGroup leftDrive = RobotMap.leftDrive;
   private SparkMaxGroup rightDrive = RobotMap.rightDrive;
+
+  private Encoder leftGrayhill = RobotMap.leftGrayhill;
+  private Encoder rightGrayhill = RobotMap.rightGrayhill;
+
   private DoubleSolenoid gearbox = RobotMap.gearbox;
-  private DoubleSolenoid.Value gearing = RobotMap.LOW_GEAR;
+  private DoubleSolenoid.Value gearing = RobotMap.SLOW;
 
   public Drivetrain(){
     super();
@@ -23,7 +31,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new DriveTank());
+    setDefaultCommand(new DriveChangeable());
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
@@ -50,17 +58,40 @@ public class Drivetrain extends Subsystem {
     return leftDrive.pidGet();
   }
 
+  public double getRight() {
+    return rightDrive.pidGet();
+  }
+
   public void resetEncoders(){
     rightDrive.resetEncoders();
     leftDrive.resetEncoders();
   }
-  public double getRight() {
-    return rightDrive.pidGet();
+
+  // TODO should we use the grayhills for everything and take out the SparkMax encoder methods?
+  public double getLeftGrayhill() {
+    return leftGrayhill.getDistance();
+  }
+
+  public double getRightGrayhill() {
+    return rightGrayhill.getDistance();
+  }
+
+  public double getDistance() {
+    return (getLeftGrayhill() + getRightGrayhill()) / 2;
+  }
+
+  public void resetGrayhills() {
+    leftGrayhill.reset();
+    rightGrayhill.reset();
   }
 
   public void stop() {
     leftDrive.set(0);
     rightDrive.set(0);
+  }
+
+  public enum DriveMode {
+    Tank, Cheezy, GTA, CheezyPad, SmoothedTriggersGTA, SmoothedTurnGTA, SmoothedBothGTA, ArcadeJoy, ArcadePad
   }
 
 }

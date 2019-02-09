@@ -61,6 +61,7 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
   public double getEncoderPosition() {
     lastPos = val;
     val = enc.getPosition();
+    val *= isInverted;
     if (resetOffset >= val - 0.05 && resetOffset <= val + 0.05) return 0.0000;
     if (val == 0.0) return lastPos - resetOffset;
     return val - resetOffset;
@@ -71,6 +72,12 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
    */
   public void resetEncoder() {
     resetOffset += getEncoderPosition();
+  }
+
+  public void setInverted(boolean inverted){
+      super.setInverted(inverted);
+      if(inverted) isInverted = -1.0;
+      else isInverted = 1.0;
   }
 
   /**

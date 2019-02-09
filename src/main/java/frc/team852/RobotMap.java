@@ -1,10 +1,11 @@
 package frc.team852;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
+import frc.team852.subsystem.Drivetrain;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -20,8 +21,12 @@ public class RobotMap {
   private static SparkMax rightBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
   public static SparkMaxGroup leftDrive = new SparkMaxGroup(leftFront, leftBack);
   public static SparkMaxGroup rightDrive = new SparkMaxGroup(rightFront, rightBack);
+  public static Encoder leftGrayhill = new Encoder(9,8, false);
+  public static Encoder rightGrayhill = new Encoder(0, 1, true);
 
   public static DoubleSolenoid gearbox = new DoubleSolenoid(0, 1);
-  public static DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kForward; // Not 100% sure of this
-  public static DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kReverse;
+  public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kForward;
+  public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kReverse;
+
+  public static Drivetrain.DriveMode currentDriveMode = Drivetrain.DriveMode.GTA;
 }

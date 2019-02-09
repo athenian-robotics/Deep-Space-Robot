@@ -1,85 +1,123 @@
 package frc.team852.lib.utils;
 
-import edu.wpi.first.wpilibj.Timer;
+import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.path.utilities.Pose2D;
-import frc.team852.lib.path.utilities.Rotation2D;
+import frc.team852.subsystem.Drivetrain;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PositionTracking implements Runnable {
 
-    private static final double ticksPerRevolution_HG = 277.2;
-    private static final double ticksPerRevolution_LG = 630;
-    private static final double wheelCircumference = .1524 * Math.PI; // 15.24 cm wheel diameter
+    public static final double ONE_METER = 2868d;
+    public static final double trackDistance = Drivetrain.trackDistance;  // 61.12 cm distance between wheel sides
+
+    public static final boolean logging = true;
+    public static final boolean pure = true;
+    public static final boolean useGyro = true;
+
 
     public AtomicReference<Pose2D> currPose = new AtomicReference<>();
+    public AtomicReference<Double> currX = new AtomicReference<>(0d);
+    public AtomicReference<Double> currY = new AtomicReference<>(0d);
+    public AtomicReference<Double> currAngle = new AtomicReference<>(0d);
+
     private double lastEncValue;
     private double lastGyroHeading;
-    private long lastTimestamp;
+    private StringBuilder log;
 
-
-    public PositionTracking(Pose2D pose) {
-        currPose.set(pose);
-        lastTimestamp = 0;
-    }
 
     public PositionTracking() {
-        this(new Pose2D());
+        if (logging) {
+            log = new StringBuilder();
+        }
+        reset();
     }
 
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            Timer.delay(.005);
+            double leftEnc = RobotMap.leftGrayhill.get();
+            double rightEnc = RobotMap.rightGrayhill.get();
+            double currEncValue = (leftEnc + rightEnc) / 2 / ONE_METER;
+            double currGyroHeading;
+            if (useGyro)
+                currGyroHeading = Math.toRadians(Robot.gyro.getAngle());
+            else
+                currGyroHeading = (rightEnc - leftEnc) / 2 / ONE_METER / trackDistance;
 
-            long currTimestamp = System.currentTimeMillis();
-            double left = -Robot.drivetrain.getLeft();
-            double right = Robot.drivetrain.getRight();
-            double currEncValue = (left + right) / 2;
-            //double currGyroHeading = (right - left) / 2;
-            double currGyroHeading = Robot.gyro.getFusedHeading();
+            log.append(System.currentTimeMillis()).append(',')
+                    .append(OI.stick1.getY() / 2).append(',')
+                    .append(currEncValue).append('\n');
 
-            if (lastTimestamp == 0 || Robot.gyro.isCalibrating()) {
-                lastTimestamp = currTimestamp;
-                lastEncValue = currEncValue;
-                lastGyroHeading = currGyroHeading;
-                continue;
-            }
-
-
-            double dt = (currTimestamp - lastTimestamp) / 1000d;
-
-            double denc = currEncValue - lastEncValue;
-            double tpr = getTicksPerRevolution();
-            double dist = denc / tpr * wheelCircumference;
-
+            double dist = currEncValue - lastEncValue;
             double angle = currGyroHeading - lastGyroHeading;
 
-            Pose2D nextPose;
-            if (angle == 0) {
-                nextPose = new Pose2D(dist, 0);
+            if (pure) {
+                double deltaX = 0;
+                double deltaY = 0;
+                double deltaAngle = 0;
+                if (angle == 0) {
+                    deltaX = dist;
+                    deltaY = 0;
+                } else {
+                    double radius = dist / angle;
+                    deltaX = radius * Math.sin(angle);
+                    deltaY = radius * (1 - Math.cos(angle));
+
+                    double oldAngle = currAngle.get();
+                    double tempX = deltaX * Math.cos(oldAngle) - deltaY * Math.sin(oldAngle);
+                    double tempY = deltaX * Math.sin(oldAngle) + deltaY * Math.cos(oldAngle);
+                    deltaX = tempX;
+                    deltaY = tempY;
+
+                    deltaAngle = angle;
+                }
+                currX.accumulateAndGet(deltaX, Double::sum);
+                currY.accumulateAndGet(deltaY, Double::sum);
+                currAngle.accumulateAndGet(deltaAngle, Double::sum);
             }
             else {
-                double radius = dist / angle;
-                nextPose = new Pose2D(radius * Math.sin(angle), radius * (1 - Math.cos(angle)), angle);
+                Pose2D nextPose;
+                if (angle == 0) {
+                    nextPose = new Pose2D(dist, 0);
+                }
+                else {
+                    double radius = dist / angle;
+                    nextPose = new Pose2D(radius * Math.sin(angle), radius * (1 - Math.cos(angle)), angle);
+                }
+                currPose.accumulateAndGet(nextPose, Pose2D::compose);
             }
-            currPose.accumulateAndGet(nextPose, Pose2D::compose);
 
-            lastTimestamp = currTimestamp;
             lastEncValue = currEncValue;
             lastGyroHeading = currGyroHeading;
         }
-        System.out.println("Imma die");
+        writeLog();
+        System.out.println("Ended position tracking.");
+    }
+
+    private void writeLog() {
+        File file = new File("/home/lvuser/driveLog.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(log.toString());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void reset() {
         currPose.set(new Pose2D());
-        lastTimestamp = 0;
+        currX.set(0d);
+        currY.set(0d);
+        currAngle.set(0d);
+        RobotMap.leftGrayhill.reset();
+        RobotMap.rightGrayhill.reset();
     }
 
-    private double getTicksPerRevolution() {
-        return (Robot.gearstate == RobotMap.HIGH_GEAR) ? ticksPerRevolution_HG : ticksPerRevolution_LG;
-    }
 }
