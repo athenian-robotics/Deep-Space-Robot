@@ -1,18 +1,17 @@
 package frc.team852.lib.utils;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SerialLidar extends SerialPort {
+public class SerialLidar extends SerialPort implements PIDSource {
 
     private int dist, lastDist;
+    private double rate, lastSampleTime;
     private byte[] bytes;
-    private boolean isXOff = false;
+    private PIDSourceType pidSourceType = PIDSourceType.kDisplacement;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private AtomicBoolean running;
 
@@ -45,6 +44,8 @@ public class SerialLidar extends SerialPort {
             while(running.get()) {
                 this.lastDist = this.dist;
                 this.dist = this.getDist();
+                rate = (dist-lastDist)/(Timer.getFPGATimestamp()-lastSampleTime);
+                lastSampleTime = Timer.getFPGATimestamp();
                 Timer.delay(0.02);
             }
         });
@@ -61,5 +62,22 @@ public class SerialLidar extends SerialPort {
             return lastDist;
         }
         return dist;
+    }
+
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+        pidSourceType = pidSource;
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return pidSourceType;
+    }
+
+    @Override
+    public double pidGet() {
+        if(pidSourceType == PIDSourceType.kRate)
+            return rate;
+        return getLidarDistance();
     }
 }
