@@ -16,3 +16,6 @@ __pycache__
 # Personal deploy scripts
 deploy.sh
 debug.sh
+
+# personal testing scripts
+./src/main/python/re*.py
