@@ -13,6 +13,8 @@ public class WristSubsystem extends PIDSubsystem {
   private final WPI_TalonSRX motor;
   private final Encoder encoder;
   private DigitalInput lowerLimit, upperLimit;
+  private final int elevatorLowerSafeDist = 10, elevatorUpperSafeDist = 30; // IDK what these values really are TODO fix on on reception of robot
+  private final double wristBottom = 0, place = 90, wristSafe = 30; // IDK what these values really are TODO fix on on reception of robot
 
   public WristSubsystem() {
     super("Wrist", 0, 0, 0); // TODO Tune
@@ -35,6 +37,11 @@ public class WristSubsystem extends PIDSubsystem {
     return this.motor.get();
   }
 
+  /**
+   * Manually set the speed while paying attention to limit switches in the mechanism
+   *
+   * @param speed
+   */
   public void setSpeed(double speed) {
     if (speed > 0 && upperLimit.get()) {
       motor.set(0);
@@ -47,6 +54,32 @@ public class WristSubsystem extends PIDSubsystem {
     }
   }
 
+  /**
+   * Used in conjunction with a command controlling the elevator to keep the back of the plate from breaking
+   *
+   * @param elevatorHeight
+   */
+  public void safeMove(int elevatorHeight) {
+    if (!getPIDController().isEnabled())
+      enable();
+
+    if (elevatorHeight <= elevatorLowerSafeDist)
+      setSetpoint(wristBottom);
+    else if (elevatorHeight <= elevatorUpperSafeDist)
+      setSetpoint(wristSafe);
+    else
+      setSetpoint(place);
+  }
+
+  public double getSafeSetpoint(int elevatorHeight) {
+    if (elevatorHeight <= elevatorLowerSafeDist)
+      return wristBottom;
+    else if (elevatorHeight <= elevatorUpperSafeDist)
+      return wristSafe;
+    else
+      return place;
+  }
+
   public boolean canMoveUp() {
     return !upperLimit.get();
   }
@@ -57,7 +90,7 @@ public class WristSubsystem extends PIDSubsystem {
 
   public boolean canMove() {
     double elevatorHeight = Robot.elevatorLidar.getLidarDistance()[0];
-    return !(elevatorHeight <= RobotMap.elevatorUpperSafeDist);
+    return !(elevatorHeight <= elevatorUpperSafeDist);
   }
 
 

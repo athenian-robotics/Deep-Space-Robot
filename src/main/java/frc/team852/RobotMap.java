@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import frc.team852.lib.utils.*;
+import frc.team852.subsystem.Drivetrain;
 
 /**
  * Map of all the sensors, motors, and other that the robot uses
@@ -23,9 +24,9 @@ public class RobotMap {
   private static SparkMax rightBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
   public static SparkMaxGroup leftDrive = new SparkMaxGroup(leftFront, leftBack);
   public static SparkMaxGroup rightDrive = new SparkMaxGroup(rightFront, rightBack);
+  public static Encoder leftGrayhill = new Encoder(9,8, false);
+  public static Encoder rightGrayhill = new Encoder(0, 1, true);
   public static DoubleSolenoid gearbox = new DoubleSolenoid(0, 1); // TODO set based off of robot wiring
-  public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kForward;
-  public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kReverse;
 
 
   //Elevator
@@ -58,8 +59,11 @@ public class RobotMap {
   public static AHRS gyro = Robot.gyro;
 
   // CONSTANTS
-  public static final int elevatorLowerSafeDist = 10, elevatorUpperSafeDist = 30; // IDK what these values really are TODO fix on on reception of robot
-  public static final double wristBottom = 0, wristTop = 90, wristSafe = 30; // IDK what these values really are TODO fix on on reception of robot
 
 
+
+  public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kForward;
+  public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kReverse;
+
+  public static Drivetrain.DriveMode currentDriveMode = Drivetrain.DriveMode.GTA;
 }
