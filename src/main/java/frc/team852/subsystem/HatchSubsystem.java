@@ -5,20 +5,25 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 
 public class HatchSubsystem extends Subsystem {
+  private final DoubleSolenoid pneumatics;
+  public HatchSubsystem(){
+    setName("HatchSystem");
+    pneumatics = RobotMap.hatchPancakePneumatics;
+  }
 
   @Override
   protected void initDefaultCommand() {
   }
 
   public void extendPneumatics(){
-    RobotMap.hatchPancakePneumatics.set(DoubleSolenoid.Value.kForward);
+    pneumatics.set(DoubleSolenoid.Value.kForward);
   }
 
   public void retractPneumatics(){
-    RobotMap.hatchPancakePneumatics.set(DoubleSolenoid.Value.kReverse);
+    pneumatics.set(DoubleSolenoid.Value.kReverse);
   }
 
   public DoubleSolenoid.Value getPneumaticState(){
-    return RobotMap.hatchPancakePneumatics.get();
+    return pneumatics.get();
   }
 }

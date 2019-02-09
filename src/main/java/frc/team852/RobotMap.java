@@ -58,8 +58,7 @@ public class RobotMap {
   public static AHRS gyro = Robot.gyro;
 
   // CONSTANTS
-  public static final int elevatorLowerSafeDist = 10, elevatorUpperSafeDist = 30; // IDK what these values really are TODO fix on on reception of robot
-  public static final double wristBottom = 0, wristTop = 90, wristSafe = 30; // IDK what these values really are TODO fix on on reception of robot
+
 
 
 }

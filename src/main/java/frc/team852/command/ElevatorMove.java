@@ -12,17 +12,19 @@ public class ElevatorMove extends Command {
   private ElevatorSubsystem elevator;
   private WristSubsystem wrist;
   private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
-  private double elevatorSetpoint, oldElevatorSetpoint, wristSetpoint, oldWristSetpoint;
-  private final int elevatorLowerSafeDist = RobotMap.elevatorLowerSafeDist, elevatorUpperSafeDist = RobotMap.elevatorUpperSafeDist;
-  private final double wristBottom = RobotMap.wristBottom, wristTop = RobotMap.wristTop, wristSafe = RobotMap.wristSafe;
+  private double elevatorSetpoint, oldElevatorSetpoint, wristSetpoint;
 
   public ElevatorMove() {
+    this(Robot.elevatorSubsystem.getHeight());
+  }
+
+  public ElevatorMove(int setpoint) {
     requires(Robot.elevatorSubsystem);
     requires(Robot.wristSubsystem);
     this.elevator = Robot.elevatorSubsystem;
     this.wrist = Robot.wristSubsystem;
-    this.elevatorSetpoint = elevator.getPosition();
-    this.wristSetpoint = wrist.getPosition();
+    this.elevatorSetpoint = setpoint;
+    this.wristSetpoint = wrist.getSafeSetpoint(elevator.getHeight());
   }
 
 
@@ -36,29 +38,28 @@ public class ElevatorMove extends Command {
 
   @Override
   protected void execute() {
-    if (OI.POVUp.get()) {
-      elevatorSetpoint = elevator.canMoveUp() ? elevatorSetpoint + moveDist : elevatorSetpoint;
-    } else if (OI.POVDown.get()) {
-      elevatorSetpoint = elevator.canMoveDown() ? elevatorSetpoint - moveDist : elevatorSetpoint;
+    if (!elevator.getPIDController().isEnabled())
+      elevator.enable();
+    // Check if under user control
+    if (OI.fightStickLB.get()) {
+      if (OI.POVUp.get()) {
+        elevatorSetpoint = elevator.canMoveUp() ? elevatorSetpoint + moveDist : elevatorSetpoint;
+      } else if (OI.POVDown.get()) {
+        elevatorSetpoint = elevator.canMoveDown() ? elevatorSetpoint - moveDist : elevatorSetpoint;
+      }
+      if (oldElevatorSetpoint != elevatorSetpoint) {
+        elevator.setSetpoint(elevatorSetpoint);
+        oldElevatorSetpoint = elevatorSetpoint;
+      }
     }
-    if (oldElevatorSetpoint != elevatorSetpoint) {
-      elevator.setSetpoint(elevatorSetpoint);
-      oldElevatorSetpoint = elevatorSetpoint;
-    }
-    if (elevator.getHeight() <= elevatorLowerSafeDist) {
-      wrist.setSetpoint(wristBottom); // This should put the wrist at level
-    } else if (elevator.getHeight() <= elevatorUpperSafeDist) {
-      wrist.setSetpoint(wristSafe); // This should put the back of wrist outside of the frame
-    } else {
-      wrist.setSetpoint(wristTop); // This should leave the wrist ready to deploy the hatch
-    }
+    // Move the wrist to a safe position
+    wrist.safeMove(elevator.getHeight());
   }
 
   @Override
   protected void interrupted() {
     end();
   }
-
 
   @Override
   protected void end() {

@@ -10,14 +10,14 @@ import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
 
 public class Drivetrain extends Subsystem {
-  private SparkMaxGroup leftDrive = RobotMap.leftDrive;
-  private SparkMaxGroup rightDrive = RobotMap.rightDrive;
-  private DoubleSolenoid gearbox = RobotMap.gearbox;
+  private final SparkMaxGroup leftDrive = RobotMap.leftDrive;
+  private final SparkMaxGroup rightDrive = RobotMap.rightDrive;
+  private final DoubleSolenoid gearbox = RobotMap.gearbox;
   private DoubleSolenoid.Value gearing = RobotMap.LOW_GEAR;
   private SparkMax.IdleMode idleMode = SparkMax.IdleMode.kBrake;
 
   public Drivetrain(){
-    super();
+    super("Drivetrain");
     // Gotta reverse one side of the drivetrain
     rightDrive.setInverted(true);
     leftDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);

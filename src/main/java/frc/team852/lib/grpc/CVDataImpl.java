@@ -7,13 +7,12 @@ import frc.team852.lib.CVDataStore;
 import frc.team852.lib.callbacks.*;
 import io.grpc.stub.StreamObserver;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
-  CVDataStore store = Robot.dataStore;
+  private CVDataStore store = Robot.dataStore;
   private Map<Class, ConcurrentLinkedQueue<GenericListener>> allCallbacks = new ConcurrentHashMap<>();
 
   @Override

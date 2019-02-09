@@ -1,9 +1,7 @@
 package frc.team852.command;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorHold extends Command {
@@ -16,9 +14,14 @@ public class ElevatorHold extends Command {
    * Set the elevator to hold position
    */
   public ElevatorHold() {
+    this(Robot.elevatorSubsystem.getPosition());
+
+  }
+
+  public ElevatorHold(double setpoint) {
     requires(Robot.elevatorSubsystem);
     this.elevator = Robot.elevatorSubsystem;
-    this.setpoint = elevator.getPosition();
+    this.setpoint = setpoint;
     this.wasInterruped = false;
   }
 

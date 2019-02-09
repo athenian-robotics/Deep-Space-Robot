@@ -9,12 +9,14 @@ import frc.team852.command.ClimberMove;
 public class ClimberSubsystem extends PIDSubsystem {
 
   //Set a climber motor
-  private WPI_TalonSRX climberMotor = RobotMap.climberMotor;
-  private Encoder encoder = RobotMap.climberEncoder;
+  private final WPI_TalonSRX climberMotor;
+  private final Encoder encoder;
 
   //Constructor
   public ClimberSubsystem() {
     super("Climber", 0, 0, 0); // TODO tune
+    climberMotor = RobotMap.climberMotor;
+    encoder = RobotMap.climberEncoder;
   }
 
   //Default command is climberMove
@@ -32,10 +34,10 @@ public class ClimberSubsystem extends PIDSubsystem {
   }
 
   public void setSpeed(double speed) {
-  	if (speed != 0)
-    	this.climberMotor.set(speed);
-  	else
-  		stopMotors();
+    if (speed != 0)
+      this.climberMotor.set(speed);
+    else
+      stopMotors();
   }
 
   public double getEncoderPos() {

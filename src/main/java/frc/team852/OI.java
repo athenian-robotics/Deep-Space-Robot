@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team852.command.ElevatorMove;
+import frc.team852.command.PlaceHatch;
 import frc.team852.command.SubsystemPID;
 import frc.team852.command.ToggleGearbox;
-import frc.team852.command.WristMove;
 import frc.team852.lib.utils.fightstick.FightStickAxisButton;
 import frc.team852.lib.utils.fightstick.FightStickDigitalButton;
 import frc.team852.lib.utils.fightstick.FightStickInput;
@@ -81,8 +81,9 @@ public class OI {
     //TODO change target
     xboxB.whenPressed(new SubsystemPID(1000, RobotMap.wristPIDPosition, Robot.wristSubsystem, 2, RobotMap.wristLowerLimit, RobotMap.wristUpperLimit));
     fightStickLB.whileHeld(new ElevatorMove());
-    fightStickRB.whileHeld(new WristMove());
-
+    fightStickX.whenReleased(new PlaceHatch(0));
+    fightStickY.whenReleased(new PlaceHatch(1));
+    fightStickRB.whenReleased(new PlaceHatch(2));
 
   }
 
