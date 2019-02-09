@@ -12,7 +12,7 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PI
 
   private ArrayList<SparkMax> speedControllerList = new ArrayList<>();
   private SparkMax leader;
-  private PIDSourceType m_sourceType;
+  private PIDSourceType sourceType;
   private CANSparkMax.IdleMode idleMode;
 
   /**
@@ -41,11 +41,11 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PI
     super(leader, speedControllers);
     this.leader = leader;
     speedControllerList.addAll(Arrays.asList(speedControllers));
-    m_sourceType = sourceType;
+    this.sourceType = sourceType;
     this.idleMode = idleMode;
     speedControllerList.forEach(sc -> {
       sc.follow(leader);
-      sc.setPIDSourceType(m_sourceType);
+      sc.setPIDSourceType(this.sourceType);
       sc.setIdleMode(idleMode);
     });
     speedControllerList.add(leader);

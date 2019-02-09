@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     elevatorLidar.setReadBufferSize(4500);
     elevatorLidar.setWriteBufferSize(32);
 
-    gyro = new AHRS(SerialPort.Port.kUSB);
+    gyro = new AHRS_PID(SerialPort.Port.kUSB);
 
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);

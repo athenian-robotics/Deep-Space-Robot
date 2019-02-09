@@ -8,10 +8,9 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
 
-  private double resetOffset, lastPos, val, lastSpeed;
+  private double resetOffset, lastPos, val, lastSpeed, isInverted;
   private CANEncoder enc;
   private PIDSourceType m_sourceType;
-  private double lastSpeed = 0;
 
   /**
    * <p>Defaults to displacement readings for the encoder</p>
