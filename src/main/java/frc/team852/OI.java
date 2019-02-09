@@ -4,7 +4,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team852.command.*;
+import frc.team852.command.ElevatorMove;
+import frc.team852.command.PlaceHatch;
+import frc.team852.command.SubsystemPID;
+import frc.team852.command.ToggleGearbox;
+import frc.team852.lib.utils.fightstick.FightStickAxisButton;
+import frc.team852.lib.utils.fightstick.FightStickDigitalButton;
+import frc.team852.lib.utils.fightstick.FightStickInput;
+import frc.team852.lib.utils.fightstick.FightStickPOVDirection;
 
 public class OI {
   /**
@@ -26,19 +33,20 @@ public class OI {
    * <p>
    * Start the command when the button is pressed and let it run the command
    * until it is finished as determined by it's isFinished method.
-   * button.whenPressed(new ElevatorToPosition());
+   * button.whenPressed(new ElevatorMove());
    * <p>
    * Run the command while the button is being held down and interrupt it once
    * the button is released.
-   * button.whileHeld(new ElevatorToPosition());
+   * button.whileHeld(new ElevatorMove());
    * <p>
    * Start the command when the button is released and let it run the command
    * until it is finished as determined by it's isFinished method.
-   * button.whenReleased(new ElevatorToPosition());
+   * button.whenReleased(new ElevatorMove());
    */
   public static Joystick stick1 = new Joystick(0);
   public static Joystick stick2 = new Joystick(1);
   public static XboxController xbox = new XboxController(2);
+  public static Joystick fightStick = new Joystick(3);
 
   // Joystick buttons start at 1
   public static Button xboxA = new JoystickButton(xbox, 1);
@@ -51,6 +59,19 @@ public class OI {
   public static Button xboxStart = new JoystickButton(xbox, 8);
   public static Button xboxLS = new JoystickButton(xbox, 9);
   public static Button xboxRS = new JoystickButton(xbox, 10);
+
+  public static FightStickDigitalButton fightStickA = new FightStickDigitalButton(fightStick, 1, FightStickInput.input.medKick);
+  public static FightStickDigitalButton fightStickB = new FightStickDigitalButton(fightStick, 2, FightStickInput.input.heavyKick);
+  public static FightStickDigitalButton fightStickX = new FightStickDigitalButton(fightStick, 3, FightStickInput.input.medPunch);
+  public static FightStickDigitalButton fightStickY = new FightStickDigitalButton(fightStick, 4, FightStickInput.input.heavyPunch);
+  public static FightStickDigitalButton fightStickLB = new FightStickDigitalButton(fightStick, 5, FightStickInput.input.lightPunch);
+  public static FightStickDigitalButton fightStickRB = new FightStickDigitalButton(fightStick, 6, FightStickInput.input.R1);
+  public static FightStickAxisButton fightStickLT = new FightStickAxisButton(fightStick, 2, FightStickInput.input.lightKick);
+  public static FightStickAxisButton fightStickRT = new FightStickAxisButton(fightStick, 3, FightStickInput.input.R2);
+
+  public static FightStickPOVDirection POVUp = new FightStickPOVDirection(FightStickInput.input.POVtop);
+  public static FightStickPOVDirection POVDown = new FightStickPOVDirection(FightStickInput.input.POVbot);
+  public static FightStickPOVDirection POVcenter = new FightStickPOVDirection(FightStickInput.input.POVcenter);
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
@@ -69,6 +90,12 @@ public class OI {
     xboxY.whenPressed(new DriveDistance(157.48));
     xboxB.whenPressed(new DriveAngle(90));
     xboxX.whenPressed(new DriveAngle(-90));
+    //TODO change target
+    xboxB.whenPressed(new SubsystemPID(1000, RobotMap.wristPIDPosition, Robot.wristSubsystem, 2, RobotMap.wristLowerLimit, RobotMap.wristUpperLimit));
+    fightStickLB.whileHeld(new ElevatorMove());
+    fightStickX.whenReleased(new PlaceHatch(0));
+    fightStickY.whenReleased(new PlaceHatch(1));
+    fightStickRB.whenReleased(new PlaceHatch(2));
 
   }
 

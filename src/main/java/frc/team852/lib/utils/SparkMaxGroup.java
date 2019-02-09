@@ -1,28 +1,31 @@
 package frc.team852.lib.utils;
 
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static edu.wpi.first.wpilibj.PIDSourceType.kDisplacement;
 
-public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PIDSource {
+public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PIDOutput {
 
   private ArrayList<SparkMax> speedControllerList = new ArrayList<>();
-  private PIDSourceType sourceType;
   private SparkMax leader;
-  private double lastSpeed = 0;
+  private PIDSourceType m_sourceType;
+  private CANSparkMax.IdleMode idleMode;
 
   /**
-   * @param speedController  Motor Controller using SparkMax speed controller wrapper
+   * @param leader           Motor Controller using SparkMax speed controller wrapper
    * @param speedControllers The SparkMaxes to add
    */
-  public SparkMaxGroup(SparkMax speedController, SparkMax... speedControllers) {
-    this(kDisplacement, speedController, speedControllers);
+
+  /**
+   * @param leader           Motor Controller using SparkMax speed controller wrapper
+   * @param speedControllers The SparkMaxes to add
+   */
+  public SparkMaxGroup(SparkMax leader, SparkMax... speedControllers) {
+    this(kDisplacement, leader, speedControllers);
   }
 
   /**
@@ -31,23 +34,22 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
    * @param speedControllers The SparkMaxes to add
    */
   public SparkMaxGroup(PIDSourceType sourceType, SparkMax leader, SparkMax... speedControllers) {
-    super(leader, speedControllers);
-//    speedControllerList.add(speedController);
-    speedControllerList.addAll(Arrays.asList(speedControllers));
-    this.sourceType = sourceType;
-    this.leader = leader;
-    speedControllerList.forEach(sc -> {
-      sc.setPIDSourceType(sourceType);
-      sc.follow(this.leader);
-    });
+    this(SparkMax.IdleMode.kBrake, sourceType, leader, speedControllers);
   }
 
-  @Override
-  public void set(double speed) {
-    if (this.lastSpeed != speed) {
-      leader.set(speed);
-      this.lastSpeed = speed;
-    }
+  public SparkMaxGroup(SparkMax.IdleMode idleMode, PIDSourceType sourceType, SparkMax leader, SparkMax... speedControllers) {
+    super(leader, speedControllers);
+    this.leader = leader;
+    speedControllerList.addAll(Arrays.asList(speedControllers));
+    m_sourceType = sourceType;
+    this.idleMode = idleMode;
+    speedControllerList.forEach(sc -> {
+      sc.follow(leader);
+      sc.setPIDSourceType(m_sourceType);
+      sc.setIdleMode(idleMode);
+    });
+    speedControllerList.add(leader);
+
   }
 
 
@@ -83,4 +85,24 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDOutput, PI
   public void setInverted(boolean inverted) {
     this.leader.setInverted(inverted);
   }
+
+  /**
+   * Set the leader's speed
+   *
+   * @param speed
+   */
+  @Override
+  public void set(double speed) {
+    leader.set(speed);
+  }
+
+  public void setIdleMode(SparkMax.IdleMode idleMode) {
+    speedControllerList.forEach(sc -> sc.setIdleMode(idleMode));
+    this.idleMode = idleMode;
+  }
+
+  public CANSparkMax.IdleMode getIdleMode() {
+    return this.idleMode;
+  }
+
 }

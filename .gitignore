@@ -6,6 +6,7 @@ out
 .gradle
 *.jar
 *.csv
+__pycache__
 
 # Project files
 *.iml

@@ -1,15 +1,24 @@
 package frc.team852;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.command.TrackPosition;
 import frc.team852.lib.utils.AHRS_PID;
 import frc.team852.subsystem.Drivetrain;
+import frc.team852.subsystem.*;
+import frc.team852.lib.CVDataStore;
+import frc.team852.lib.grpc.CVDataServer;
+import frc.team852.lib.utils.SerialLidar;
+import frc.team852.subsystem.*;
+
+import java.io.IOException;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +32,16 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static DoubleSolenoid.Value gearstate;
   public static AHRS_PID gyro;
+  public static ElevatorSubsystem elevatorSubsystem;
+  public static WristSubsystem wristSubsystem;
+  public static CargoSubsystem cargoSubsystem;
+  public static HatchSubsystem hatchSubsystem;
+  public static ClimberSubsystem climberSubsystem;
+
+  public static SerialLidar elevatorLidar;
+
+  public static CVDataServer dataServer;
+  public static CVDataStore dataStore;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -42,7 +61,23 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     new RobotMap(); // Empty declaration
+    dataServer = new CVDataServer();
+    dataStore = new CVDataStore();
+
     drivetrain = new Drivetrain();
+    elevatorSubsystem = new ElevatorSubsystem();
+    wristSubsystem = new WristSubsystem();
+    cargoSubsystem = new CargoSubsystem();
+    hatchSubsystem = new HatchSubsystem();
+    climberSubsystem = new ClimberSubsystem();
+
+    elevatorLidar = new SerialLidar(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+    Timer.delay(0.2);
+    elevatorLidar.setReadBufferSize(4500);
+    elevatorLidar.setWriteBufferSize(32);
+
+    gyro = new AHRS(SerialPort.Port.kUSB);
+
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -56,6 +91,14 @@ public class Robot extends TimedRobot {
     RobotMap.gearbox.set(RobotMap.SLOW);
 
     oi = new OI(); // Must be defined last
+
+    try {
+      dataServer.start();
+      SmartDashboard.putString("GRPC_STATUS", "Vision Driver assist available");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+      SmartDashboard.putString("GRPC status", "Vision Driver assist unavailable");
+    }
   }
 
   /**
