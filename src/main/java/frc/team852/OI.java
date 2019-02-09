@@ -4,10 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team852.command.ElevatorMove;
-import frc.team852.command.PlaceHatch;
-import frc.team852.command.SubsystemPID;
-import frc.team852.command.ToggleGearbox;
+import frc.team852.command.*;
 import frc.team852.lib.utils.fightstick.FightStickAxisButton;
 import frc.team852.lib.utils.fightstick.FightStickDigitalButton;
 import frc.team852.lib.utils.fightstick.FightStickInput;
@@ -76,8 +73,20 @@ public class OI {
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
     new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
-    new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
+    new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
+      new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
+    //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
 
+    FieldPaths.genPaths();
+    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
+    xboxBack.whenPressed(new ToggleGearbox());
+    xboxStart.whenPressed(new ToggleGearbox());
+    xboxRB.whenPressed(new ToggleGearbox());
+    if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
+      new ChangeDriveMode();
+    xboxY.whenPressed(new DriveDistance(157.48));
+    xboxB.whenPressed(new DriveAngle(90));
+    xboxX.whenPressed(new DriveAngle(-90));
     //TODO change target
     xboxB.whenPressed(new SubsystemPID(1000, RobotMap.wristPIDPosition, Robot.wristSubsystem, 2, RobotMap.wristLowerLimit, RobotMap.wristUpperLimit));
     fightStickLB.whileHeld(new ElevatorMove());

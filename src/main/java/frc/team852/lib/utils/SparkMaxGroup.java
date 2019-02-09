@@ -12,8 +12,13 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PI
 
   private ArrayList<SparkMax> speedControllerList = new ArrayList<>();
   private SparkMax leader;
-  private PIDSourceType m_sourceType;
+  private PIDSourceType sourceType;
   private CANSparkMax.IdleMode idleMode;
+
+  /**
+   * @param leader           Motor Controller using SparkMax speed controller wrapper
+   * @param speedControllers The SparkMaxes to add
+   */
 
   /**
    * @param leader           Motor Controller using SparkMax speed controller wrapper
@@ -36,11 +41,11 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PI
     super(leader, speedControllers);
     this.leader = leader;
     speedControllerList.addAll(Arrays.asList(speedControllers));
-    m_sourceType = sourceType;
+    this.sourceType = sourceType;
     this.idleMode = idleMode;
     speedControllerList.forEach(sc -> {
       sc.follow(leader);
-      sc.setPIDSourceType(m_sourceType);
+      sc.setPIDSourceType(this.sourceType);
       sc.setIdleMode(idleMode);
     });
     speedControllerList.add(leader);
@@ -54,13 +59,13 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PI
 
   @Override
   public void setPIDSourceType(PIDSourceType pidSource) {
-    m_sourceType = pidSource;
-    speedControllerList.forEach(x -> x.setPIDSourceType(m_sourceType));
+    sourceType = pidSource;
+    speedControllerList.forEach(x -> x.setPIDSourceType(sourceType));
   }
 
   @Override
   public PIDSourceType getPIDSourceType() {
-    return m_sourceType;
+    return sourceType;
   }
 
   /**
@@ -78,7 +83,7 @@ public class SparkMaxGroup extends SpeedControllerGroup implements PIDSource, PI
    * @param inverted The inversion value to set for each speed controller in the group
    */
   public void setInverted(boolean inverted) {
-    speedControllerList.forEach(sc -> sc.setInverted(inverted));
+    this.leader.setInverted(inverted);
   }
 
   /**

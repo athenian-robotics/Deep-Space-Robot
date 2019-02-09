@@ -30,12 +30,12 @@ public class ToggleGearbox extends Command {
   @Override
   protected void execute() {
     System.out.println("Running Toggle Gear");
-    if (gear == RobotMap.HIGH_GEAR) {
-      dt.setGearbox(RobotMap.LOW_GEAR);
+    if (gear == RobotMap.SLOW) {
+      dt.setGearbox(RobotMap.FAST);
       System.out.println("IN LOW GEAR");
     }
     else {
-      dt.setGearbox(RobotMap.HIGH_GEAR);
+      dt.setGearbox(RobotMap.SLOW);
       System.out.println("IN HIGH GEAR");
     }
   }

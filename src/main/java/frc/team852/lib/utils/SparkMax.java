@@ -8,10 +8,9 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
 
-  private double resetOffset, lastPos, val;
+  private double resetOffset, lastPos, val, lastSpeed, isInverted;
   private CANEncoder enc;
   private PIDSourceType m_sourceType;
-  private double lastSpeed = 0;
 
   /**
    * <p>Defaults to displacement readings for the encoder</p>
@@ -46,8 +45,15 @@ public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
     this.enc = getEncoder();
     this.m_sourceType = sourceType;
     this.setInverted(inverted);
+    this.lastSpeed = 0;
   }
 
+  public void set(double speed) {
+    if (this.lastSpeed != speed) {
+      super.set(speed);
+      this.lastSpeed = speed;
+    }
+  }
 
   /**
    * @return Readings from the encoder
@@ -55,6 +61,7 @@ public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
   public double getEncoderPosition() {
     lastPos = val;
     val = enc.getPosition();
+    val *= isInverted;
     if (resetOffset >= val - 0.05 && resetOffset <= val + 0.05) return 0.0000;
     if (val == 0.0) return lastPos - resetOffset;
     return val - resetOffset;
@@ -65,6 +72,12 @@ public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
    */
   public void resetEncoder() {
     resetOffset += getEncoderPosition();
+  }
+
+  public void setInverted(boolean inverted){
+      super.setInverted(inverted);
+      if(inverted) isInverted = -1.0;
+      else isInverted = 1.0;
   }
 
   /**
@@ -95,18 +108,6 @@ public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
         return enc.getVelocity();
       default:
         return 0.0;
-    }
-  }
-
-  /**
-   * Lazily set the speed
-   * @param speed The speed to drive the motor at
-   */
-  @Override
-  public void set(double speed) {
-    if (speed != lastSpeed) {
-      super.set(speed);
-      lastSpeed = speed;
     }
   }
 }
