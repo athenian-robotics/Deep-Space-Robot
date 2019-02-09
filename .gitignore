@@ -1,9 +1,11 @@
 # Output
 build
+out
 *.iml
 .idea
 .gradle
 *.jar
+*.csv
 
 # Project files
 *.iml
