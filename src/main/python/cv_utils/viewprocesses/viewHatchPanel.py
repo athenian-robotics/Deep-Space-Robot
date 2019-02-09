@@ -32,4 +32,4 @@ def viewHatchPanel(shared_frame: SharedFrame):
     centroid = Point((leftPoint[0] + rightPoint[0]) / 2, (leftPoint[1] + rightPoint[2]) / 2)
     diameter = rightPoint[0] - leftPoint[0]
 
-    return Hatch(wasDetected, centroid, diameter)
+    return Hatch(centroid, diameter)
