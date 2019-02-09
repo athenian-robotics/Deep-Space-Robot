@@ -4,6 +4,8 @@ from cv_utils.stream import *
 from grpc_utils.CVObject import *
 
 # range of values to scan
+# TODO REPLACE WITH SAME PROCESS UNDER VIEWREFLTAPE and return blobsize & stuff
+
 low = numpy.array([50, 100, 50])
 high = numpy.array([70, 200, 200])
 
