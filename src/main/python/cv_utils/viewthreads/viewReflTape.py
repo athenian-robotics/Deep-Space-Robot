@@ -1,8 +1,7 @@
 import math
 
+import cv2
 import numpy
-
-from cv_utils.stream import *
 
 # range of values to scan
 # low = numpy.array([50, 100, 50])
@@ -13,6 +12,7 @@ from cv_utils.stream import *
 # high = numpy.array([255, 150, 150])
 
 # hsv
+
 hrange = 47
 srange = 55
 vrange = 47
@@ -20,10 +20,8 @@ vrange = 47
 low = numpy.array([85 - hrange, 235 - srange, 80 - vrange])
 high = numpy.array([85 + hrange, 235 + srange, 80 + vrange])
 
-# low = numpy.array([45, 40, 0])
-# high = numpy.array([155, 200, 160])
-
 # Constants that needs to be tuned
+# TODO TUNE VALUES
 deadZone = 50
 stopDistance = 350
 blobMax = 30000
@@ -96,8 +94,8 @@ def getDistance(p1, p2):
     return int(math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2))
 
 
+# TODO 480 x 640
 def viewReflTape(frame):
-    # frame = shared_frame.getFrame()
     height, width, channels = frame.shape
     center = (int(width / 2), int(height / 2))
     cv2.circle(frame, (center), 7, (255, 255, 255), 5)
@@ -120,6 +118,7 @@ def viewReflTape(frame):
 
             contour1 = c1[0]
             centroid1 = c1[1]
+
             cv2.drawContours(frame, [contour0, contour1], -1, (0, 255, 0), 4)
 
             pairCentroid = (int((centroid0[0] + centroid1[0]) / 2), int((centroid0[1] + centroid1[1]) / 2))
@@ -139,21 +138,11 @@ def viewReflTape(frame):
             cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
             return frame
 
+        # return unmodified frame
         except TypeError:
-            pass
+            return frame
 
         except AssertionError:
-            pass
+            return frame
 
     return frame
-
-
-cap = cv2.VideoCapture(1)
-
-while 1:
-    ret, frame = cap.read()
-    if ret: cv2.imshow(str(frame.shape), viewReflTape(frame))
-    if cv2.waitKey(1) & 0xFF == ord('q'): break
-
-cap.release()
-cv2.destroyAllWindows()

@@ -5,12 +5,16 @@ class Point:
 
 
 class ReflectiveTape:
-    def __init__(self, degree, size, topInside: Point, centroid: Point, bottomOutside: Point):
-        self.degree = degree
-        self.size = size
-        self.topInside = topInside
-        self.centroid = centroid
-        self.bottomOutside = bottomOutside
+    def __init__(self, blobsize):
+        self.blobsize = blobsize
+
+
+class ReflTapePair:
+    def __init__(self, TapeA: ReflectiveTape, TapeB: ReflectiveTape, Centroid: Point, Distance):
+        self.leftTape = TapeA
+        self.rightTape = TapeB
+        self.centroid = Centroid
+        self.distance = Distance
 
 
 class GaffeTape:
@@ -20,20 +24,13 @@ class GaffeTape:
         self.back = back
         self.centroid = centroid
 
-
-class Hatch:
-    def __init__(self, centroid: Point, diameter):
-        self.centroid = centroid
-        self.diameter = diameter
-
-
-class Ball:
-    def __init__(self, centroid: Point, diameter):
-        self.centroid = centroid
-        self.diameter = diameter
-
-
-class ReflTapePair:
-    def __init__(self, TapeA: ReflectiveTape, TapeB: ReflectiveTape):
-        self.leftTape = TapeA
-        self.rightTape = TapeB
+# class Hatch:
+#     def __init__(self, centroid: Point, diameter):
+#         self.centroid = centroid
+#         self.diameter = diameter
+#
+#
+# class Ball:
+#     def __init__(self, centroid: Point, diameter):
+#         self.centroid = centroid
+#         self.diameter = diameter

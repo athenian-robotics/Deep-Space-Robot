@@ -25,37 +25,19 @@ message FrameSize {
     double y = 2;
 }
 
-message Hatch {
-    Point centroid = 1;
-    double diameter = 2;
-}
-
-message Ball {
-    Point centroid = 1;
-    double diameter = 2;
-}
-
-// message CVData {
-//    ReflTape left = 1;
-//    ReflTape right = 2;
-//    GaffeTape tape = 3;
-// }
-
 message ReflTapePair {
     ReflTape leftTape = 1;
     ReflTape rightTape = 2;
+    double centroid = 3;
+    double distance = 4;
 }
 
 message ReflTape {
-    Point topInside = 1;
-    Point centroid = 2;
-    Point bottomOutside = 3;
-    double degrees = 4;
-    double size = 5;
+    double blobsize = 5;
 }
 
 message GaffeTape {
-    Point ront = 1;
+    Point front = 1;
     Point centroid = 2;
     Point back = 3;
     double degrees = 4;
@@ -66,3 +48,12 @@ message Point {
     int32 y = 2;
 }
 
+message Hatch {
+    Point centroid = 1;
+    double diameter = 2;
+}
+
+message Ball {
+    Point centroid = 1;
+    double diameter = 2;
+}
