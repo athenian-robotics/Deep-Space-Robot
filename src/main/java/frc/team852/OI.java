@@ -88,7 +88,6 @@ public class OI {
     xboxB.whenPressed(new DriveAngle(90));
     xboxX.whenPressed(new DriveAngle(-90));
     //TODO change target
-    xboxB.whenPressed(new SubsystemPID(1000, RobotMap.wristPIDPosition, Robot.wristSubsystem, 2, RobotMap.wristLowerLimit, RobotMap.wristUpperLimit));
     fightStickLB.whileHeld(new ElevatorMove());
     fightStickX.whenReleased(new PlaceHatch(0));
     fightStickY.whenReleased(new PlaceHatch(1));

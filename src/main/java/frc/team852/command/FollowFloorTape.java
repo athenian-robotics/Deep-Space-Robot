@@ -2,6 +2,7 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.DeepSpaceRobot.GaffeTape;
+import frc.team852.DeepSpaceRobot.ReflTape;
 import frc.team852.DeepSpaceRobot.ReflTapePair;
 import frc.team852.Robot;
 import frc.team852.lib.callbacks.CallbackDataContainer;
@@ -14,6 +15,8 @@ import frc.team852.subsystem.Drivetrain;
 public class FollowFloorTape extends Command {
   private CallbackDataContainer<GaffeTape> gaffeTape = new CallbackDataContainer<>();
   private CallbackDataContainer<ReflTapePair> reflTapePair = new CallbackDataContainer<>();
+  private CallbackDataContainer<ReflTape> leftTape = new CallbackDataContainer<>();
+  private CallbackDataContainer<ReflTape> rightTape = new CallbackDataContainer<>();
   private double fwdPower = 0.25;
   private Drivetrain dt;
 
@@ -30,6 +33,12 @@ public class FollowFloorTape extends Command {
       @Override
       public void onNewData(ReflTapePair data) {
         reflTapePair.update(data);
+        if (data.hasLeftTape()) {
+          leftTape.update(data.getLeftTape());
+        }
+        if (data.hasRightTape()) {
+          rightTape.update(data.getRightTape());
+        }
       }
     });
     dt = Robot.drivetrain;
@@ -47,6 +56,6 @@ public class FollowFloorTape extends Command {
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return true; // TODO figure out dist
   }
 }
