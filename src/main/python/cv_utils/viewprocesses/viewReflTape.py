@@ -8,25 +8,31 @@ from cv_utils.stream import *
 # low = numpy.array([50, 100, 50])
 # high = numpy.array([70, 200, 200])
 
-# # bgr
+# # bgr blue
 # low = numpy.array([85, 0, 0])
 # high = numpy.array([255, 150, 150])
 
 # hsv
+hrange = 47
+srange = 55
+vrange = 47
 
-# TODO TUNE ACTUAL VALUES FOR REFL TAPE
-low = numpy.array([45, 40, 0])
-high = numpy.array([155, 200, 160])
+low = numpy.array([85 - hrange, 235 - srange, 80 - vrange])
+high = numpy.array([85 + hrange, 235 + srange, 80 + vrange])
+
+# low = numpy.array([45, 40, 0])
+# high = numpy.array([155, 200, 160])
 
 # Constants that needs to be tuned
 deadZone = 50
 stopDistance = 350
-blobMax = 40000
-blobMin = 100
+blobMax = 30000
+blobMin = 200
 
 
 class TapePairs:
-    def __init__(self, contours):
+    def __init__(self, contours, center):
+        self.center = center
         self.contours = contours
         self.contourPairs = []
         self.pair()
@@ -61,18 +67,25 @@ class TapePairs:
 
         return angle0 == "r" and angle1 == "l"
 
+    def findCentroid(self, contour):
+        leftpt = sorted(contour, key=lambda a: a[0][0])[0][0]
+        rightpt = sorted(contour, key=lambda a: a[0][0])[-1][0]
+        centroid = (int((leftpt[0] + rightpt[0]) / 2), int((leftpt[1] + rightpt[1]) / 2))
+        return centroid
+
     def getPair(self):
         try:
-            return self.contourPairs[0][0], self.contourPairs[0][1]
+            list.sort(self.contourPairs, key=lambda contourPair: self.closeCenter(self.findCentroid(contourPair[0]),
+                                                                                  self.findCentroid(contourPair[1]),
+                                                                                  self.center))
+            c0 = self.contourPairs[0][0]
+            c1 = self.contourPairs[0][1]
+            return [c0, self.findCentroid(c0)], [c1, self.findCentroid(c1)]
         except IndexError:
             pass
 
-
-def findCentroid(contour):
-    leftpt = sorted(contour, key=lambda a: a[0][0])[0][0]
-    rightpt = sorted(contour, key=lambda a: a[0][0])[-1][0]
-    centroid = (int((leftpt[0] + rightpt[0]) / 2), int((leftpt[1] + rightpt[1]) / 2))
-    return centroid
+    def closeCenter(self, contourCenter0, contourCenter1, center):
+        return getDistance(contourCenter0, center) + getDistance(contourCenter1, center)
 
 
 def getMinMax(min, max, val):
@@ -84,8 +97,8 @@ def getDistance(p1, p2):
 
 
 def viewReflTape(frame):
+    # frame = shared_frame.getFrame()
     height, width, channels = frame.shape
-
     center = (int(width / 2), int(height / 2))
     cv2.circle(frame, (center), 7, (255, 255, 255), 5)
 
@@ -99,12 +112,14 @@ def viewReflTape(frame):
 
     if len(ordered) >= 2:
         try:
-            currPair = TapePairs(ordered)
-            contour0, contour1 = currPair.getPair()
+            currPair = TapePairs(ordered, center)
+            c0, c1 = currPair.getPair()
 
-            centroid0 = findCentroid(contour0)
-            centroid1 = findCentroid(contour1)
+            contour0 = c0[0]
+            centroid0 = c0[1]
 
+            contour1 = c1[0]
+            centroid1 = c1[1]
             cv2.drawContours(frame, [contour0, contour1], -1, (0, 255, 0), 4)
 
             pairCentroid = (int((centroid0[0] + centroid1[0]) / 2), int((centroid0[1] + centroid1[1]) / 2))
@@ -137,11 +152,8 @@ cap = cv2.VideoCapture(1)
 
 while 1:
     ret, frame = cap.read()
-    if ret:
-        ree = viewReflTape(frame)
-        cv2.imshow(str(frame.shape), ree)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    if ret: cv2.imshow(str(frame.shape), viewReflTape(frame))
+    if cv2.waitKey(1) & 0xFF == ord('q'): break
 
 cap.release()
 cv2.destroyAllWindows()
