@@ -1,37 +1,31 @@
 package frc.team852.subsystem;
 
-import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.DriveChangeable;
-import frc.team852.lib.utils.SparkMax;
-import frc.team852.lib.utils.SparkMaxGroup;
 
 public class Drivetrain extends Subsystem {
   public static final double trackDistance = .6112;  // 61.12 cm distance between wheel sides
 
 
-  private Encoder leftGrayhill = RobotMap.leftGrayhill;
-  private Encoder rightGrayhill = RobotMap.rightGrayhill;
+  private Encoder leftEncoder = RobotMap.leftEncoder;
+  private Encoder rightEncoder = RobotMap.rightEncoder;
 
-  private DoubleSolenoid gearbox = RobotMap.gearbox;
-  private DoubleSolenoid.Value gearing = RobotMap.SLOW;
-
-  private final SparkMaxGroup leftDrive = RobotMap.leftDrive;
-  private final SparkMaxGroup rightDrive = RobotMap.rightDrive;
-  private SparkMax.IdleMode idleMode = SparkMax.IdleMode.kBrake;
+  private final SpeedControllerGroup leftDrive = RobotMap.leftDrive;
+  private final SpeedControllerGroup rightDrive = RobotMap.rightDrive;
 
   public Drivetrain(){
     super("Drivetrain");
     // Gotta reverse one side of the drivetrain
     rightDrive.setInverted(true);
-    leftDrive.setPIDSourceType(PIDSourceType.kDisplacement);
-    rightDrive.setPIDSourceType(PIDSourceType.kDisplacement);
-    leftDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    rightDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    leftEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
+    rightEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
+    setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -48,49 +42,24 @@ public class Drivetrain extends Subsystem {
     rightDrive.set(rightSpeed);
   }
 
-  public DoubleSolenoid.Value getGearing() {
-    return gearing;
-  }
-
-  public void setGearbox(DoubleSolenoid.Value m_gearing) {
-    if (m_gearing == gearing)
-      return;
-    gearbox.set(m_gearing);
-    gearing = m_gearing;
-  }
-
   public double getLeft() {
-    return leftDrive.pidGet();
+    return leftEncoder.pidGet();
   }
 
   public double getRight() {
-    return rightDrive.pidGet();
+    return rightEncoder.pidGet();
   }
 
   public void resetEncoders(){
-    rightDrive.resetEncoders();
-    leftDrive.resetEncoders();
-  }
-
-  // TODO should we use the grayhills for everything and take out the SparkMax encoder methods?
-  public double getLeftGrayhill() {
-    return leftGrayhill.getDistance();
-  }
-
-  public double getRightGrayhill() {
-    return rightGrayhill.getDistance();
+    rightEncoder.reset();
+    leftEncoder.reset();
   }
 
   public double getDistance() {
-    return (leftGrayhill.getDistance() + rightGrayhill.getDistance()) / 2;
+    return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
   }
 
-  public double getRate() { return (leftGrayhill.getRate() + rightGrayhill.getRate()) / 2;}
-
-  public void resetGrayhills() {
-    leftGrayhill.reset();
-    rightGrayhill.reset();
-  }
+  public double getRate() { return (leftEncoder.getRate() + rightEncoder.getRate()) / 2;}
 
   public void stop() {
     leftDrive.set(0);
@@ -101,14 +70,8 @@ public class Drivetrain extends Subsystem {
     Tank, GTA, ArcadeJoy, ArcadePad
   }
 
-  public void setIdleMode(CANSparkMax.IdleMode idleMode){
-    this.idleMode = idleMode;
-    leftDrive.setIdleMode(idleMode);
-    rightDrive.setIdleMode(idleMode);
-  }
-
-  public CANSparkMax.IdleMode getIdleMode(){
-    return this.idleMode;
+  public void setNeutralMode(NeutralMode neutralMode){
+    RobotMap.setNeutralMode(neutralMode);
   }
 
 }

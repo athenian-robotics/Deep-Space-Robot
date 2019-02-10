@@ -13,7 +13,7 @@ import static frc.team852.OI.*;
 public class DriveChangeable extends Command {
 
   private Drivetrain dt = Robot.drivetrain;
-  private double oldRate, currentRate, maxSlowRate, maxFastRate;
+  private double oldRate, currentRate, maxRate;
   private DifferentialDrive drive = new DifferentialDrive(RobotMap.leftDrive, RobotMap.rightDrive);
   private boolean squareInputs;
 
@@ -50,15 +50,15 @@ public class DriveChangeable extends Command {
 
     SmartDashboard.putNumber("Gyro Angle", Robot.gyro.getAngle());
     SmartDashboard.putNumber("Gyro Fused Heading", Robot.gyro.getFusedHeading());
-    SmartDashboard.putNumber("Grayhill Encoder Left (get)", RobotMap.leftGrayhill.get());
-    SmartDashboard.putNumber("Grayhill Encoder Left (Distance)", RobotMap.leftGrayhill.getDistance());
-    SmartDashboard.putNumber("Grayhill Encoder Left (pid)", RobotMap.leftGrayhill.pidGet());
-    SmartDashboard.putNumber("Grayhill Encoder Right (get)", RobotMap.rightGrayhill.get());
-    SmartDashboard.putNumber("Grayhill Encoder Right (Distance)", RobotMap.rightGrayhill.getDistance());
-    SmartDashboard.putNumber("Grayhill Encoder Right (pid)", RobotMap.rightGrayhill.pidGet());
+    SmartDashboard.putNumber("Grayhill Encoder Left (get)", RobotMap.leftEncoder.get());
+    SmartDashboard.putNumber("Grayhill Encoder Left (Distance)", RobotMap.leftEncoder.getDistance());
+    SmartDashboard.putNumber("Grayhill Encoder Left (pid)", RobotMap.leftEncoder.pidGet());
+    SmartDashboard.putNumber("Grayhill Encoder Right (get)", RobotMap.rightEncoder.get());
+    SmartDashboard.putNumber("Grayhill Encoder Right (Distance)", RobotMap.rightEncoder.getDistance());
+    SmartDashboard.putNumber("Grayhill Encoder Right (pid)", RobotMap.rightEncoder.pidGet());
 
-    SmartDashboard.putNumber("Left Neos", RobotMap.leftDrive.pidGet());
-    SmartDashboard.putNumber("Right Neos", RobotMap.rightDrive.pidGet());
+    SmartDashboard.putNumber("Left Neos", RobotMap.leftEncoder.pidGet());
+    SmartDashboard.putNumber("Right Neos", RobotMap.rightEncoder.pidGet());
 
 
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
@@ -75,17 +75,9 @@ public class DriveChangeable extends Command {
       drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
 
       double currentDecreasingRate = getDecreasing();
-      if(dt.getGearing() == RobotMap.SLOW){
-        if(currentDecreasingRate > maxSlowRate){
-          maxSlowRate = currentDecreasingRate;
-          SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxSlowRate);
-        }
-      }
-      if(dt.getGearing() == RobotMap.FAST){
-        if(currentDecreasingRate > maxFastRate){
-          maxFastRate = currentDecreasingRate;
-          SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxFastRate);
-        }
+      if(currentDecreasingRate > maxRate) {
+        maxRate = currentDecreasingRate;
+        SmartDashboard.putNumber("Max Decreasing Rate", maxRate);
       }
 //      if(speed > 0){
 //        xbox.setRumble(GenericHID.RumbleType.kRightRumble, getDecreasing());

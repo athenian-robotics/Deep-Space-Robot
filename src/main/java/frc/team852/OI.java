@@ -30,15 +30,15 @@ public class OI {
    * <p>
    * Start the command when the button is pressed and let it run the command
    * until it is finished as determined by it's isFinished method.
-   * button.whenPressed(new ElevatorMove());
+   * button.whenPressed(new Command());
    * <p>
    * Run the command while the button is being held down and interrupt it once
    * the button is released.
-   * button.whileHeld(new ElevatorMove());
+   * button.whileHeld(new Command());
    * <p>
    * Start the command when the button is released and let it run the command
    * until it is finished as determined by it's isFinished method.
-   * button.whenReleased(new ElevatorMove());
+   * button.whenReleased(new Command());
    */
   public static Joystick stick1 = new Joystick(0);
   public static Joystick stick2 = new Joystick(1);
@@ -72,28 +72,16 @@ public class OI {
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
-    new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
     new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
       new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
-    //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
 
     FieldPaths.genPaths();
     xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
-    xboxBack.whenPressed(new ToggleGearbox());
-    xboxStart.whenPressed(new ToggleGearbox());
-    xboxRB.whenPressed(new ToggleGearbox());
     if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
       new ChangeDriveMode();
     xboxY.whenPressed(new DriveDistance(157.48));
     xboxB.whenPressed(new DriveAngle(90));
     xboxX.whenPressed(new DriveAngle(-90));
-    //TODO change target
-    xboxB.whenPressed(new SubsystemPID(1000, RobotMap.wristPIDPosition, Robot.wristSubsystem, 2, RobotMap.wristLowerLimit, RobotMap.wristUpperLimit));
-    fightStickLB.whileHeld(new ElevatorMove());
-    fightStickX.whenReleased(new PlaceHatch(0));
-    fightStickY.whenReleased(new PlaceHatch(1));
-    fightStickRB.whenReleased(new PlaceHatch(2));
-
   }
 
 

@@ -42,8 +42,8 @@ public class PositionTracking implements Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            double leftEnc = RobotMap.leftGrayhill.get();
-            double rightEnc = RobotMap.rightGrayhill.get();
+            double leftEnc = RobotMap.leftEncoder.get();
+            double rightEnc = RobotMap.rightEncoder.get();
             double currEncValue = (leftEnc + rightEnc) / 2 / ONE_METER;
             double currGyroHeading;
             if (useGyro)
@@ -116,8 +116,8 @@ public class PositionTracking implements Runnable {
         currX.set(0d);
         currY.set(0d);
         currAngle.set(0d);
-        RobotMap.leftGrayhill.reset();
-        RobotMap.rightGrayhill.reset();
+        RobotMap.leftEncoder.reset();
+        RobotMap.rightEncoder.reset();
     }
 
 }

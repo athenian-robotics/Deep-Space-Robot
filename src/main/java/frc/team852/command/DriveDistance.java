@@ -13,8 +13,10 @@ public class DriveDistance extends Command {
     private Drivetrain dt = Robot.drivetrain;
     //private DifferentialDrive drive = new DifferentialDrive(RobotMap.leftDrive, RobotMap.rightDrive);
     private PIDControl pid = new PIDControl(0.02,0.00003,0.00000002);
-    private PIDController leftPID = new PIDController(0.025,0.000002,0.00000001,RobotMap.leftDrive, RobotMap.leftDrive,0.005);
-    private PIDController rightPID = new PIDController(0.025,0.000002,0.00000001, RobotMap.rightDrive,RobotMap.rightDrive, 0.005);
+    private PIDController leftPID = new PIDController(0.025,0.000002,0.00000001,
+            RobotMap.leftEncoder, RobotMap.leftDrive,0.005);
+    private PIDController rightPID = new PIDController(0.025,0.000002,0.00000001,
+            RobotMap.leftEncoder,RobotMap.rightDrive, 0.005);
 
 
     //1 revolution = 18.84 inches
@@ -28,19 +30,11 @@ public class DriveDistance extends Command {
     @Override
     protected void initialize(){
 
-        RobotMap.leftDrive.resetEncoders();
-        RobotMap.rightDrive.resetEncoders();
-        if(dt.getGearing() == RobotMap.SLOW) {
-            System.out.println("WARNING: IN SLOW GEAR!");
-            this.targetDist = (inches / 39.37) * 34;//29.645;
-        }
-        else {
-            System.out.println("WARNING: IN FAST GEAR!");
-            this.targetDist = (inches / 39.37) * 15;//13.075;
-        }
+        RobotMap.leftEncoder.reset();
+        RobotMap.rightEncoder.reset();
 
-        System.out.println("WARNING: RobotMap.leftDrive.pidGet() = " + RobotMap.leftDrive.pidGet());
-        System.out.println("WARNING: RobotMap.rightDrive.pidGet() = " + RobotMap.rightDrive.pidGet());
+        System.out.println("WARNING: RobotMap.leftEncoder.pidGet() = " + RobotMap.leftEncoder.pidGet());
+        System.out.println("WARNING: RobotMap.rightEncoder.pidGet() = " + RobotMap.rightEncoder.pidGet());
         System.out.println("WARNING: targetDist = " + targetDist);
         leftPID.setContinuous(false);
         leftPID.setSetpoint(targetDist);
@@ -79,13 +73,13 @@ public class DriveDistance extends Command {
 //        if(!rightPID.isEnabled())
 //            rightPID.setEnabled(true);
 
-        double error = pid.getPID(targetDist, (RobotMap.leftDrive.pidGet()+RobotMap.rightDrive.pidGet())/2);
+        double error = pid.getPID(targetDist, (RobotMap.leftEncoder.pidGet()+RobotMap.rightEncoder.pidGet())/2);
         dt.drive(-error,-error);
 
         System.out.println("leftPID error = " + leftPID.getError());
         System.out.println("rightPID error = " + rightPID.getError());
-        //System.out.println("RobotMap.leftDrive.pidGet() = " + RobotMap.leftDrive.pidGet());
-        //System.out.println("RobotMap.rightDrive.pidGet() = " + RobotMap.rightDrive.pidGet());
+        //System.out.println("RobotMap.leftEncoder.pidGet() = " + RobotMap.leftEncoder.pidGet());
+        //System.out.println("RobotMap.rightEncoder.pidGet() = " + RobotMap.rightEncoder.pidGet());
         //System.out.println("targetDist = " + targetDist);
     }
 }

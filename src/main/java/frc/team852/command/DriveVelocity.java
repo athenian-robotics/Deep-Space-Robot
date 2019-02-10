@@ -26,18 +26,18 @@ public class DriveVelocity extends Command {
         Kf = kf;
         leftSetpoint = 0;
         rightSetpoint = 0;
-        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.leftGrayhill, RobotMap.leftDrive);
-        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.rightGrayhill, RobotMap.rightDrive);
+        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.leftEncoder, RobotMap.leftDrive);
+        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.rightEncoder, RobotMap.rightDrive);
         requires(Robot.drivetrain);
     }
 
 
     @Override
     protected void initialize() {
-        leftSourceType = RobotMap.leftGrayhill.getPIDSourceType();
-        rightSourceType = RobotMap.rightGrayhill.getPIDSourceType();
-        RobotMap.leftGrayhill.setPIDSourceType(PIDSourceType.kRate);
-        RobotMap.rightGrayhill.setPIDSourceType(PIDSourceType.kRate);
+        leftSourceType = RobotMap.leftEncoder.getPIDSourceType();
+        rightSourceType = RobotMap.rightEncoder.getPIDSourceType();
+        RobotMap.leftEncoder.setPIDSourceType(PIDSourceType.kRate);
+        RobotMap.rightEncoder.setPIDSourceType(PIDSourceType.kRate);
 
         leftControl.enable();
         rightControl.enable();
@@ -57,8 +57,8 @@ public class DriveVelocity extends Command {
 
     @Override
     protected void end() {
-        RobotMap.leftGrayhill.setPIDSourceType(leftSourceType);
-        RobotMap.leftGrayhill.setPIDSourceType(rightSourceType);
+        RobotMap.leftEncoder.setPIDSourceType(leftSourceType);
+        RobotMap.leftEncoder.setPIDSourceType(rightSourceType);
 
         leftControl.reset();
         rightControl.reset();

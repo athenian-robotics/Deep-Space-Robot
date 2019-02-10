@@ -34,7 +34,6 @@ public class DrivePathBasic extends Command {
     private static final double maxSpeed = 0.2;
     private static final double ticksPerRevolution = 277.2;
     private static final double distanceUnits = 0.1;
-    // Ticks / revolution = 277.2 high gear, 630 low gear
 
     public DrivePathBasic(List<Pose2D> path) {
         if (path.size() < 2)
@@ -47,11 +46,6 @@ public class DrivePathBasic extends Command {
 
     @Override
     protected void initialize() {
-        // Make sure drivetrain is in high gear
-        if (dt.getGearing() == RobotMap.SLOW) {
-            dt.setGearbox(RobotMap.SLOW);
-            System.out.println("IN HIGH GEAR");
-        }
         // Emulate an encoder reset
         encoderStart = 0;
         dt.resetEncoders();

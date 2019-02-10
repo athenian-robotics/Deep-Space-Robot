@@ -25,16 +25,9 @@ public class Robot extends TimedRobot {
 
   //Subsystems
   public static Drivetrain drivetrain;
-  public static DoubleSolenoid.Value gearstate;
-  public static ElevatorSubsystem elevatorSubsystem;
-  public static WristSubsystem wristSubsystem;
-//  public static CargoSubsystem cargoSubsystem;
-  public static HatchSubsystem hatchSubsystem;
-  public static ClimberSubsystem climberSubsystem;
 
   //Sensors
   public static AHRS_PID gyro;
-  public static SerialLidar elevatorLidar;
 
   //Data
   public static CVDataServer dataServer;
@@ -63,31 +56,16 @@ public class Robot extends TimedRobot {
     dataStore = new CVDataStore();
 
     drivetrain = new Drivetrain();
-    elevatorSubsystem = new ElevatorSubsystem();
-    wristSubsystem = new WristSubsystem();
-//    cargoSubsystem = new CargoSubsystem();
-    hatchSubsystem = new HatchSubsystem();
-    climberSubsystem = new ClimberSubsystem();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     try {
-      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB1);
-      Timer.delay(0.2);
-      elevatorLidar.setReadBufferSize(1);
-    }
-    catch (RuntimeException ex){
-      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
-    }
-
-    try {
       gyro = new AHRS_PID(SerialPort.Port.kUSB);
     } catch (RuntimeException ex ) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
-    RobotMap.gearbox.set(RobotMap.SLOW);
 
     oi = new OI(); // Must be defined last
 
@@ -164,7 +142,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    RobotMap.gearbox.set(RobotMap.SLOW);
     Scheduler.getInstance().add(new TrackPosition());
   }
 
