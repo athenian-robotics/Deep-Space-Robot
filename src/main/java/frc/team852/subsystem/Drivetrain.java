@@ -1,14 +1,12 @@
 package frc.team852.subsystem;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.DriveChangeable;
-import frc.team852.command.DriveTank;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
 
@@ -84,8 +82,10 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getDistance() {
-    return (getLeftGrayhill() + getRightGrayhill()) / 2;
+    return (leftGrayhill.getDistance() + rightGrayhill.getDistance()) / 2;
   }
+
+  public double getRate() { return (leftGrayhill.getRate() + rightGrayhill.getRate()) / 2;}
 
   public void resetGrayhills() {
     leftGrayhill.reset();
@@ -98,7 +98,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public enum DriveMode {
-    Tank, Cheezy, GTA, CheezyPad, SmoothedTriggersGTA, SmoothedTurnGTA, SmoothedBothGTA, ArcadeJoy, ArcadePad
+    Tank, GTA, ArcadeJoy, ArcadePad
   }
 
   public void setIdleMode(CANSparkMax.IdleMode idleMode){
