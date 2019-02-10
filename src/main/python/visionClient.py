@@ -51,9 +51,14 @@ The Process:
 """
 
 # TODO Actual Host
-HOSTNAME = "localhost"
+# HOSTNAME = "localhost"
+# PORT = "5050"
+
+HOSTNAME = "0.0.0.0"
 PORT = "5050"
 
+
+# HELLO BARE REPO
 
 def main():
     sftop = SharedFrame()
@@ -77,7 +82,7 @@ def main():
         # executor.submit(grpc_client.sendHatch, sfmed)
         # executor.submit(grpc_client.sendBall, sfmed)
 
-        # stream started
+        # stream started6
         # executor.submit(grpc_client.sendGaffeTape, sflow)
         # executor.submit(grpc_client.sendReflTape, sftop)
 
