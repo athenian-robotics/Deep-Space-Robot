@@ -1,6 +1,6 @@
 default: all
 
-all: clean stubs bin
+all: arc852 stubs bin
 
 stubs: clean java-stubs python-stubs
 
@@ -40,3 +40,6 @@ python-client:
 java-client:
 	build/install/Deep-Space-Robot/bin/grpc-Server
 
+# install and update arc852 python library
+arc852:
+	sudo -H pip3 install --upgrade arc852-robotics --extra-index-url https://pypi.fury.io/pambrose/
