@@ -89,6 +89,7 @@ public class DriveDistanceVelocity extends Command {
                 kfEntry.getDouble(0));
 
 
+        //TODO: Duplicate code (fix)
         // Update drivetrain values
         switch (state) {
             case STATE_ACCEL:

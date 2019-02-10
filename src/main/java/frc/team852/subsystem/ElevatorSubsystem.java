@@ -3,19 +3,17 @@ package frc.team852.subsystem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.ElevatorHold;
-import frc.team852.lib.utils.SerialLidar;
 
 public class ElevatorSubsystem extends PIDSubsystem {
   private final WPI_TalonSRX motor;
-  private final SerialLidar lidar;
   private final DigitalInput lowerLimit, upperLimit;
 
   public ElevatorSubsystem() {
     super("Elevator", 0, 0, 0); // TODO tune
     motor = RobotMap.elevatorMotor;
-    lidar = RobotMap.elevatorLidar;
     setPercentTolerance(1);
     getPIDController().setContinuous(false);
     this.lowerLimit = RobotMap.elevatorLowerLimit;
@@ -23,7 +21,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
   }
 
   public int getHeight() {
-    return this.lidar.getLidarDistance()[0];
+    return Robot.elevatorLidar.getLidarDistance();
   }
 
   public double getOutput() {
@@ -32,7 +30,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
 
   @Override
   protected double returnPIDInput() {
-    return lidar.pidGet();
+    return Robot.elevatorLidar.pidGet();
   }
 
   @Override

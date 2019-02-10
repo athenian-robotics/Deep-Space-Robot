@@ -4,18 +4,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.subsystem.Drivetrain;
 
-import static frc.team852.OI.stick1;
-import static frc.team852.OI.stick2;
-import static frc.team852.OI.xbox;
+import static frc.team852.OI.*;
 
 public class DriveChangeable extends Command {
 
   private Drivetrain dt = Robot.drivetrain;
+  private double oldRate, currentRate, maxSlowRate, maxFastRate;
   private DifferentialDrive drive = new DifferentialDrive(RobotMap.leftDrive, RobotMap.rightDrive);
   private boolean squareInputs;
 
@@ -48,6 +46,8 @@ public class DriveChangeable extends Command {
   @Override
   protected void execute() {
 
+    currentRate = dt.getRate();
+
     SmartDashboard.putNumber("Gyro Angle", Robot.gyro.getAngle());
     SmartDashboard.putNumber("Gyro Fused Heading", Robot.gyro.getFusedHeading());
     SmartDashboard.putNumber("Grayhill Encoder Left (get)", RobotMap.leftGrayhill.get());
@@ -61,25 +61,7 @@ public class DriveChangeable extends Command {
     SmartDashboard.putNumber("Right Neos", RobotMap.rightDrive.pidGet());
 
 
-
-    if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Cheezy) {
-//      if (stick2.getTriggerPressed()) {
-//        drive.curvatureDrive(stick2.getY(), -stick1.getX(), true);
-//      } else {
-//      drive.curvatureDrive(stick2.getY(), -stick1.getY(), false);
-//        System.out.println("QUICK TURN ENABLEEED");
-//      }
-    }
-    else if(RobotMap.currentDriveMode == Drivetrain.DriveMode.CheezyPad){
-      if(OI.xboxLB.get() || OI.xboxRB.get()){
-        drive.curvatureDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), true);
-      System.out.print("Quick Turn is Enabled!");
-      }
-      else{
-        drive.curvatureDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), false);
-      }
-    }
-    else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
+    if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
       drive.tankDrive(-stick2.getY(), stick1.getY(), true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadeJoy) {
       drive.arcadeDrive(-stick1.getX(), -stick1.getY(), true);
@@ -89,17 +71,40 @@ public class DriveChangeable extends Command {
         multiplyBy = xbox.getTriggerAxis(GenericHID.Hand.kRight);
       drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
-      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight));
+      double speed = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight);
+      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
+
+      double currentDecreasingRate = getDecreasing();
+      if(dt.getGearing() == RobotMap.SLOW){
+        if(currentDecreasingRate > maxSlowRate){
+          maxSlowRate = currentDecreasingRate;
+          SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxSlowRate);
+        }
+      }
+      if(dt.getGearing() == RobotMap.FAST){
+        if(currentDecreasingRate > maxFastRate){
+          maxFastRate = currentDecreasingRate;
+          SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxFastRate);
+        }
+      }
+//      if(speed > 0){
+//        xbox.setRumble(GenericHID.RumbleType.kRightRumble, getDecreasing());
+//      }
+//      else{
+//        xbox.setRumble(GenericHID.RumbleType.kLeftRumble, getDecreasing());
+//      }
     }
-    else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.SmoothedTriggersGTA){
-      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -smooth(xbox.getTriggerAxis(GenericHID.Hand.kLeft)) + smooth(xbox.getTriggerAxis(GenericHID.Hand.kRight)));
+
+    oldRate = dt.getRate();
+  }
+
+  private double getDecreasing(){
+    double finalRate = oldRate - currentRate;
+    if(finalRate > 0.05){
+      //TODO: implement scaling from 0-1
+      return finalRate;
     }
-    else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.SmoothedTurnGTA){
-      drive.arcadeDrive(-smooth(xbox.getX(GenericHID.Hand.kLeft)), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight));
-    }
-    else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.SmoothedBothGTA){
-      drive.arcadeDrive(-smooth(xbox.getX(GenericHID.Hand.kLeft)), -smooth(xbox.getTriggerAxis(GenericHID.Hand.kLeft)) + smooth(xbox.getTriggerAxis(GenericHID.Hand.kRight)));
-    }
+    return 0.0;
   }
 
   private double smooth(double input){

@@ -33,7 +33,6 @@ def detectGaffeTape(shared_frame: SharedFrame):
         # find centroid as the average of ^^^
         centroid = Point(int((bottompt[0] + toppt[0]) / 2), int((bottompt[1] + toppt[1]) / 2))
         if len(contour) > 5:
-            # if there are enough points, find the angle of the contour (using fitEllipse)
             (x1, y1), (MA1, ma1), angle = cv2.fitEllipse(contour)
         else:
             angle = 0  # default

@@ -4,6 +4,9 @@ from grpc_utils.routeClient import *
 
 # CONVENTION: INDEX STARTS AT 0
 
+HOSTNAME = "localhost"
+PORT = "5050"
+
 sftop = SharedFrame()
 sfmed = SharedFrame()
 sflow = SharedFrame()
@@ -14,12 +17,8 @@ lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(500, 500))
 
 server = StreamServer(sftop, sfmed, sflow)
 
-# TODO get rpc from button press
-
-# TODO Implement Break Function
-
 # placeholder host and port
-grpc_client = RouteClient(host="localhost", port="5050")
+grpc_client = RouteClient(host=HOSTNAME, port=PORT)
 
 with ThreadPoolExecutor() as executor:
     executor.submit(topCamera.start)
@@ -30,9 +29,9 @@ with ThreadPoolExecutor() as executor:
     executor.submit(server.start)
 
     # alignment
-    # executor.submit(grpc_client.sendHatch, sfmed)
-    # executor.submit(grpc_client.sendBall, sfmed)
+    executor.submit(grpc_client.sendHatch, sfmed)
+    executor.submit(grpc_client.sendBall, sfmed)
 
     # game object
-    # executor.submit(grpc_client.sendGaffeTape, sflow)
-    # executor.submit(grpc_client.sendReflTape, sftop)
+    executor.submit(grpc_client.sendGaffeTape, sflow)
+    executor.submit(grpc_client.sendReflTape, sftop)
