@@ -89,7 +89,7 @@ public class WristSubsystem extends PIDSubsystem {
   }
 
   public boolean canMove() {
-    double elevatorHeight = Robot.elevatorLidar.getLidarDistance()[0];
+    int elevatorHeight = Robot.elevatorLidar.getLidarDistance();
     return !(elevatorHeight <= elevatorUpperSafeDist);
   }
 

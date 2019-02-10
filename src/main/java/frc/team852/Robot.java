@@ -1,20 +1,13 @@
 package frc.team852;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.command.TrackPosition;
-import frc.team852.lib.utils.AHRS_PID;
-import frc.team852.subsystem.Drivetrain;
-import frc.team852.subsystem.*;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
+import frc.team852.lib.utils.AHRS_PID;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.subsystem.*;
 
@@ -29,20 +22,25 @@ import java.io.IOException;
  */
 public class Robot extends TimedRobot {
   public static OI oi;
+
+  //Subsystems
   public static Drivetrain drivetrain;
   public static DoubleSolenoid.Value gearstate;
-  public static AHRS_PID gyro;
   public static ElevatorSubsystem elevatorSubsystem;
   public static WristSubsystem wristSubsystem;
-  public static CargoSubsystem cargoSubsystem;
+//  public static CargoSubsystem cargoSubsystem;
   public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
 
+  //Sensors
+  public static AHRS_PID gyro;
   public static SerialLidar elevatorLidar;
 
+  //Data
   public static CVDataServer dataServer;
   public static CVDataStore dataStore;
 
+  //Other
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -67,21 +65,22 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     elevatorSubsystem = new ElevatorSubsystem();
     wristSubsystem = new WristSubsystem();
-    cargoSubsystem = new CargoSubsystem();
+//    cargoSubsystem = new CargoSubsystem();
     hatchSubsystem = new HatchSubsystem();
     climberSubsystem = new ClimberSubsystem();
-
-    elevatorLidar = new SerialLidar(115200, SerialPort.Port.kMXP, 8, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
-    Timer.delay(0.2);
-    elevatorLidar.setReadBufferSize(4500);
-    elevatorLidar.setWriteBufferSize(32);
-
-    gyro = new AHRS_PID(SerialPort.Port.kUSB);
-
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    try {
+      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB1);
+      Timer.delay(0.2);
+      elevatorLidar.setReadBufferSize(1);
+    }
+    catch (RuntimeException ex){
+      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
+    }
 
     try {
       gyro = new AHRS_PID(SerialPort.Port.kUSB);
