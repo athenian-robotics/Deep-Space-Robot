@@ -27,7 +27,7 @@ public class DriveVelocity extends Command {
         leftSetpoint = 0;
         rightSetpoint = 0;
         leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.leftEncoder, RobotMap.leftDrive);
-        leftControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.rightEncoder, RobotMap.rightDrive);
+        rightControl = new PIDController(Kp, Ki, Kd, Kf, RobotMap.rightEncoder, RobotMap.rightDrive);
         requires(Robot.drivetrain);
     }
 
