@@ -23,7 +23,7 @@ public class DriveDistanceVelocity extends Command {
     public static final int STATE_DECEL = 2;  // Robot decelerating to a halt near target distance
     public static final int STATE_ENDED = 3;  // Robot has reached target distance and halted
 
-    private DriveVelocity driveVelocity;
+    private final DriveVelocity driveVelocity;
     private final double targetDistance;
     private final double targetVelocity;
 
