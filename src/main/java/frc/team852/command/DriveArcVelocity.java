@@ -27,35 +27,21 @@ public class DriveArcVelocity extends Command {
     public static final int STATE_ENDED = 3;  // Robot has reached target distance and halted
 
     private DriveVelocity driveVelocity;
-    private double targetDistance;
-    private double targetVelocity;
-    private double targetCurvature;
+    private final double targetDistance;
+    private final double targetVelocity;
+    private final double targetCurvature;
     
-    private double startTime;
+    private long startTime;
     private double startDistance;
     public double startHeading;
     
     private static final double trackCoeff = Drivetrain.trackDistance; //TODO Fix if needed
     private int state;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-    private NetworkTableEntry kpEntry = tab.add("DriveDistanceVelocity Kp", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-    private NetworkTableEntry kiEntry = tab.add("DriveDistanceVelocity Ki", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-    private NetworkTableEntry kdEntry = tab.add("DriveDistanceVelocity Kd", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-    private NetworkTableEntry kfEntry = tab.add("DriveDistanceVelocity Kf", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-
 
     public DriveArcVelocity(double targetDistance, double targetCurvature, double targetVelocity) {
     	
-        driveVelocity = new DriveVelocity(0, 0, 0, 0);
+        driveVelocity = new DriveVelocity();
         this.targetDistance = Math.max(0, targetDistance);
         this.targetVelocity = Math.max(0, targetVelocity);
         this.targetCurvature = targetCurvature;
@@ -88,19 +74,12 @@ public class DriveArcVelocity extends Command {
         double distanceTraveled = Robot.drivetrain.getDistance() - startDistance;
         double headingError = Robot.gyro.getAngle() - startHeading - (targetCurvature / trackCoeff) * distanceTraveled;
 
-        // Update PID controller with values from dashboard
-        driveVelocity.setAll(
-                kpEntry.getDouble(0),
-                kiEntry.getDouble(0),
-                kdEntry.getDouble(0),
-                kfEntry.getDouble(0));
-
 
         // Update drivetrain values
         switch (state) {
             case STATE_ACCEL:
                 // Ramp up velocity over time at the rate given by maxAcceleration
-                forwardVelocity = maxAcceleration * (System.currentTimeMillis() - startTime) / 1000;
+                forwardVelocity = maxAcceleration * (System.currentTimeMillis() - startTime) / 1000d;
                 // Hold it constant once target velocity reached
                 forwardVelocity = Math.max(targetVelocity, forwardVelocity);
                 break;
