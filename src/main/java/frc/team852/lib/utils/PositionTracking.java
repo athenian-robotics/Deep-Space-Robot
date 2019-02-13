@@ -41,61 +41,66 @@ public class PositionTracking implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.interrupted()) {
-            double leftEnc = RobotMap.leftGrayhill.get();
-            double rightEnc = RobotMap.rightGrayhill.get();
-            double currEncValue = (leftEnc + rightEnc) / 2 / ONE_METER;
-            double currGyroHeading;
-            if (useGyro)
-                currGyroHeading = Math.toRadians(Robot.gyro.getAngle());
-            else
-                currGyroHeading = (rightEnc - leftEnc) / 2 / ONE_METER / trackDistance;
+        try {
+            while (!Thread.interrupted()) {
+                Thread.sleep(10);
 
-            log.append(System.currentTimeMillis()).append(',')
-                    .append(OI.stick1.getY() / 2).append(',')
-                    .append(currEncValue).append('\n');
+                double leftEnc = RobotMap.leftGrayhill.get();
+                double rightEnc = RobotMap.rightGrayhill.get();
+                double currEncValue = (leftEnc + rightEnc) / 2 / ONE_METER;
+                double currGyroHeading;
+                if (useGyro)
+                    currGyroHeading = Math.toRadians(Robot.gyro.getAngle());
+                else
+                    currGyroHeading = (rightEnc - leftEnc) / 2 / ONE_METER / trackDistance;
 
-            double dist = currEncValue - lastEncValue;
-            double angle = currGyroHeading - lastGyroHeading;
+                log.append(System.currentTimeMillis()).append(',')
+                        .append(OI.stick1.getY() / 2).append(',')
+                        .append(currEncValue).append('\n');
 
-            if (pure) {
-                double deltaX = 0;
-                double deltaY = 0;
-                double deltaAngle = 0;
-                if (angle == 0) {
-                    deltaX = dist;
-                    deltaY = 0;
+                double dist = currEncValue - lastEncValue;
+                double angle = currGyroHeading - lastGyroHeading;
+
+                if (pure) {
+                    double deltaX = 0;
+                    double deltaY = 0;
+                    double deltaAngle = 0;
+                    if (angle == 0) {
+                        deltaX = dist;
+                        deltaY = 0;
+                    } else {
+                        double radius = dist / angle;
+                        deltaX = radius * Math.sin(angle);
+                        deltaY = radius * (1 - Math.cos(angle));
+
+                        double oldAngle = currAngle.get();
+                        double tempX = deltaX * Math.cos(oldAngle) - deltaY * Math.sin(oldAngle);
+                        double tempY = deltaX * Math.sin(oldAngle) + deltaY * Math.cos(oldAngle);
+                        deltaX = tempX;
+                        deltaY = tempY;
+
+                        deltaAngle = angle;
+                    }
+                    currX.accumulateAndGet(deltaX, Double::sum);
+                    currY.accumulateAndGet(deltaY, Double::sum);
+                    currAngle.accumulateAndGet(deltaAngle, Double::sum);
                 } else {
-                    double radius = dist / angle;
-                    deltaX = radius * Math.sin(angle);
-                    deltaY = radius * (1 - Math.cos(angle));
-
-                    double oldAngle = currAngle.get();
-                    double tempX = deltaX * Math.cos(oldAngle) - deltaY * Math.sin(oldAngle);
-                    double tempY = deltaX * Math.sin(oldAngle) + deltaY * Math.cos(oldAngle);
-                    deltaX = tempX;
-                    deltaY = tempY;
-
-                    deltaAngle = angle;
+                    Pose2D nextPose;
+                    if (angle == 0) {
+                        nextPose = new Pose2D(dist, 0);
+                    } else {
+                        double radius = dist / angle;
+                        nextPose = new Pose2D(radius * Math.sin(angle), radius * (1 - Math.cos(angle)), angle);
+                    }
+                    currPose.accumulateAndGet(nextPose, Pose2D::compose);
                 }
-                currX.accumulateAndGet(deltaX, Double::sum);
-                currY.accumulateAndGet(deltaY, Double::sum);
-                currAngle.accumulateAndGet(deltaAngle, Double::sum);
+
+                lastEncValue = currEncValue;
+                lastGyroHeading = currGyroHeading;
             }
-            else {
-                Pose2D nextPose;
-                if (angle == 0) {
-                    nextPose = new Pose2D(dist, 0);
-                }
-                else {
-                    double radius = dist / angle;
-                    nextPose = new Pose2D(radius * Math.sin(angle), radius * (1 - Math.cos(angle)), angle);
-                }
-                currPose.accumulateAndGet(nextPose, Pose2D::compose);
-            }
-
-            lastEncValue = currEncValue;
-            lastGyroHeading = currGyroHeading;
+        }
+        catch (InterruptedException e) {
+            System.out.println("Interrupted position tracking.");
         }
         writeLog();
         System.out.println("Ended position tracking.");
