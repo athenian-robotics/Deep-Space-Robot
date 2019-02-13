@@ -3,10 +3,11 @@ package frc.team852.subsystem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.ClimberMove;
 
-public class ClimberSubsystem extends PIDSubsystem {
+public class ClimberSubsystem extends Subsystem {
 
   //Set a climber motor
   private final WPI_TalonSRX climberMotor;
@@ -14,7 +15,7 @@ public class ClimberSubsystem extends PIDSubsystem {
 
   //Constructor
   public ClimberSubsystem() {
-    super("Climber", 0, 0, 0); // TODO tune
+    super("Climber");
     climberMotor = RobotMap.climberMotor;
     encoder = RobotMap.climberEncoder;
   }
@@ -22,7 +23,6 @@ public class ClimberSubsystem extends PIDSubsystem {
   //Default command is climberMove
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new ClimberMove());
   }
 
   public void stopMotors() {
@@ -34,10 +34,7 @@ public class ClimberSubsystem extends PIDSubsystem {
   }
 
   public void setSpeed(double speed) {
-    if (speed != 0)
-      this.climberMotor.set(speed);
-    else
-      stopMotors();
+    this.climberMotor.set(speed);
   }
 
   public double getEncoderPos() {
@@ -46,15 +43,5 @@ public class ClimberSubsystem extends PIDSubsystem {
 
   public void resetEncoder() {
     this.encoder.reset();
-  }
-
-  @Override
-  protected double returnPIDInput() {
-    return encoder.get();
-  }
-
-  @Override
-  protected void usePIDOutput(double output) {
-    climberMotor.set(output);
   }
 }

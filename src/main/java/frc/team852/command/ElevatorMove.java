@@ -3,14 +3,11 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystem.ElevatorSubsystem;
-import frc.team852.subsystem.WristSubsystem;
 
 public class ElevatorMove extends Command {
 
   private ElevatorSubsystem elevator;
-  private WristSubsystem wrist;
   private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
   private double elevatorSetpoint, oldElevatorSetpoint, wristSetpoint;
 
@@ -20,11 +17,8 @@ public class ElevatorMove extends Command {
 
   public ElevatorMove(int setpoint) {
     requires(Robot.elevatorSubsystem);
-    requires(Robot.wristSubsystem);
     this.elevator = Robot.elevatorSubsystem;
-    this.wrist = Robot.wristSubsystem;
     this.elevatorSetpoint = setpoint;
-    this.wristSetpoint = wrist.getSafeSetpoint(elevator.getHeight());
   }
 
 
@@ -32,8 +26,6 @@ public class ElevatorMove extends Command {
   protected void initialize() {
     elevator.setSetpoint(this.elevatorSetpoint);
     elevator.enable();
-    wrist.setSetpoint(this.wristSetpoint);
-    wrist.enable();
   }
 
   @Override
@@ -42,9 +34,9 @@ public class ElevatorMove extends Command {
       elevator.enable();
     // Check if under user control
     if (OI.fightStickLB.get()) {
-      if (OI.POVUp.get()) {
+      if (OI.fightStickPOVUp.get()) {
         elevatorSetpoint = elevator.canMoveUp() ? elevatorSetpoint + moveDist : elevatorSetpoint;
-      } else if (OI.POVDown.get()) {
+      } else if (OI.fightStickPOVDown.get()) {
         elevatorSetpoint = elevator.canMoveDown() ? elevatorSetpoint - moveDist : elevatorSetpoint;
       }
       if (oldElevatorSetpoint != elevatorSetpoint) {
@@ -53,7 +45,6 @@ public class ElevatorMove extends Command {
       }
     }
     // Move the wrist to a safe position
-    wrist.safeMove(elevator.getHeight());
   }
 
   @Override

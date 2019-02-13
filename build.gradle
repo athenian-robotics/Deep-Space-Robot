@@ -1,3 +1,4 @@
+// TODO rewrite with kotlin dsl and provide tasks for building gRPC protocol buffers
 plugins {
     id "java"
 

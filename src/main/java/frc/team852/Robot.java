@@ -27,9 +27,7 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static DoubleSolenoid.Value gearstate;
   public static ElevatorSubsystem elevatorSubsystem;
-  public static WristSubsystem wristSubsystem;
 //  public static CargoSubsystem cargoSubsystem;
-  public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
 
   //Sensors
@@ -64,9 +62,6 @@ public class Robot extends TimedRobot {
 
     drivetrain = new Drivetrain();
     elevatorSubsystem = new ElevatorSubsystem();
-    wristSubsystem = new WristSubsystem();
-//    cargoSubsystem = new CargoSubsystem();
-    hatchSubsystem = new HatchSubsystem();
     climberSubsystem = new ClimberSubsystem();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);

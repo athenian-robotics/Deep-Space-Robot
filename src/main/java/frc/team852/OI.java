@@ -66,33 +66,23 @@ public class OI {
   public static FightStickAxisButton fightStickLT = new FightStickAxisButton(fightStick, 2, FightStickInput.input.lightKick);
   public static FightStickAxisButton fightStickRT = new FightStickAxisButton(fightStick, 3, FightStickInput.input.R2);
 
-  public static FightStickPOVDirection POVUp = new FightStickPOVDirection(FightStickInput.input.POVtop);
-  public static FightStickPOVDirection POVDown = new FightStickPOVDirection(FightStickInput.input.POVbot);
-  public static FightStickPOVDirection POVcenter = new FightStickPOVDirection(FightStickInput.input.POVcenter);
+  public static FightStickPOVDirection fightStickPOVUp = new FightStickPOVDirection(FightStickInput.input.POVtop);
+  public static FightStickPOVDirection fightStickPOVDown = new FightStickPOVDirection(FightStickInput.input.POVbot);
+  public static FightStickPOVDirection fightStickPOVcenter = new FightStickPOVDirection(FightStickInput.input.POVcenter);
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
     new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
     new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
-      new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
+    new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
     //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
 
     FieldPaths.genPaths();
-    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
-    xboxBack.whenPressed(new ToggleGearbox());
-    xboxStart.whenPressed(new ToggleGearbox());
     xboxRB.whenPressed(new ToggleGearbox());
-    if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
-      new ChangeDriveMode();
-    xboxY.whenPressed(new DriveDistance(157.48));
-    xboxB.whenPressed(new DriveAngle(90));
-    xboxX.whenPressed(new DriveAngle(-90));
+    xboxLB.whenPressed(new ChangeDriveMode());
     //TODO change target
     fightStickLB.whileHeld(new ElevatorMove());
-    fightStickX.whenReleased(new PlaceHatch(0));
-    fightStickY.whenReleased(new PlaceHatch(1));
-    fightStickRB.whenReleased(new PlaceHatch(2));
-
+    fightStickA.whileHeld(new ClimberMove());
   }
 
 

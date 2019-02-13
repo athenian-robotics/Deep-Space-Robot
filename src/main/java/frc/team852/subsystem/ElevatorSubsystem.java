@@ -1,14 +1,14 @@
 package frc.team852.subsystem;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.ElevatorHold;
+import frc.team852.lib.utils.SparkMax;
 
 public class ElevatorSubsystem extends PIDSubsystem {
-  private final WPI_TalonSRX motor;
+  private final SparkMax motor;
   private final DigitalInput lowerLimit, upperLimit;
 
   public ElevatorSubsystem() {
