@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from arc852.multi_image_server import ImageServer
 
 from cv_utils.viewthreads.viewReflTape import *
-from grpc_utils.routeClient import *
+from grpc_utils.routeClient import SharedFrame, Camera, RouteClient
 
 
 # CONVENTION: INDEX STARTS AT 0
