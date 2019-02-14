@@ -54,8 +54,9 @@ The Process:
 # HOSTNAME = "localhost"
 # PORT = "5050"
 
-HOSTNAME = "0.0.0.0"
-PORT = "5050"
+# TODO get roborio
+HOSTNAME = "10.8.52.2"
+PORT = "50051"
 
 
 # HELLO BARE REPO
