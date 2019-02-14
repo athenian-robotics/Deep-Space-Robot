@@ -18,13 +18,13 @@ public class DriveTimedVelocity extends Command {
     @Override
     protected void initialize() {
         startTime = System.currentTimeMillis();
-        driveVelocity.setSetpoints(targetVelocity, targetVelocity);
         driveVelocity.start();
+        driveVelocity.setSetpoints(targetVelocity, targetVelocity);
     }
 
     @Override
     protected void end() {
-        driveVelocity.end();
+        driveVelocity.cancel();
     }
 
     @Override

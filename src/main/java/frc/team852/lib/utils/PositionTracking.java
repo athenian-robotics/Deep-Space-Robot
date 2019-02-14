@@ -1,6 +1,5 @@
 package frc.team852.lib.utils;
 
-import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.path.utilities.Pose2D;
@@ -55,7 +54,7 @@ public class PositionTracking implements Runnable {
                     currGyroHeading = (rightEnc - leftEnc) / 2 / ONE_METER / trackDistance;
 
                 log.append(System.currentTimeMillis()).append(',')
-                        .append(OI.stick1.getY() / 2).append(',')
+                        //.append(OI.stick1.getY() / 2).append(',')
                         .append(currEncValue).append('\n');
 
                 double dist = currEncValue - lastEncValue;

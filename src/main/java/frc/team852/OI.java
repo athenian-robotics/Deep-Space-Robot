@@ -40,8 +40,8 @@ public class OI {
    * until it is finished as determined by it's isFinished method.
    * button.whenReleased(new Command());
    */
-  public static Joystick stick1 = new Joystick(0);
-  public static Joystick stick2 = new Joystick(1);
+  //public static Joystick stick1 = new Joystick(0);
+  //public static Joystick stick2 = new Joystick(1);
   public static XboxController xbox = new XboxController(2);
   public static Joystick fightStick = new Joystick(3);
 
@@ -72,16 +72,20 @@ public class OI {
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
-    new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
-      new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
+    //new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
+    //  new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
 
     FieldPaths.genPaths();
-    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
+    //xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
+    xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
+    xboxB.whenPressed(new DriveTimedVelocity(1, 2));
+    xboxX.whenPressed(new DriveTimed());
+    xboxY.whenPressed(new DriveTank());
     if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
       new ChangeDriveMode();
-    xboxY.whenPressed(new DriveDistance(157.48));
-    xboxB.whenPressed(new DriveAngle(90));
-    xboxX.whenPressed(new DriveAngle(-90));
+    //xboxY.whenPressed(new DriveDistance(157.48));
+    //xboxB.whenPressed(new DriveAngle(90));
+    //xboxX.whenPressed(new DriveAngle(-90));
   }
 
 
