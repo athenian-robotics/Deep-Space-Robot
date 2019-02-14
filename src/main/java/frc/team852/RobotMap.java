@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
-import frc.team852.lib.utils.*;
+import frc.team852.lib.utils.SerialLidar;
+import frc.team852.lib.utils.SparkMax;
+import frc.team852.lib.utils.SparkMaxGroup;
 import frc.team852.subsystem.Drivetrain;
 
 /**
@@ -66,4 +68,10 @@ public class RobotMap {
   public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kReverse;
 
   public static Drivetrain.DriveMode currentDriveMode = Drivetrain.DriveMode.GTA;
+
+  public RobotMap() {
+    // TODO calculate these values (m/s) from gearing, check empirically
+    //leftGrayhill.setDistancePerPulse(???);
+    //rightGrayhill.setDistancePerPulse(???);
+  }
 }
