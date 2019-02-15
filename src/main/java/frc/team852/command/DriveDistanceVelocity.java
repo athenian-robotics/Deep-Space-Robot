@@ -1,22 +1,18 @@
 package frc.team852.command;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.team852.Robot;
 
 public class DriveDistanceVelocity extends Command {
     // https://www.desmos.com/calculator/d7p5kcfj7j
 
-    public static final double maxAcceleration = 1; // TODO idk what this should be
+    public static final double maxAcceleration = 0.5; // TODO idk what this should be
     public static final double decelRate = Math.sqrt(2 * maxAcceleration);  // Coefficient used in deceleration phase
     public static final double decelThreshold = 0.5 / maxAcceleration;  // starting distance for deceleration relative to target distance
 
     // TODO idk what these should be
-    public static final double marginVelocity = 0.1;  // error margin for velocity in meters/second
-    public static final double marginDistance = 0.1;  // error margin for distance in meters
+    public static final double marginVelocity = 0.02;  // error margin for velocity in meters/second
+    public static final double marginDistance = 0.02;  // error margin for distance in meters
 
     public static final int STATE_ACCEL = 0;  // Robot still accelerating to target speed
     public static final int STATE_CONST = 1;  // Robot driving at target speed
@@ -47,25 +43,32 @@ public class DriveDistanceVelocity extends Command {
 
     @Override
     protected void initialize() {
-        startTime = System.currentTimeMillis();
+        startTime = 0;
         startDistance = Robot.drivetrain.getDistance();
         startHeading = Robot.gyro.getAngle();
+        state = STATE_ACCEL;
         driveVelocity.start();
     }
 
     @Override
     protected void end() {
-        driveVelocity.end();
+        driveVelocity.cancel();
     }
 
     @Override
     protected void execute() {
+        if (startTime == 0) {
+            startTime = System.currentTimeMillis();
+            return;
+        }
+
         double forwardVelocity = 0;
         double angularVelocity = 0;
 
         // Calculate distance and heading relative to start
         double distanceTraveled = Robot.drivetrain.getDistance() - startDistance;
         double headingError = Robot.gyro.getAngle() - startHeading;
+        headingError *= 0;
 
         // Update PID controller with values from dashboard
 
@@ -76,7 +79,7 @@ public class DriveDistanceVelocity extends Command {
                 // Ramp up velocity over time at the rate given by maxAcceleration
                 forwardVelocity = maxAcceleration * (System.currentTimeMillis() - startTime) / 1000d;
                 // Hold it constant once target velocity reached
-                forwardVelocity = Math.max(targetVelocity, forwardVelocity);
+                forwardVelocity = Math.min(targetVelocity, forwardVelocity);
                 break;
             case STATE_CONST:
                 // Keep velocity at target velocity
@@ -90,6 +93,7 @@ public class DriveDistanceVelocity extends Command {
                 forwardVelocity = decelRate * Math.copySign(Math.sqrt(Math.abs(distanceOffset)), distanceOffset);
                 break;
         }
+        System.out.println(forwardVelocity);
 
         // Cheap proportional angle correction - TODO replace with PID if it doesn't work - also use trackDistance somewhere
         angularVelocity = -headingError;
@@ -111,8 +115,8 @@ public class DriveDistanceVelocity extends Command {
                     state = STATE_DECEL;
                 break;
             case STATE_DECEL:
-                if (Math.abs(targetDistance - distanceTraveled) < marginDistance
-                        || driveVelocity.getAbsError() < marginVelocity)
+                if (Math.abs(targetDistance - distanceTraveled) < marginDistance)
+                        //|| driveVelocity.getAbsError() < marginVelocity)
                     state = STATE_ENDED;
                 break;
         }

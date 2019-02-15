@@ -81,8 +81,8 @@ public class OI {
     xboxB.whenPressed(new DriveTimedVelocity(1, 2));
     xboxX.whenPressed(new DriveTimed());
     xboxY.whenPressed(new DriveTank());
-    if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
-      new ChangeDriveMode();
+    xboxBack.whenPressed(new ChangeDriveMode());
+    xboxStart.whenPressed(new ChangeDriveMode());
     //xboxY.whenPressed(new DriveDistance(157.48));
     //xboxB.whenPressed(new DriveAngle(90));
     //xboxX.whenPressed(new DriveAngle(-90));

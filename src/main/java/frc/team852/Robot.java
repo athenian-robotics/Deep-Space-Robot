@@ -1,6 +1,8 @@
 package frc.team852;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,8 +10,8 @@ import frc.team852.command.TrackPosition;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
 import frc.team852.lib.utils.AHRS_PID;
-import frc.team852.lib.utils.SerialLidar;
-import frc.team852.subsystem.*;
+import frc.team852.lib.utils.Shuffle;
+import frc.team852.subsystem.Drivetrain;
 
 import java.io.IOException;
 
@@ -45,13 +47,18 @@ public class Robot extends TimedRobot {
     super(period);
   }
 
+  public static Shuffle robotStarted = new Shuffle(Robot.class, "robotStarted", false);
+  public static Shuffle robotReady = new Shuffle(Robot.class, "robotReady", false);
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-    new RobotMap(); // Empty declaration
+    robotStarted.set(true);
+
+    new RobotMap();
     dataServer = new CVDataServer();
     dataStore = new CVDataStore();
 
@@ -76,6 +83,8 @@ public class Robot extends TimedRobot {
       System.out.println(e.getMessage());
       SmartDashboard.putString("GRPC status", "Vision Driver assist unavailable");
     }
+
+    robotReady.set(true);
   }
 
   /**
@@ -103,7 +112,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-
+    robotStarted.set(false);
   }
 
   /**
@@ -119,6 +128,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    robotStarted.set(true);
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -142,6 +152,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotStarted.set(true);
     Scheduler.getInstance().add(new TrackPosition());
   }
 

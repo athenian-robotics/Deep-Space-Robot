@@ -1,10 +1,8 @@
 package frc.team852.command;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.team852.Robot;
+import frc.team852.lib.utils.Shuffle;
 
 public class DriveTimed extends Command {
     private double velocity;
@@ -14,23 +12,18 @@ public class DriveTimed extends Command {
     private double midPortion;
     private double midDistance;
 
-    private static ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-    private static NetworkTableEntry velocityEntry = tab.add("DriveTimed velocity", 0)
-            .getEntry();
-    private static NetworkTableEntry secondsEntry = tab.add("DriveTimed seconds", 0)
-            .getEntry();
-    private static NetworkTableEntry midPortionEntry = tab.add("DriveTimed midPortion", 0)
-            .getEntry();
-    private static NetworkTableEntry midDistanceEntry = tab.add("DriveTimed midDistance", 0)
-            .getEntry();
+    private static final Shuffle sVelocity = new Shuffle(DriveTimed.class, "velocity", 0);
+    private static final Shuffle sSeconds = new Shuffle(DriveTimed.class, "seconds", 0);
+    private static final Shuffle sMidPortion = new Shuffle(DriveTimed.class, "midPortion", 0);
+    private static final Shuffle sMidDistance = new Shuffle(DriveTimed.class, "midDistance", 0);
 
     private long startTime;
 
     @Override
     protected void initialize() {
-        velocity = velocityEntry.getDouble(0);
-        seconds = secondsEntry.getDouble(0);
-        midPortion = midPortionEntry.getDouble(0);
+        velocity = sVelocity.get();
+        seconds = sSeconds.get();
+        midPortion = sMidPortion.get();
         midActive = false;
         startTime = System.currentTimeMillis();
         System.out.println("Started DriveTimed.");
@@ -38,7 +31,7 @@ public class DriveTimed extends Command {
 
     @Override
     protected void end() {
-        midDistanceEntry.setNumber((Robot.drivetrain.getDistance() - midDistance) / (midPortion * seconds));
+        sMidDistance.set((Robot.drivetrain.getDistance() - midDistance) / (midPortion * seconds));
         System.out.println("Ended DriveTimed.");
     }
 
