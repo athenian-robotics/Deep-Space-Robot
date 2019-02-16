@@ -62,9 +62,9 @@ public class DriveChangeable extends Command {
 
 
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
-      drive.tankDrive(-stick2.getY(), stick1.getY(), true);
+      //drive.tankDrive(-stick2.getY(), stick1.getY(), true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadeJoy) {
-      drive.arcadeDrive(-stick1.getX(), -stick1.getY(), true);
+      //drive.arcadeDrive(-stick1.getX(), -stick1.getY(), true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadePad) {
       double multiplyBy = 0.6;
       if (xbox.getTriggerAxis(GenericHID.Hand.kRight) > 0.6)

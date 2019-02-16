@@ -1,16 +1,15 @@
 package frc.team852.subsystem;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.ClimberMove;
+import frc.team852.lib.utils.SparkMax;
 
 public class ClimberSubsystem extends Subsystem {
 
   //Set a climber motor
-  private final WPI_TalonSRX climberMotor;
+  private final SparkMax climberMotor;
   private final Encoder encoder;
 
   //Constructor
@@ -23,6 +22,7 @@ public class ClimberSubsystem extends Subsystem {
   //Default command is climberMove
   @Override
   protected void initDefaultCommand() {
+    new ClimberMove();
   }
 
   public void stopMotors() {

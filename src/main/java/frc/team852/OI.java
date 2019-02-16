@@ -40,8 +40,8 @@ public class OI {
    * until it is finished as determined by it's isFinished method.
    * button.whenReleased(new ElevatorMove());
    */
-  public static Joystick stick1 = new Joystick(0);
-  public static Joystick stick2 = new Joystick(1);
+ // public static Joystick stick1 = new Joystick(0);
+  //public static Joystick stick2 = new Joystick(1);
   public static XboxController xbox = new XboxController(2);
   public static Joystick fightStick = new Joystick(3);
 
@@ -72,16 +72,16 @@ public class OI {
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
-    new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
-    new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
-    new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
+//    new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
+//    new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
+//    new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
     //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
 
     FieldPaths.genPaths();
     xboxRB.whenPressed(new ToggleGearbox());
     xboxLB.whenPressed(new ChangeDriveMode());
     //TODO change target
-    fightStickLB.whileHeld(new ElevatorMove());
+//    fightStickLB.whileHeld(new ElevatorMove());
     fightStickA.whileHeld(new ClimberMove());
   }
 

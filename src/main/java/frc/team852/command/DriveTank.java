@@ -4,9 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.subsystem.Drivetrain;
 
-import static frc.team852.OI.stick1;
-import static frc.team852.OI.stick2;
-
 public class DriveTank extends Command {
 
   private Drivetrain dt = Robot.drivetrain;
@@ -45,13 +42,13 @@ public class DriveTank extends Command {
 
   @Override
   protected void execute() {
-    double leftSpeed = deadband(stick1.getY());
-    double rightSpeed = deadband(stick2.getY());
-    if (squareInputs) {
-      leftSpeed = sign(leftSpeed) * (leftSpeed * leftSpeed);
-      rightSpeed = sign(rightSpeed) * (rightSpeed * rightSpeed);
-    }
-    dt.drive(leftSpeed, rightSpeed);
+    //double leftSpeed = deadband(stick1.getY());
+    //double rightSpeed = deadband(stick2.getY());
+//    if (squareInputs) {
+//      leftSpeed = sign(leftSpeed) * (leftSpeed * leftSpeed);
+//      rightSpeed = sign(rightSpeed) * (rightSpeed * rightSpeed);
+//    }
+//    dt.drive(leftSpeed, rightSpeed);
   }
 
 
