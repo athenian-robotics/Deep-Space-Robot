@@ -93,7 +93,7 @@ public class DriveVelocity extends Command {
         sLeftSetpoint.set(leftControl.getSetpoint());
         sRightSetpoint.set(rightControl.getSetpoint());
         sLeftGrayhill.set(RobotMap.leftGrayhill.getRate());
-        sRighGrayhill.set(RobotMap.rightGrayhill.getRate());
+        sRightGrayhill.set(RobotMap.rightGrayhill.getRate());
         sEnabled.set(true);
     }
 
