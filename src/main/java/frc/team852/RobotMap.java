@@ -24,7 +24,7 @@ public class RobotMap {
   public static SpeedControllerGroup leftDrive = new SpeedControllerGroup(leftFront, leftBack);
   public static SpeedControllerGroup rightDrive = new SpeedControllerGroup(rightFront, rightBack);
   public static Encoder leftEncoder = new Encoder(0,1, true);
-  public static Encoder rightEncoder = new Encoder(2, 3, true);
+  public static Encoder rightEncoder = leftEncoder;//new Encoder(2, 3, true);
 
   public static AHRS gyro = Robot.gyro;
 
@@ -33,7 +33,7 @@ public class RobotMap {
   public RobotMap() {
     // TODO confirm values (m/s)
     leftEncoder.setDistancePerPulse(0.0020373563);
-    rightEncoder.setDistancePerPulse(0.0014345957);
+    rightEncoder.setDistancePerPulse(0.0020373563);
   }
 
   public static void setNeutralMode(NeutralMode neutralMode) {

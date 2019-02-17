@@ -34,7 +34,7 @@ python-server:
 
 # initiate python client, nonapplicable, the usage of client is different and can be found under src/main/python/grpc
 python-client:
-	python3 src/main/python/grpc_utils/routeClient.py
+	python3 src/main/python/visionClient.py
 
 # initiate java client, not applicable
 java-client:

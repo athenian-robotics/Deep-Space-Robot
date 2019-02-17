@@ -11,5 +11,6 @@ public class CVDataStore {
   public AtomicReference<FrameSize> frameSize = new AtomicReference<>();
   public AtomicReference<ReflTapePair> reflTapeRef = new AtomicReference<>();
   public AtomicReference<GaffeTape> gaffeRef = new AtomicReference<>();
+  public AtomicReference<CameraPose> cameraPoseRef = new AtomicReference<>();
 
 }

@@ -78,7 +78,7 @@ public class OI {
     FieldPaths.genPaths();
     //xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
     xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
-    xboxB.whenPressed(new DriveTimedVelocity(1, 2));
+    xboxB.whenPressed(new DriveTimedVelocity(1, 4));
     xboxX.whenPressed(new DriveTimed());
     xboxY.whenPressed(new DriveTank());
     xboxBack.whenPressed(new ChangeDriveMode());
