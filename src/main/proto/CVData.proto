@@ -18,6 +18,8 @@ service OpenCVInfo {
     rpc SendBall (Ball) returns (google.protobuf.Empty) {}
 
     rpc SendHatch (Hatch) returns (google.protobuf.Empty) {}
+
+    rpc SendCameraPose (CameraPose) returns (google.protobuf.Empty) {}
 }
 
 message FrameSize {
@@ -46,6 +48,16 @@ message GaffeTape {
 message Point {
     int32 x = 1;
     int32 y = 2;
+}
+
+message CameraPose {
+    Vector3D translation = 1;
+    Vector3D rotation = 2;
+}
+message Vector3D {
+    double x = 1;
+    double y = 2;
+    double z = 3;
 }
 
 message Hatch {

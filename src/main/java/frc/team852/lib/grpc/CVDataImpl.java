@@ -96,6 +96,23 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     responseObserver.onCompleted();
   }
 
+  @Override
+  public void sendCameraPose(CameraPose request, StreamObserver<Empty> responseObserver) {
+    Empty reply = Empty.newBuilder().build();
+    System.out.print(request);
+    this.store.cameraPoseRef.set(request);
+    allCallbacks.computeIfAbsent(CameraPose.class, k -> new ConcurrentLinkedQueue<>());
+    try {
+      allCallbacks.get(CameraPoseListener.class).forEach(c -> ((CameraPoseListener) c).onNewData(request));
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("STOP BEING A POSER, FIX YOUR CALLBACK");
+    }
+    responseObserver.onNext(reply);
+    responseObserver.onCompleted();
+  }
+
+
   public synchronized void registerCallback(GenericListener listener) {
     if (listener.msgType == null) {
       throw new RuntimeException("Listener's message type is null");

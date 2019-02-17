@@ -1,14 +1,12 @@
 package frc.team852.command;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.lib.utils.Shuffle;
+import frc.team852.lib.utils.SmoothSpeedOutput;
 
 public class DriveVelocity extends Command {
     private PIDController leftControl;
@@ -16,40 +14,25 @@ public class DriveVelocity extends Command {
     private PIDSourceType leftSourceType;
     private PIDSourceType rightSourceType;
 
-    private static ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-    private static NetworkTableEntry kpEntry = tab.add("DriveDistanceVelocity Kp", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-    private static NetworkTableEntry kiEntry = tab.add("DriveDistanceVelocity Ki", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-    private static NetworkTableEntry kdEntry = tab.add("DriveDistanceVelocity Kd", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
-    private static NetworkTableEntry kfEntry = tab.add("DriveDistanceVelocity Kf", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .getEntry();
+    private static final Shuffle sKp = new Shuffle(DriveVelocity.class, "Kp", 0.01);
 
-    private static NetworkTableEntry leftErrorEntry = tab.add("DriveDistanceVelocity leftError", 0)
-            .getEntry();
-    private static NetworkTableEntry rightErrorEntry = tab.add("DriveDistanceVelocity rightError", 0)
-            .getEntry();
-    private static NetworkTableEntry leftSetpointEntry = tab.add("DriveDistanceVelocity leftSetpoint", 0)
-            .getEntry();
-    private static NetworkTableEntry rightSetpointEntry = tab.add("DriveDistanceVelocity rightSetpoint", 0)
-            .getEntry();
-    private static NetworkTableEntry leftEncoderEntry = tab.add("DriveDistanceVelocity leftEncoder", 0)
-            .getEntry();
-    private static NetworkTableEntry rightEncoderEntry = tab.add("DriveDistanceVelocity rightEncoder", 0)
-            .getEntry();
-    private static NetworkTableEntry driveVelocityEnabled = tab.add("DriveDistanceVelocity enabled", false)
-            .getEntry();
+    private static final Shuffle sKi = new Shuffle(DriveVelocity.class, "Ki", 0);
+    private static final Shuffle sKd = new Shuffle(DriveVelocity.class, "Kd", 0.1);
+    private static final Shuffle sKf = new Shuffle(DriveVelocity.class, "Kf", 0.275);
+
+    private static final Shuffle sLeftError = new Shuffle(DriveVelocity.class, "leftError", 0);
+    private static final Shuffle sRightError = new Shuffle(DriveVelocity.class, "rightError", 0);
+    private static final Shuffle sLeftSetpoint = new Shuffle(DriveVelocity.class, "leftSetpoint", 0);
+    private static final Shuffle sRightSetpoint = new Shuffle(DriveVelocity.class, "rightSetpoint", 0);
+    private static final Shuffle sLeftGrayhill = new Shuffle(DriveVelocity.class, "leftGrayhill", 0);
+    private static final Shuffle sRightGrayhill = new Shuffle(DriveVelocity.class, "rightGrayhill", 0);
+    private static final Shuffle sEnabled = new Shuffle(DriveVelocity.class, "enabled", false);
 
     public DriveVelocity(double kp, double ki, double kd, double kf) {
-        kpEntry.setNumber(kp);
-        kiEntry.setNumber(ki);
-        kdEntry.setNumber(kd);
-        kfEntry.setNumber(kf);
+        sKp.set(kp);
+        sKi.set(ki);
+        sKd.set(kd);
+        sKf.set(kf);
         prepare();
     }
 
@@ -59,17 +42,17 @@ public class DriveVelocity extends Command {
 
     private void prepare() {
         leftControl = new PIDController(
-                kpEntry.getDouble(0),
-                kiEntry.getDouble(0),
-                kdEntry.getDouble(0),
-                kfEntry.getDouble(0),
-                RobotMap.leftGrayhill, RobotMap.leftDrive);
+                sKp.get(),
+                sKi.get(),
+                sKd.get(),
+                sKf.get(),
+                RobotMap.leftGrayhill, new SmoothSpeedOutput(RobotMap.leftDrive, 1, true));
         rightControl = new PIDController(
-                kpEntry.getDouble(0),
-                kiEntry.getDouble(0),
-                kdEntry.getDouble(0),
-                kfEntry.getDouble(0),
-                RobotMap.rightGrayhill, RobotMap.rightDrive);
+                sKp.get(),
+                sKi.get(),
+                sKd.get(),
+                sKf.get(),
+                RobotMap.rightGrayhill, new SmoothSpeedOutput(RobotMap.rightDrive, 1, false));
 
         requires(Robot.drivetrain);
     }
@@ -85,15 +68,15 @@ public class DriveVelocity extends Command {
         leftControl.enable();
         rightControl.enable();
         System.out.println("DriveVelocity started.");
-        driveVelocityEnabled.setBoolean(true);
+        sEnabled.set(true);
     }
 
     @Override
     protected void execute() {
-        double kp = kpEntry.getDouble(0);
-        double ki = kiEntry.getDouble(0);
-        double kd = kdEntry.getDouble(0);
-        double kf = kfEntry.getDouble(0);
+        double kp = sKp.get();
+        double ki = sKi.get();
+        double kd = sKd.get();
+        double kf = sKf.get();
 
         leftControl.setP(kp);
         leftControl.setI(ki);
@@ -105,13 +88,13 @@ public class DriveVelocity extends Command {
         rightControl.setD(kd);
         rightControl.setF(kf);
 
-        leftErrorEntry.setNumber(leftControl.getError());
-        rightErrorEntry.setNumber(rightControl.getError());
-        leftSetpointEntry.setNumber(leftControl.getSetpoint());
-        rightSetpointEntry.setNumber(rightControl.getSetpoint());
-        leftEncoderEntry.setNumber(RobotMap.leftGrayhill.getRate());
-        rightEncoderEntry.setNumber(RobotMap.rightGrayhill.getRate());
-        driveVelocityEnabled.setBoolean(true);
+        sLeftError.set(leftControl.getError());
+        sRightError.set(rightControl.getError());
+        sLeftSetpoint.set(leftControl.getSetpoint());
+        sRightSetpoint.set(rightControl.getSetpoint());
+        sLeftGrayhill.set(RobotMap.leftGrayhill.getRate());
+        sRighGrayhill.set(RobotMap.rightGrayhill.getRate());
+        sEnabled.set(true);
     }
 
     @Override
@@ -121,7 +104,7 @@ public class DriveVelocity extends Command {
 
     @Override
     protected void end() {
-        driveVelocityEnabled.setBoolean(false);
+        sEnabled.set(false);
         setSetpoints(0, 0);
         RobotMap.leftGrayhill.setPIDSourceType(leftSourceType);
         RobotMap.rightGrayhill.setPIDSourceType(rightSourceType);
@@ -135,7 +118,7 @@ public class DriveVelocity extends Command {
 
     @Override
     protected void interrupted() {
-        driveVelocityEnabled.setBoolean(false);
+        sEnabled.set(false);
         System.out.println("DriveVelocity interrupted.");
         end();
     }
