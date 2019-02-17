@@ -70,9 +70,9 @@ public class DriveChangeable extends Command {
     // TODO replace old joystick tank/arcade with xbox joystick inputs
     Shuffle.put(this, "currentDriveMode", RobotMap.currentDriveMode.toString());
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
-      //drive.tankDrive(-stick2.getY(), stick1.getY(), true);
+      drive.tankDrive(xbox.getTriggerAxis(GenericHID.Hand.kLeft), xbox.getTriggerAxis(GenericHID.Hand.kRight));
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadeJoy) {
-      //arcadeDrive(-stick1.getX(), -stick1.getY(), true);
+      drive.arcadeDrive(xbox.getY(GenericHID.Hand.kLeft), xbox.getX(GenericHID.Hand.kLeft));
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadePad) {
       double multiplyBy = 0.6;
       if (xbox.getTriggerAxis(GenericHID.Hand.kRight) > 0.6)
@@ -80,7 +80,7 @@ public class DriveChangeable extends Command {
       arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
       double speed = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
 
       double currentDecreasingRate = getDecreasing();
       if(dt.getGearing() == RobotMap.SLOW){
