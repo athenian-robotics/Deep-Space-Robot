@@ -53,17 +53,6 @@ public class DriveChangeable extends Command {
   @Override
   protected void execute() {
 
-    Shuffle.put(this, "Gyro Angle", Robot.gyro.getAngle());
-    Shuffle.put(this, "Gyro Fused Heading", Robot.gyro.getFusedHeading());
-    Shuffle.put(this, "Grayhill Encoder Left (Rate)", RobotMap.leftGrayhill.getRate());
-    Shuffle.put(this, "Grayhill Encoder Left (Distance)", RobotMap.leftGrayhill.getDistance());
-    Shuffle.put(this, "Grayhill Encoder Right (Rate)", RobotMap.rightGrayhill.getRate());
-    Shuffle.put(this, "Grayhill Encoder Right (Distance)", RobotMap.rightGrayhill.getDistance());
-
-    Shuffle.put(this, "Left Neos", RobotMap.leftDrive.pidGet());
-    Shuffle.put(this, "Right Neos", RobotMap.rightDrive.pidGet());
-
-
     // TODO replace old joystick tank/arcade with xbox joystick inputs
     Shuffle.put(this, "currentDriveMode", RobotMap.currentDriveMode.toString());
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
