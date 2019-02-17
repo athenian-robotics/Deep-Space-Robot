@@ -76,8 +76,8 @@ public class OI {
     //FieldPaths.genPaths();
     xboxA.whenPressed(new OutputHatch());
     // TODO Which buttons to use for ToggleGearbox and which for ChangeDriveMode?
-//    xboxBack.whenPressed(new ToggleGearbox());
-//    xboxStart.whenPressed(new ToggleGearbox());
+    xboxBack.whenPressed(new ChangeDriveMode());
+    xboxStart.whenPressed(new ChangeDriveMode());
     xboxLB.whenPressed(new ToggleGearbox());
     xboxRB.whenPressed(new ToggleGearbox());
 
