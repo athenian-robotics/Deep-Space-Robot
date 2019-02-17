@@ -21,8 +21,9 @@ public class DriveChangeable extends Command {
   private double xSpeed;
   private double zRotation;
 
-  private static final Shuffle sMaxAcceleration = new Shuffle(DriveChangeable.class, "maxAcceleration", 1000);
-  private static final Shuffle sMaxDeceleration = new Shuffle(DriveChangeable.class, "maxDeceleration", 1000);
+  private static final Shuffle sMaxAcceleration = new Shuffle(DriveChangeable.class, "maxAcceleration", 1.5);
+  private static final Shuffle sMaxDeceleration = new Shuffle(DriveChangeable.class, "maxDeceleration", 2);
+  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "RotationAccelScale", 1);
 
   public DriveChangeable() {
     requires(Robot.drivetrain);
@@ -84,6 +85,7 @@ public class DriveChangeable extends Command {
     double zRotationError = zRotation - this.zRotation;
     double maxAcceleration = sMaxAcceleration.get();
     double maxDeceleration = Math.max(maxAcceleration, sMaxDeceleration.get());
+    double rotationAccelScale = sRotationAccelScale.get();
 
     this.xSpeed += Math.copySign(
             Math.max(
@@ -95,9 +97,9 @@ public class DriveChangeable extends Command {
             xSpeedError);
     this.zRotation += Math.copySign(
             Math.max(
-                    -Math.abs(maxDeceleration * deltaTime),
+                    -Math.abs(maxDeceleration * rotationAccelScale * deltaTime),
                     Math.min(
-                            Math.abs(maxAcceleration * deltaTime),
+                            Math.abs(maxAcceleration * rotationAccelScale * deltaTime),
                             Math.copySign(zRotationError, this.zRotation * zRotationError)
                     )),
             zRotationError);
