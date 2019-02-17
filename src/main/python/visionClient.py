@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from arc852.multi_image_server import ImageServer
 
 from cv_utils.viewthreads.viewReflTape import *
-from grpc_utils.routeClient import *
+from grpc_utils.routeClient import SharedFrame, Camera, RouteClient
 
 
 # CONVENTION: INDEX STARTS AT 0
@@ -67,9 +67,9 @@ def main():
     sflow = SharedFrame()
 
     # 480 x 640 default
-    topCamera = Camera(cameraIndex=1, shared_frame=sftop, resolution=(640, 480))
-    medCamera = Camera(cameraIndex=2, shared_frame=sfmed, resolution=(640, 480))
-    lowCamera = Camera(cameraIndex=3, shared_frame=sflow, resolution=(640, 480))
+    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(640, 480))
+    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(640, 480))
+    lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(640, 480))
 
     grpc_client = RouteClient(host=HOSTNAME, port=PORT)
     httpserver = StreamServer(sftop, sfmed, sflow)
