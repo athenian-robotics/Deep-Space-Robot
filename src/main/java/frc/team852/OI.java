@@ -82,6 +82,12 @@ public class OI {
     xboxBack.whenPressed(new ToggleGearbox());
     xboxStart.whenPressed(new ToggleGearbox());
     xboxRB.whenPressed(new ToggleGearbox());
+
+    //xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
+    //xboxB.whenPressed(new DriveTimedVelocity(1, 2));
+    //xboxX.whenPressed(new DriveTimed());
+    //xboxY.whenPressed(new DriveTank());
+
     if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
       new ChangeDriveMode();
     xboxY.whenPressed(new DriveDistance(157.48));

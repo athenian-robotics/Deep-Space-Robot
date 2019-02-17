@@ -1,8 +1,11 @@
 package frc.team852.command;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
@@ -16,6 +19,16 @@ public class DriveChangeable extends Command {
   private double oldRate, currentRate, maxSlowRate, maxFastRate;
   private DifferentialDrive drive = new DifferentialDrive(RobotMap.leftDrive, RobotMap.rightDrive);
   private boolean squareInputs;
+
+  private double lastTime;
+  private double xSpeed;
+  private double zRotation;
+
+  private static ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+  private static NetworkTableEntry maxAccelerationEntry = tab.add("DriveChangeable maxAcceleration", 0)
+          .getEntry();
+  private static NetworkTableEntry maxDecelerationEntry = tab.add("DriveChangeable maxDeceleration", 1000)
+          .getEntry();
 
   public DriveChangeable() {
     requires(Robot.drivetrain);
@@ -69,10 +82,10 @@ public class DriveChangeable extends Command {
       double multiplyBy = 0.6;
       if (xbox.getTriggerAxis(GenericHID.Hand.kRight) > 0.6)
         multiplyBy = xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
       double speed = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
 
       double currentDecreasingRate = getDecreasing();
       if(dt.getGearing() == RobotMap.SLOW){
@@ -96,6 +109,46 @@ public class DriveChangeable extends Command {
     }
 
     oldRate = dt.getRate();
+  }
+
+  // TODO migrate to a more sensible and general place
+  public void arcadeDrive(double xSpeed, double zRotation, boolean squareInputs) {
+    double currTime = System.currentTimeMillis();
+    double deltaTime = (currTime - lastTime) / 1000d;
+    lastTime = currTime;
+
+    if (squareInputs) {
+      xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
+      zRotation = Math.copySign(zRotation * zRotation, zRotation);
+    }
+
+    double xSpeedError = xSpeed - this.xSpeed;
+    double zRotationError = zRotation - this.zRotation;
+    double maxAcceleration = maxAccelerationEntry.getDouble(0);
+    double maxDeceleration = Math.max(maxAcceleration, maxDecelerationEntry.getDouble(0));
+
+    this.xSpeed += Math.copySign(
+            Math.max(
+                    -Math.abs(maxDeceleration * deltaTime),
+                    Math.min(
+                            Math.abs(maxAcceleration * deltaTime),
+                            Math.copySign(xSpeedError, this.xSpeed * xSpeedError)
+                    )),
+            xSpeedError);
+    this.zRotation += Math.copySign(
+            Math.max(
+                    -Math.abs(maxDeceleration * deltaTime),
+                    Math.min(
+                            Math.abs(maxAcceleration * deltaTime),
+                            Math.copySign(zRotationError, this.zRotation * zRotationError)
+                    )),
+            zRotationError);
+
+    drive.arcadeDrive(this.xSpeed, this.zRotation, false);
+  }
+
+  public void arcadeDrive(double xSpeed, double zRotation) {
+    arcadeDrive(xSpeed, zRotation, false);
   }
 
   private double getDecreasing(){
