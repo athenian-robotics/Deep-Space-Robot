@@ -2,7 +2,6 @@ import math
 
 import numpy as np
 
-# print(__import__("sys").path)
 from cv_utils.stream import *
 
 
@@ -122,7 +121,7 @@ object_points = np.array([
 
 # Load previously saved data for camera calibration, undistortion
 # with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
-with np.load('./cv_utils/calibration_matrix.npz') as X:
+with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 
 
@@ -264,17 +263,16 @@ def viewReflTape(frame):
 
     return frame
 
-
-cap = cv2.VideoCapture(1)
-
-while True:
-    ret, frame = cap.read()
-    if ret:
-        processed = viewReflTape(frame)
-        cv2.imshow(str(processed.shape), processed)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
+# cap = cv2.VideoCapture(1)
+#
+# while True:
+#     ret, frame = cap.read()
+#     if ret:
+#         processed = viewReflTape(frame)
+#         cv2.imshow(str(processed.shape), processed)
+#
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+#
+# cap.release()
+# cv2.destroyAllWindows()
