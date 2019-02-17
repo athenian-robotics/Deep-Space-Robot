@@ -64,6 +64,21 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robotStarted.set(true);
 
+    try {
+      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
+      Timer.delay(1);
+      elevatorLidar.setReadBufferSize(10);
+    }
+    catch (RuntimeException ex){
+      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
+    }
+
+    try {
+      gyro = new AHRS_PID(I2C.Port.kOnboard);
+    } catch (RuntimeException ex ) {
+      DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+    }
+
     new RobotMap();
     dataServer = new CVDataServer();
     dataStore = new CVDataStore();
@@ -79,20 +94,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    try {
-      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB1);
-      Timer.delay(0.2);
-      elevatorLidar.setReadBufferSize(1);
-    }
-    catch (RuntimeException ex){
-      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
-    }
 
-    try {
-      gyro = new AHRS_PID(SerialPort.Port.kUSB);
-    } catch (RuntimeException ex ) {
-      DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
-    }
     RobotMap.gearbox.set(RobotMap.SLOW);
 
     oi = new OI(); // Must be defined last

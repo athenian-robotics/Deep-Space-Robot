@@ -2,15 +2,12 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystem.ClimberSubsystem;
 
 public class ClimberMove extends Command {
     private final ClimberSubsystem climber;
 
 	/**
-	 * @param speed the speed to move the climber at
-	 * @param target the target location, in encoder ticks, to move the motor to
 	 *               	//TODO convert to inches?
 	 *               may go slightly past the encoder position
 	 */
@@ -23,8 +20,8 @@ public class ClimberMove extends Command {
 
     @Override
     protected void initialize(){
-      climber.resetEncoder();
-      climber.setSetpoint(climber.getEncoderPos());
+//      climber.resetEncoder();
+//      climber.setSetpoint(climber.getEncoderPos());
     }
 
     //Called when interrupted
@@ -37,7 +34,7 @@ public class ClimberMove extends Command {
     @Override
     protected void end() {
       climber.disable();
-      climber.resetEncoder();
+//      climber.resetEncoder();
       climber.stopMotors();
     }
 

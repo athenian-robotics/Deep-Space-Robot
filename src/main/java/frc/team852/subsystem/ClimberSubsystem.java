@@ -1,7 +1,6 @@
 package frc.team852.subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.ClimberMove;
@@ -10,13 +9,13 @@ public class ClimberSubsystem extends PIDSubsystem {
 
   //Set a climber motor
   private final WPI_TalonSRX climberMotor;
-  private final Encoder encoder;
+//  private final Encoder encoder;
 
   //Constructor
   public ClimberSubsystem() {
     super("Climber", 0, 0, 0); // TODO tune
     climberMotor = RobotMap.climberMotor;
-    encoder = RobotMap.climberEncoder;
+//    encoder = RobotMap.climberEncoder;
   }
 
   //Default command is climberMove
@@ -40,17 +39,18 @@ public class ClimberSubsystem extends PIDSubsystem {
       stopMotors();
   }
 
-  public double getEncoderPos() {
-    return this.encoder.get();
-  }
+//  public double getEncoderPos() {
+//    return this.encoder.get();
+//  }
 
-  public void resetEncoder() {
-    this.encoder.reset();
-  }
+//  public void resetEncoder() {
+//    this.encoder.reset();
+//  }
 
   @Override
   protected double returnPIDInput() {
-    return encoder.get();
+//    return encoder.get();
+    return 0;
   }
 
   @Override

@@ -40,10 +40,8 @@ public class OI {
    * until it is finished as determined by it's isFinished method.
    * button.whenReleased(new ElevatorMove());
    */
-  public static Joystick stick1 = new Joystick(0);
-  public static Joystick stick2 = new Joystick(1);
-  public static XboxController xbox = new XboxController(2);
-  public static Joystick fightStick = new Joystick(3);
+  public static XboxController xbox = new XboxController(0);
+  public static Joystick fightStick = new Joystick(1);
 
   // Joystick buttons start at 1
   public static Button xboxA = new JoystickButton(xbox, 1);
@@ -75,12 +73,12 @@ public class OI {
     //new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
     //  new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
 
-    FieldPaths.genPaths();
-    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
+    //FieldPaths.genPaths();
+    xboxA.whenPressed(new OutputHatch());
     // TODO Which buttons to use for ToggleGearbox and which for ChangeDriveMode?
-    xboxBack.whenPressed(new ToggleGearbox());
-    xboxStart.whenPressed(new ToggleGearbox());
-    xboxLB.whenPressed(new ChangeDriveMode());
+//    xboxBack.whenPressed(new ToggleGearbox());
+//    xboxStart.whenPressed(new ToggleGearbox());
+    xboxLB.whenPressed(new ToggleGearbox());
     xboxRB.whenPressed(new ToggleGearbox());
 
     //xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
@@ -88,14 +86,15 @@ public class OI {
     //xboxX.whenPressed(new DriveTimed());
     //xboxY.whenPressed(new DriveTank());
 
+
     xboxY.whenPressed(new DriveDistance(157.48));
     xboxB.whenPressed(new DriveAngle(90));
     xboxX.whenPressed(new DriveAngle(-90));
     //TODO change target
-    fightStickLB.whileHeld(new ElevatorMove());
-    fightStickX.whenReleased(new PlaceHatch(0));
-    fightStickY.whenReleased(new PlaceHatch(1));
-    fightStickRB.whenReleased(new PlaceHatch(2));
+    fightStickA.whileHeld(new ElevatorMove());
+    //fightStickX.whenReleased(new PlaceHatch(0));
+    //fightStickY.whenReleased(new PlaceHatch(1));
+    //fightStickRB.whenReleased(new PlaceHatch(2));
 
   }
 

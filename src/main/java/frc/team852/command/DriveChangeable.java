@@ -22,7 +22,7 @@ public class DriveChangeable extends Command {
   private double xSpeed;
   private double zRotation;
 
-  private static final Shuffle sMaxAcceleration = new Shuffle(DriveChangeable.class, "maxAcceleration", 0);
+  private static final Shuffle sMaxAcceleration = new Shuffle(DriveChangeable.class, "maxAcceleration", 1000);
   private static final Shuffle sMaxDeceleration = new Shuffle(DriveChangeable.class, "maxDeceleration", 1000);
 
   public DriveChangeable() {
@@ -80,7 +80,7 @@ public class DriveChangeable extends Command {
       arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
       double speed = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
+      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
 
       double currentDecreasingRate = getDecreasing();
       if(dt.getGearing() == RobotMap.SLOW){
@@ -95,12 +95,12 @@ public class DriveChangeable extends Command {
           SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxFastRate);
         }
       }
-//      if(speed > 0){
-//        xbox.setRumble(GenericHID.RumbleType.kRightRumble, getDecreasing());
-//      }
-//      else{
-//        xbox.setRumble(GenericHID.RumbleType.kLeftRumble, getDecreasing());
-//      }
+      if(speed > 0){
+        xbox.setRumble(GenericHID.RumbleType.kRightRumble, getDecreasing());
+      }
+      else{
+        xbox.setRumble(GenericHID.RumbleType.kLeftRumble, getDecreasing());
+      }
     }
 
     oldRate = dt.getRate();
