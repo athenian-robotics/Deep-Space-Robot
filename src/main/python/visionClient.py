@@ -19,13 +19,16 @@ class StreamServer(object):
 
         while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
             # camera looking at reflective tape
-            rftAssist = viewReflTape(self.sf0.getFrame())
+            # rftAssist = viewReflTape(self.sf0.getFrame())
+            rftAssist = viewReflTape(self.sf1.getFrame())
 
             # camera for driver assist only?
-            medStream = self.sf1.getFrame()
+            # medStream = self.sf1.getFrame()
+            medStream = self.sf0.getFrame()
 
             # camera looking at tape for auto alignment
             lowStream = self.sf2.getFrame()
+            # lowStream = self.sf0.getFrame()
 
             server.image(rftAssist, "cam0")
             server.image(medStream, "cam1")
@@ -78,6 +81,8 @@ def main():
         executor.submit(topCamera.start)
         executor.submit(medCamera.start)
         executor.submit(lowCamera.start)
+
+        # executor.submit(grpc_client.sendCamPose,sftop)
 
         # alignment
         # executor.submit(grpc_client.sendHatch, sfmed)
