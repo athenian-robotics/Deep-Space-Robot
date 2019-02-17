@@ -27,11 +27,11 @@ public class Drivetrain extends Subsystem {
   public Drivetrain(){
     super("Drivetrain");
     // Gotta reverse one side of the drivetrain
-    rightDrive.setInverted(true);
+    leftDrive.setInverted(true);
     leftDrive.setPIDSourceType(PIDSourceType.kDisplacement);
     rightDrive.setPIDSourceType(PIDSourceType.kDisplacement);
-    leftDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    rightDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    leftDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    rightDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);
   }
 
   @Override

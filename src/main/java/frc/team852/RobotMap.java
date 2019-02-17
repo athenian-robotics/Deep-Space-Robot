@@ -17,10 +17,10 @@ import frc.team852.subsystem.Drivetrain;
 public class RobotMap {
 
   //Drivetrain
-  private static SparkMax leftFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
-  private static SparkMax leftBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
-  private static SparkMax rightFront = new SparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
-  private static SparkMax rightBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
+  private static SparkMax leftFront = new SparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
+  private static SparkMax leftBack = new SparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
+  private static SparkMax rightFront = new SparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
+  private static SparkMax rightBack = new SparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
   public static SparkMaxGroup leftDrive = new SparkMaxGroup(leftFront, leftBack);
   public static SparkMaxGroup rightDrive = new SparkMaxGroup(rightFront, rightBack);
   public static Encoder leftGrayhill = new Encoder(9,8, false);
@@ -29,7 +29,7 @@ public class RobotMap {
 
 
   //Elevator
-  public static WPI_TalonSRX elevatorMotor = new WPI_TalonSRX(4); // TODO set based off of CAN id
+  public static SparkMax elevatorMotor = new SparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless); // TODO set based off of CAN id
   public static DigitalInput elevatorLowerLimit = new DigitalInput(10); // TODO set based off of robot wiring
   public static DigitalInput elevatorUpperLimit = new DigitalInput(11); // TODO set based off of robot wiring
   //TODO tune pid values
@@ -45,13 +45,13 @@ public class RobotMap {
 //  public static PIDController wristPIDPosition = new PIDController(0, 0, 0, wristEncoder, wristMotor); // TODO tune
 
   //Cargo subsystem
-  public static WPI_TalonSRX cargoMotor = new WPI_TalonSRX(7);  // TODO might need to delete
+  //public static WPI_TalonSRX cargoMotor = new WPI_TalonSRX(7);  // TODO might need to delete
 
   //Hatch Subsystem
   public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(3, 4);
 
   //Climber Subsystem
-  public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(8); // TODO set based off of CAN id
+  public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(5); // TODO set based off of CAN id
   //public static Encoder climberEncoder = new Encoder(6, 7); // TODO set based off off robot wiring
 
 //  public static AHRS gyro = Robot.gyro;

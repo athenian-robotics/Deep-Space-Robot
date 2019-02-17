@@ -3,7 +3,6 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.utils.Shuffle;
@@ -54,8 +53,6 @@ public class DriveChangeable extends Command {
   @Override
   protected void execute() {
 
-    currentRate = dt.getRate();
-
     Shuffle.put(this, "Gyro Angle", Robot.gyro.getAngle());
     Shuffle.put(this, "Gyro Fused Heading", Robot.gyro.getFusedHeading());
     Shuffle.put(this, "Grayhill Encoder Left (Rate)", RobotMap.leftGrayhill.getRate());
@@ -79,42 +76,19 @@ public class DriveChangeable extends Command {
         multiplyBy = xbox.getTriggerAxis(GenericHID.Hand.kRight);
       arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
-      double speed = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), speed);
-
-      double currentDecreasingRate = getDecreasing();
-      if(dt.getGearing() == RobotMap.SLOW){
-        if(currentDecreasingRate > maxSlowRate){
-          maxSlowRate = currentDecreasingRate;
-          SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxSlowRate);
-        }
-      }
-      if(dt.getGearing() == RobotMap.FAST){
-        if(currentDecreasingRate > maxFastRate){
-          maxFastRate = currentDecreasingRate;
-          SmartDashboard.putNumber("Max Decreasing Rate (slow speed)", maxFastRate);
-        }
-      }
-      if(speed > 0){
-        xbox.setRumble(GenericHID.RumbleType.kRightRumble, getDecreasing());
-      }
-      else{
-        xbox.setRumble(GenericHID.RumbleType.kLeftRumble, getDecreasing());
-      }
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight));
     }
-
-    oldRate = dt.getRate();
   }
 
   // TODO migrate to a more sensible and general place
-  public void arcadeDrive(double xSpeed, double zRotation, boolean squareInputs) {
+  public void arcadeDrive(double zRotation, double xSpeed, boolean squareInputs) {
     double currTime = System.currentTimeMillis();
     double deltaTime = (currTime - lastTime) / 1000d;
     lastTime = currTime;
 
     if (squareInputs) {
-      xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
-      zRotation = Math.copySign(zRotation * zRotation, zRotation);
+      this.xSpeed = Math.copySign(this.xSpeed * this.xSpeed, this.xSpeed);
+      this.zRotation = Math.copySign(this.zRotation * this.zRotation, this.zRotation);
     }
 
     double xSpeedError = xSpeed - this.xSpeed;
@@ -139,18 +113,25 @@ public class DriveChangeable extends Command {
                     )),
             zRotationError);
 
-    drive.arcadeDrive(this.xSpeed, this.zRotation, false);
+    if(xSpeedError > 0){
+      xbox.setRumble(GenericHID.RumbleType.kRightRumble, xSpeedError);
+    }
+    else{
+      xbox.setRumble(GenericHID.RumbleType.kLeftRumble, xSpeedError);
+    }
+
+    drive.arcadeDrive(-this.zRotation, this.xSpeed, false);
   }
 
-  public void arcadeDrive(double xSpeed, double zRotation) {
-    arcadeDrive(xSpeed, zRotation, false);
+  public void arcadeDrive(double zRotation, double xSpeed) {
+    arcadeDrive(zRotation, xSpeed, false);
   }
 
   private double getDecreasing(){
     double finalRate = oldRate - currentRate;
     if(finalRate > 0.05){
       //TODO: implement scaling from 0-1
-      return finalRate;
+      return finalRate/4000;
     }
     return 0.0;
   }
