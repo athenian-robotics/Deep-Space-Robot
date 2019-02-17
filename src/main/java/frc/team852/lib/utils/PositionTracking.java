@@ -1,9 +1,9 @@
 package frc.team852.lib.utils;
 
-import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.path.utilities.Pose2D;
+import frc.team852.lib.path.utilities.Translation2D;
 import frc.team852.subsystem.Drivetrain;
 
 import java.io.BufferedWriter;
@@ -55,7 +55,6 @@ public class PositionTracking implements Runnable {
                     currGyroHeading = (rightEnc - leftEnc) / 2 / ONE_METER / trackDistance;
 
                 log.append(System.currentTimeMillis()).append(',')
-                        .append(OI.stick1.getY() / 2).append(',')
                         .append(currEncValue).append('\n');
 
                 double dist = currEncValue - lastEncValue;
@@ -106,6 +105,49 @@ public class PositionTracking implements Runnable {
         System.out.println("Ended position tracking.");
     }
 
+    public Pose2D getCurrentPose() {
+        if (pure)
+            return new Pose2D(currX.get(), currY.get(), currAngle.get());
+        else
+            return currPose.get();
+    }
+
+    public void reset(Pose2D pose) {
+        currPose.set(pose);
+        currX.set(pose.getTranslation().getX());
+        currY.set(pose.getTranslation().getY());
+        currAngle.set(pose.getRotation().getAngle());
+        Robot.drivetrain.resetEncoders();
+        Robot.drivetrain.resetGrayhills();
+    }
+
+    public void reset(double x, double y, double angle) {
+        currPose.set(new Pose2D(x, y, angle));
+        currX.set(x);
+        currY.set(y);
+        currAngle.set(angle);
+        Robot.drivetrain.resetEncoders();
+        Robot.drivetrain.resetGrayhills();
+    }
+
+    public void reset() {
+        reset(0, 0, 0);
+    }
+
+    public void resetPosition(Translation2D translation) {
+        if (pure)
+            reset(new Pose2D(translation, currAngle.get()));
+        else
+            reset(new Pose2D(translation, currPose.get().getRotation()));
+    }
+
+    public void resetPosition(double x, double y) {
+        if (pure)
+            reset(x, y, currAngle.get());
+        else
+            reset(x, y, currPose.get().getRotation().getAngle());
+    }
+
     private void writeLog() {
         File file = new File("/home/lvuser/driveLog.csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -114,15 +156,6 @@ public class PositionTracking implements Runnable {
         catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void reset() {
-        currPose.set(new Pose2D());
-        currX.set(0d);
-        currY.set(0d);
-        currAngle.set(0d);
-        RobotMap.leftGrayhill.reset();
-        RobotMap.rightGrayhill.reset();
     }
 
 }

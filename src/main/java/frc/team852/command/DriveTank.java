@@ -1,11 +1,9 @@
 package frc.team852.command;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.team852.Robot;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.Drivetrain;
 
 import static frc.team852.OI.xbox;
@@ -21,9 +19,7 @@ public class DriveTank extends Command {
   private double leftSpeed;
   private double rightSpeed;
 
-  private static ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-  private static NetworkTableEntry maxAccelerationEntry = tab.add("DriveTank maxAcceleration", 0)
-          .getEntry();
+  private static final Shuffle sMaxAcceleration = new Shuffle(DriveTank.class, "maxAcceleration", 0);
 
   public DriveTank() {
     this(false);
@@ -64,7 +60,7 @@ public class DriveTank extends Command {
 
     double leftTargetSpeed = xbox.getTriggerAxis(GenericHID.Hand.kLeft);
     double rightTargetSpeed = xbox.getTriggerAxis(GenericHID.Hand.kRight);
-    double maxAcceleration = maxAccelerationEntry.getDouble(0);
+    double maxAcceleration = sMaxAcceleration.get();
 
     leftSpeed += sign(leftTargetSpeed - leftSpeed) *  Math.min(Math.abs(leftTargetSpeed - leftSpeed), Math.abs(maxAcceleration * dt));
     rightSpeed += sign(rightTargetSpeed - rightSpeed) *  Math.min(Math.abs(rightTargetSpeed - rightSpeed), Math.abs(maxAcceleration * dt));

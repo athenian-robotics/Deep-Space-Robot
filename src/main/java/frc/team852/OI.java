@@ -72,15 +72,15 @@ public class OI {
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
-    new JoystickButton(stick1, 1).whenPressed(new ToggleGearbox());
-    new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
-      new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
-    //new JoystickButton(stick2, 1).whenPressed(new ToggleGearbox());
+    //new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
+    //  new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
 
     FieldPaths.genPaths();
     xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
+    // TODO Which buttons to use for ToggleGearbox and which for ChangeDriveMode?
     xboxBack.whenPressed(new ToggleGearbox());
     xboxStart.whenPressed(new ToggleGearbox());
+    xboxLB.whenPressed(new ChangeDriveMode());
     xboxRB.whenPressed(new ToggleGearbox());
 
     //xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
@@ -88,8 +88,6 @@ public class OI {
     //xboxX.whenPressed(new DriveTimed());
     //xboxY.whenPressed(new DriveTank());
 
-    if(xbox.getPOV() == 90 || xbox.getPOV() == -90)
-      new ChangeDriveMode();
     xboxY.whenPressed(new DriveDistance(157.48));
     xboxB.whenPressed(new DriveAngle(90));
     xboxX.whenPressed(new DriveAngle(-90));

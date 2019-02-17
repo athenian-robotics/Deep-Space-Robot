@@ -1,17 +1,15 @@
 package frc.team852.command;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.Drivetrain;
 
-import static frc.team852.OI.*;
+import static frc.team852.OI.xbox;
 
 public class DriveChangeable extends Command {
 
@@ -24,11 +22,8 @@ public class DriveChangeable extends Command {
   private double xSpeed;
   private double zRotation;
 
-  private static ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-  private static NetworkTableEntry maxAccelerationEntry = tab.add("DriveChangeable maxAcceleration", 0)
-          .getEntry();
-  private static NetworkTableEntry maxDecelerationEntry = tab.add("DriveChangeable maxDeceleration", 1000)
-          .getEntry();
+  private static final Shuffle sMaxAcceleration = new Shuffle(DriveChangeable.class, "maxAcceleration", 0);
+  private static final Shuffle sMaxDeceleration = new Shuffle(DriveChangeable.class, "maxDeceleration", 1000);
 
   public DriveChangeable() {
     requires(Robot.drivetrain);
@@ -61,23 +56,23 @@ public class DriveChangeable extends Command {
 
     currentRate = dt.getRate();
 
-    SmartDashboard.putNumber("Gyro Angle", Robot.gyro.getAngle());
-    SmartDashboard.putNumber("Gyro Fused Heading", Robot.gyro.getFusedHeading());
-    SmartDashboard.putNumber("Grayhill Encoder Left (get)", RobotMap.leftGrayhill.get());
-    SmartDashboard.putNumber("Grayhill Encoder Left (Distance)", RobotMap.leftGrayhill.getDistance());
-    SmartDashboard.putNumber("Grayhill Encoder Left (pid)", RobotMap.leftGrayhill.pidGet());
-    SmartDashboard.putNumber("Grayhill Encoder Right (get)", RobotMap.rightGrayhill.get());
-    SmartDashboard.putNumber("Grayhill Encoder Right (Distance)", RobotMap.rightGrayhill.getDistance());
-    SmartDashboard.putNumber("Grayhill Encoder Right (pid)", RobotMap.rightGrayhill.pidGet());
+    Shuffle.put(this, "Gyro Angle", Robot.gyro.getAngle());
+    Shuffle.put(this, "Gyro Fused Heading", Robot.gyro.getFusedHeading());
+    Shuffle.put(this, "Grayhill Encoder Left (Rate)", RobotMap.leftGrayhill.getRate());
+    Shuffle.put(this, "Grayhill Encoder Left (Distance)", RobotMap.leftGrayhill.getDistance());
+    Shuffle.put(this, "Grayhill Encoder Right (Rate)", RobotMap.rightGrayhill.getRate());
+    Shuffle.put(this, "Grayhill Encoder Right (Distance)", RobotMap.rightGrayhill.getDistance());
 
-    SmartDashboard.putNumber("Left Neos", RobotMap.leftDrive.pidGet());
-    SmartDashboard.putNumber("Right Neos", RobotMap.rightDrive.pidGet());
+    Shuffle.put(this, "Left Neos", RobotMap.leftDrive.pidGet());
+    Shuffle.put(this, "Right Neos", RobotMap.rightDrive.pidGet());
 
 
+    // TODO replace old joystick tank/arcade with xbox joystick inputs
+    Shuffle.put(this, "currentDriveMode", RobotMap.currentDriveMode.toString());
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
-      drive.tankDrive(-stick2.getY(), stick1.getY(), true);
+      //drive.tankDrive(-stick2.getY(), stick1.getY(), true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadeJoy) {
-      drive.arcadeDrive(-stick1.getX(), -stick1.getY(), true);
+      //arcadeDrive(-stick1.getX(), -stick1.getY(), true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.ArcadePad) {
       double multiplyBy = 0.6;
       if (xbox.getTriggerAxis(GenericHID.Hand.kRight) > 0.6)
@@ -124,8 +119,8 @@ public class DriveChangeable extends Command {
 
     double xSpeedError = xSpeed - this.xSpeed;
     double zRotationError = zRotation - this.zRotation;
-    double maxAcceleration = maxAccelerationEntry.getDouble(0);
-    double maxDeceleration = Math.max(maxAcceleration, maxDecelerationEntry.getDouble(0));
+    double maxAcceleration = sMaxAcceleration.get();
+    double maxDeceleration = Math.max(maxAcceleration, sMaxDeceleration.get());
 
     this.xSpeed += Math.copySign(
             Math.max(

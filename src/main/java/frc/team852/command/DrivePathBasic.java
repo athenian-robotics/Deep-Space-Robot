@@ -32,7 +32,7 @@ public class DrivePathBasic extends Command {
     private double rightSpeed;  // speed for right side
 
     private static final double maxSpeed = 0.2;
-    private static final double ticksPerRevolution = 277.2;
+    private static final double ticksPerRevolution = 277.2;  // TODO remove once encoder distance set in RobotMap
     private static final double distanceUnits = 0.1;
     // Ticks / revolution = 277.2 high gear, 630 low gear
 
