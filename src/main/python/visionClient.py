@@ -8,16 +8,19 @@ from grpc_utils.routeClient import SharedFrame, Camera, RouteClient
 
 # CONVENTION: INDEX STARTS AT 0
 class StreamServer(object):
-    def __init__(self, sf0: SharedFrame, sf1: SharedFrame, sf2: SharedFrame):
+    # def __init__(self, sf0: SharedFrame, sf1: SharedFrame, sf2: SharedFrame):
+    def __init__(self, sf0: SharedFrame, sf1: SharedFrame):
         self.sf0 = sf0
         self.sf1 = sf1
-        self.sf2 = sf2
+        # self.sf2 = sf2
 
     def start(self):
         server = ImageServer('./src/main/python/cv_utils/multi-image.html')
         server.start()
 
-        while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
+        # while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
+        while self.sf0.notComplete() and self.sf1.notComplete():
+
             # camera looking at reflective tape
             # rftAssist = viewReflTape(self.sf0.getFrame())
             rftAssist = viewReflTape(self.sf1.getFrame())
@@ -27,12 +30,12 @@ class StreamServer(object):
             medStream = self.sf0.getFrame()
 
             # camera looking at tape for auto alignment
-            lowStream = self.sf2.getFrame()
+            #lowStream = self.sf2.getFrame()
             # lowStream = self.sf0.getFrame()
 
             server.image(rftAssist, "cam0")
             server.image(medStream, "cam1")
-            server.image(lowStream, "cam2")
+            #server.image(lowStream, "cam2")
 
 
 """
@@ -67,20 +70,21 @@ PORT = "50051"
 def main():
     sftop = SharedFrame()
     sfmed = SharedFrame()
-    sflow = SharedFrame()
+    #sflow = SharedFrame()
 
     # 480 x 640 default
-    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(640, 480))
-    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(640, 480))
-    lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(640, 480))
+    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(300, 300))
+    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(300, 300))
+    #lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(300, 300))
 
     grpc_client = RouteClient(host=HOSTNAME, port=PORT)
-    httpserver = StreamServer(sftop, sfmed, sflow)
+    # httpserver = StreamServer(sftop, sfmed, sflow)
+    httpserver = StreamServer(sftop, sfmed)
 
     with ThreadPoolExecutor() as executor:
         executor.submit(topCamera.start)
         executor.submit(medCamera.start)
-        executor.submit(lowCamera.start)
+        # executor.submit(lowCamera.start)
 
         # executor.submit(grpc_client.sendCamPose,sftop)
 
