@@ -7,7 +7,6 @@ public class PlaceHatch extends CommandGroup {
 
   public PlaceHatch(int level) {
     addSequential(new ElevatorMove(heights[level]));
-    addSequential(new FollowFloorTape());
     addSequential(new OutputHatch());
   }
 }
