@@ -73,9 +73,9 @@ def main():
     #sflow = SharedFrame()
 
     # 480 x 640 default
-    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(640, 480))
-    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(640, 480))
-    #lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(640, 480))
+    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(300, 300))
+    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(300, 300))
+    #lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(300, 300))
 
     grpc_client = RouteClient(host=HOSTNAME, port=PORT)
     # httpserver = StreamServer(sftop, sfmed, sflow)
