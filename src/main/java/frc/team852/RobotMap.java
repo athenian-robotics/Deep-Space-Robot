@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
@@ -39,13 +40,12 @@ public class RobotMap {
 
   //Wrist
   public static WPI_TalonSRX wristMotor = new WPI_TalonSRX(6); // TODO set based off of CAN id
-  public static DigitalInput wristLowerLimit = new DigitalInput(4); // TODO set based off of robot wiring
-  public static DigitalInput wristUpperLimit = new DigitalInput(3); // TODO set based off of robot wiring
+  public static DigitalInput wristLowerLimit = new InvertedDigitalInput(4); // TODO set based off of robot wiring
+  public static DigitalInput wristUpperLimit = new InvertedDigitalInput(3); // TODO set based off of robot wiring
   public static Encoder wristEncoder = new Encoder(7, 6, true); // TODO set based off of robot wiring
 
   //Hatch Subsystem
   public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2, 3);
-
   //Climber Subsystem
   public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(5); // TODO set based off of CAN id
   public static DoubleSolenoid pogoBoi = new DoubleSolenoid(4, 5);

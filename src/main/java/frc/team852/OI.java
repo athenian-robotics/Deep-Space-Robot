@@ -82,7 +82,7 @@ public class OI {
     xboxRB.whenPressed(new ToggleGearbox(RobotMap.FAST));
 
     //xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
-    //xboxB.whenPressed(new DriveTimedVelocity(1, 2));
+    xboxB.whenPressed(new WristSetup());
     //xboxX.whenPressed(new DriveTimed());
     //xboxY.whenPressed(new DriveTank());
 

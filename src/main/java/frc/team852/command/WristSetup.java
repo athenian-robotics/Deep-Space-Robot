@@ -2,27 +2,25 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.subsystem.WristSubsystem;
 
-public class WristMove extends Command {
+public class WristSetup extends Command {
   private final WristSubsystem wrist;
   private double setpoint;
-  private boolean holdingBall;
-  private boolean holdingHatch;
-  private static final int lowerUnsafe = 50, upperUnsafe = 100; // IDK what these values are
 
-  public WristMove(int setpoint) {
+  public WristSetup() {
     requires(Robot.wristSubsystem);
     this.wrist = Robot.wristSubsystem;
     this.setpoint = wrist.getPosition();
-    this.holdingBall = false;
   }
 
   @Override
   protected void initialize() {
     wrist.getPIDController().reset();
     wrist.setSetpoint(this.setpoint);
+    wrist.setPercentTolerance(.1);
     wrist.enable();
   }
 
@@ -30,17 +28,8 @@ public class WristMove extends Command {
   protected void execute() {
     if (!wrist.getPIDController().isEnabled())
       wrist.enable();
-
-    if (!holdingBall) {
-      int elevatorHeight = ElevatorSubsystem.getHeight();
-      if (elevatorHeight >= lowerUnsafe && elevatorHeight <= upperUnsafe)
-        setpoint = 30; // Not sure what the encoder ticks are
-      else if (elevatorHeight < lowerUnsafe)
-        setpoint = 0; // Not sure how this translates to encoder ticks
-      else
-        setpoint = 90;
-    }
-    wrist.setSetpoint(setpoint);
+    wrist.setSetpoint(319);
+    Shuffle.put(this, "encoder pos", wrist.getEncoderPos());
 
   }
 
