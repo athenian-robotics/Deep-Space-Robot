@@ -1,55 +1,65 @@
 package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.team852.OI;
 import frc.team852.Robot;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorMove extends Command {
   private final ElevatorSubsystem elevator;
-  private double elevatorSetpoint, oldSetpoint;
-  private int elevatorMinHeight, elevatorMaxHeight;
-  private final boolean oneOff;
+  private static double elevatorSetpoint;
+  private static int positionIndex;
 
-  public ElevatorMove(double setpoint) {
+  private static final double posHatchLow = 10;
+  private static final double posHatchMid = 80;
+  private static final double posHatchHigh = 150;
+  private static final double[] posArray = {posHatchLow, posHatchMid, posHatchHigh};
+
+  private static final Shuffle sSetpointBound = new Shuffle(ElevatorMove.class, "SetpointBound", 10);
+
+  public ElevatorMove(int pos) {
     requires(Robot.elevatorSubsystem);
     elevator = Robot.elevatorSubsystem;
-    elevator.setSetpoint(setpoint);
-    oneOff = true;
+    //positionIndex = pos;
+    //setPosition();
   }
 
   public ElevatorMove() {
-    requires(Robot.elevatorSubsystem);
-    elevator = Robot.elevatorSubsystem;
-    elevatorSetpoint = elevator.getSetpoint();
-    oneOff = false;
+    this(0);
   }
 
   @Override
   protected void initialize() {
     elevator.getPIDController().reset();
-    if (!elevator.getPIDController().isEnabled())
+    //if (!elevator.getPIDController().isEnabled())
       elevator.enable();
     elevatorSetpoint = elevator.getSetpoint();
   }
 
   @Override
   protected void execute() {
-    if (!elevator.getPIDController().isEnabled())
+    elevator.enable();
+    /*if (!elevator.getPIDController().isEnabled())
       elevator.enable();
-    double setpointMoveDist = 5;
+
     if (OI.POVUp.get()) {
-      elevatorSetpoint = oldSetpoint + setpointMoveDist;
-    } else if (OI.POVDown.get())
-      elevatorSetpoint = oldSetpoint - setpointMoveDist;
-    if (elevatorSetpoint != oldSetpoint) {
-      elevator.setSetpoint(elevatorSetpoint);
-      oldSetpoint = elevatorSetpoint;
+      positionIndex++;
     }
+    else if (OI.POVDown.get()) {
+      positionIndex--;
+    }
+
+    setPosition();*/
   }
 
   @Override
   protected boolean isFinished() {
-    return oneOff;
+    return false;  // Will be automatically canceled by whenHeld() in OI
+  }
+
+  private void setPosition() {
+    positionIndex = Math.max(0, Math.min(posArray.length - 1, positionIndex));
+    elevatorSetpoint = posArray[positionIndex];
+    elevator.setSetpoint(elevatorSetpoint);
   }
 }

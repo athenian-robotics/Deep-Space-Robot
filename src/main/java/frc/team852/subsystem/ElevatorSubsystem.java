@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.command.ElevatorMove;
 import frc.team852.lib.utils.SerialLidar;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.lib.utils.SparkMax;
 
 public class ElevatorSubsystem extends PIDSubsystem {
@@ -50,12 +52,13 @@ public class ElevatorSubsystem extends PIDSubsystem {
   protected void usePIDOutput(double output) {
     if (output > 0 && upperLimit.get()) {
       System.out.println("[!!] Elevator on upper limit.");
-      motor.set(0);
+      output = 0;
     } else if (output < 0 && lowerLimit.get()) {
       System.out.println("[!!] Elevator on lower limit.");
-      motor.set(0);
-    } else
-      motor.set(output);
+      output = 0;
+    }
+    Shuffle.put(this, "motorPower", output);
+    motor.set(output);
 
   }
 
@@ -73,5 +76,6 @@ public class ElevatorSubsystem extends PIDSubsystem {
 
   @Override
   protected void initDefaultCommand() {
+    setDefaultCommand(new ElevatorMove());
   }
 }

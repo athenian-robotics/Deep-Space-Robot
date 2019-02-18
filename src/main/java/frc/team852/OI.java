@@ -91,6 +91,7 @@ public class OI {
 //    xboxX.whenPressed(new DriveAngle(-90));
     //TODO change target
     fightStickLB.whileHeld(new ElevatorMoveBangBang());
+    fightStickRB.whileHeld(new ElevatorMove());
     fightStickY.whenPressed(new OutputHatch());
 
   }
