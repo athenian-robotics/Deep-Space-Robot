@@ -88,33 +88,42 @@ public class DriveChangeable extends Command {
 
     double maxAcceleration, maxDeceleration;
     boolean fastGear = (Robot.drivetrain.getGearing() == RobotMap.FAST);
-    maxAcceleration = fastGear ? sMaxAccelFast.get() : sMaxAccelSlow.get();
-    maxDeceleration = fastGear ? sMaxDecelFast.get() : sMaxDecelSlow.get();
-    double rotationAccelScale = sRotationAccelScale.get();
+    maxAcceleration = Math.abs(fastGear ? sMaxAccelFast.get() : sMaxAccelSlow.get());
+    maxDeceleration = Math.abs(fastGear ? sMaxDecelFast.get() : sMaxDecelSlow.get());
+    double rotationAccelScale = Math.abs(sRotationAccelScale.get());
 
     this.xSpeed += Math.copySign(
             Math.max(
-                    -Math.abs(maxDeceleration * deltaTime),
+                    -maxDeceleration * deltaTime,
                     Math.min(
-                            Math.abs(maxAcceleration * deltaTime),
+                            maxAcceleration * deltaTime,
                             Math.copySign(xSpeedError, this.xSpeed * xSpeedError)
                     )),
             xSpeedError);
     this.zRotation += Math.copySign(
             Math.max(
-                    -Math.abs(maxDeceleration * rotationAccelScale * deltaTime),
+                    -maxDeceleration * rotationAccelScale * deltaTime,
                     Math.min(
-                            Math.abs(maxAcceleration * rotationAccelScale * deltaTime),
+                            maxAcceleration * rotationAccelScale * deltaTime,
                             Math.copySign(zRotationError, this.zRotation * zRotationError)
                     )),
             zRotationError);
 
+    if (this.xSpeed * xSpeedError > 0) {
+      xbox.setRumble(GenericHID.RumbleType.kLeftRumble, Math.abs(xSpeedError) / deltaTime / maxAcceleration);
+    }
+    else {
+      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
+    }
+
+    /*
     if(xSpeedError > 0){
       xbox.setRumble(GenericHID.RumbleType.kRightRumble, xSpeedError);
     }
     else{
       xbox.setRumble(GenericHID.RumbleType.kLeftRumble, xSpeedError);
     }
+    */
 
     drive.arcadeDrive(-this.zRotation, this.xSpeed, false);
   }
