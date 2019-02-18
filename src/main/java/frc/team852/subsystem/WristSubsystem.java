@@ -1,12 +1,13 @@
 package frc.team852.subsystem;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
-import frc.team852.command.WristHold;
+import frc.team852.command.WristMove;
 
 public class WristSubsystem extends PIDSubsystem {
 
@@ -22,11 +23,8 @@ public class WristSubsystem extends PIDSubsystem {
     this.encoder = RobotMap.wristEncoder;
     this.lowerLimit = RobotMap.wristLowerLimit;
     this.upperLimit = RobotMap.wristUpperLimit;
-  }
-
-  @Override
-  protected void initDefaultCommand() {
-    setDefaultCommand(new WristHold());
+    this.motor.setNeutralMode(NeutralMode.Brake);
+//    this.setInputRange(ENCODER_RANGE_MIN, ENCODER_RANGE_MAX);
   }
 
   public void stopMotors() {
@@ -111,6 +109,12 @@ public class WristSubsystem extends PIDSubsystem {
   protected double returnPIDInput() {
     return encoder.get();
   }
+
+  @Override
+  protected void initDefaultCommand() {
+    setDefaultCommand(new WristMove());
+  }
+
 
 }
 

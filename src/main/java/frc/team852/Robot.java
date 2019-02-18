@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   public static DoubleSolenoid.Value gearstate;
   public static ElevatorSubsystem elevatorSubsystem;
   public static WristSubsystem wristSubsystem;
-//  public static CargoSubsystem cargoSubsystem;
+  //  public static CargoSubsystem cargoSubsystem;
   public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
 
@@ -46,10 +46,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  public Robot(){
+
+  public Robot() {
     super();
   }
-  public Robot(double period){
+
+  public Robot(double period) {
     super(period);
   }
 
@@ -63,10 +65,21 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotStarted.set(true);
+    try {
+      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB1);
+      Timer.delay(0.2);
+      elevatorLidar.setReadBufferSize(1);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
+    }
 
+    try {
+      gyro = new AHRS_PID(SerialPort.Port.kUSB);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+    }
     new RobotMap();
     dataServer = new CVDataServer();
-    dataStore = new CVDataStore();
 
     drivetrain = new Drivetrain();
     elevatorSubsystem = new ElevatorSubsystem();
@@ -79,20 +92,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    try {
-      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB1);
-      Timer.delay(0.2);
-      elevatorLidar.setReadBufferSize(1);
-    }
-    catch (RuntimeException ex){
-      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
-    }
 
-    try {
-      gyro = new AHRS_PID(SerialPort.Port.kUSB);
-    } catch (RuntimeException ex ) {
-      DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
-    }
     RobotMap.gearbox.set(RobotMap.SLOW);
 
     oi = new OI(); // Must be defined last

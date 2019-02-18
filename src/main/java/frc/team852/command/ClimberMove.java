@@ -23,8 +23,6 @@ public class ClimberMove extends Command {
 
     @Override
     protected void initialize(){
-      climber.resetEncoder();
-      climber.setSetpoint(climber.getEncoderPos());
     }
 
     //Called when interrupted
@@ -36,8 +34,6 @@ public class ClimberMove extends Command {
     //Reset encoders, reset motors, put everything back to where it was.
     @Override
     protected void end() {
-      climber.disable();
-      climber.resetEncoder();
       climber.stopMotors();
     }
 
@@ -49,7 +45,5 @@ public class ClimberMove extends Command {
 
     //Pass a speed through the motors, stop when done
     protected void execute() {
-      if(!climber.getPIDController().isEnabled())
-        climber.enable();
     }
 }
