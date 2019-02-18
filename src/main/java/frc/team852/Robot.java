@@ -99,6 +99,8 @@ public class Robot extends TimedRobot {
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
 
+    RobotMap.wristEncoder.reset();
+
     oi = new OI(); // Must be defined last
 
     try {
@@ -190,6 +192,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Make sure to cancel any autonomous stuff
     // Might not be needed as sandstorm etc
+    Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 
   /**

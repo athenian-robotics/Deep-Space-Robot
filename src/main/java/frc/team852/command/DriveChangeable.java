@@ -109,11 +109,11 @@ public class DriveChangeable extends Command {
                     )),
             zRotationError);
 
-    if (this.xSpeed * xSpeedError > 0) {
-      xbox.setRumble(GenericHID.RumbleType.kLeftRumble, Math.abs(xSpeedError) / deltaTime / maxAcceleration);
+    if (this.xSpeed * xSpeedError < 0) {
+      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
     }
     else {
-      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
+      xbox.setRumble(GenericHID.RumbleType.kRightRumble, 0);
     }
 
     /*

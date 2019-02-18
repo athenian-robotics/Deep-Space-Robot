@@ -32,19 +32,19 @@ public class RobotMap {
 
   //Elevator
   public static SparkMax elevatorMotor = new SparkMax(4, SparkMax.MotorType.kBrushless); // TODO set based off of CAN id
-  public static DigitalInput elevatorLowerLimit = new DigitalInput(0); // TODO set based off of robot wiring
-  public static DigitalInput elevatorUpperLimit = new DigitalInput(1); // TODO set based off of robot wiring
+  public static DigitalInput elevatorLowerLimit = new DigitalInput(15); // TODO set based off of robot wiring
+  public static DigitalInput elevatorUpperLimit = new DigitalInput(5); // TODO set based off of robot wiring
   public static SerialLidar elevatorLidar = Robot.elevatorLidar;
 
 
   //Wrist
   public static WPI_TalonSRX wristMotor = new WPI_TalonSRX(6); // TODO set based off of CAN id
-  public static DigitalInput wristLowerLimit = new DigitalInput(2); // TODO set based off of robot wiring
+  public static DigitalInput wristLowerLimit = new DigitalInput(4); // TODO set based off of robot wiring
   public static DigitalInput wristUpperLimit = new DigitalInput(3); // TODO set based off of robot wiring
-  public static Encoder wristEncoder = new Encoder(5, 6); // TODO set based off of robot wiring
+  public static Encoder wristEncoder = new Encoder(7, 6, true); // TODO set based off of robot wiring
 
   //Hatch Subsystem
-  public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(4, 3);
+  public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2, 3);
 
   //Climber Subsystem
   public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(5); // TODO set based off of CAN id

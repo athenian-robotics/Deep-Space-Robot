@@ -15,7 +15,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
 
   public ElevatorSubsystem() {
     super("Elevator", 0, 0, 0); // TODO tune
-    disable();
+//    disable();
     motor = RobotMap.elevatorMotor;
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     this.lowerLimit = RobotMap.elevatorLowerLimit;
