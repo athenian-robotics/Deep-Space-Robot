@@ -2,9 +2,7 @@ package frc.team852.subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.ClimberMove;
 

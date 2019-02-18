@@ -27,7 +27,7 @@ public class RobotMap {
   public static SparkMaxGroup rightDrive = new SparkMaxGroup(rightFront, rightBack);
   public static Encoder leftGrayhill = new Encoder(9, 8, false);
   public static Encoder rightGrayhill = new Encoder(0, 1, true);
-  public static DoubleSolenoid gearbox = new DoubleSolenoid(0, 1); // TODO set based off of robot wiring
+  public static DoubleSolenoid gearbox = new DoubleSolenoid(7, 6); // TODO set based off of robot wiring
 
 
   //Elevator
@@ -44,7 +44,7 @@ public class RobotMap {
   public static Encoder wristEncoder = new Encoder(5, 6); // TODO set based off of robot wiring
 
   //Hatch Subsystem
-  public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2, 3);
+  public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(4, 3);
 
   //Climber Subsystem
   public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(5); // TODO set based off of CAN id
@@ -55,8 +55,9 @@ public class RobotMap {
   // CONSTANTS
 
 
-  public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kForward;
-  public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kReverse;
+
+  public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kReverse;
+  public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kForward;
 
   public static Drivetrain.DriveMode currentDriveMode = Drivetrain.DriveMode.GTA;
 
