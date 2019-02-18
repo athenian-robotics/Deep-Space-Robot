@@ -44,7 +44,7 @@ public class RobotMap {
   public static Encoder wristEncoder = new Encoder(7, 6, true); // TODO set based off of robot wiring
 
   //Hatch Subsystem
-  public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(2, 3);
+  public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(3, 2);
 
   //Climber Subsystem
   public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(5); // TODO set based off of CAN id
