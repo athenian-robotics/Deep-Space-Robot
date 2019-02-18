@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.Drivetrain;
 
 public class ToggleGearbox extends Command {
@@ -11,6 +12,8 @@ public class ToggleGearbox extends Command {
   private Drivetrain dt;
   private Value gear;
   private Value state;
+
+  private static final Shuffle sInHighGear = new Shuffle(ToggleGearbox.class, "InHighGear", false);
 
   public ToggleGearbox(Value state){
     requires(Robot.drivetrain);
@@ -52,6 +55,8 @@ public class ToggleGearbox extends Command {
       else
         System.out.println("Gearing: SLOW SPEED");
     }
+
+    sInHighGear.set(state == RobotMap.FAST);
   }
 
   /**

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team852.command.DriveLogging;
 import frc.team852.command.TrackPosition;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
@@ -182,7 +181,6 @@ public class Robot extends TimedRobot {
     robotStarted.set(true);
     RobotMap.gearbox.set(RobotMap.SLOW);
     Scheduler.getInstance().add(new TrackPosition());
-    Scheduler.getInstance().add(new DriveLogging());
   }
 
   /**
