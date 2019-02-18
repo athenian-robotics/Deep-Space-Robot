@@ -3,71 +3,53 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystem.ElevatorSubsystem;
-import frc.team852.subsystem.WristSubsystem;
 
 public class ElevatorMove extends Command {
+  private final ElevatorSubsystem elevator;
+  private double elevatorSetpoint, oldSetpoint;
+  private int elevatorMinHeight, elevatorMaxHeight;
+  private final boolean oneOff;
 
-  private ElevatorSubsystem elevator;
-  private WristSubsystem wrist;
-  private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
-  private double elevatorSetpoint, oldElevatorSetpoint, wristSetpoint;
+  public ElevatorMove(double setpoint) {
+    requires(Robot.elevatorSubsystem);
+    elevator = Robot.elevatorSubsystem;
+    elevator.setSetpoint(setpoint);
+    oneOff = true;
+  }
 
   public ElevatorMove() {
-    this(Robot.elevatorSubsystem.getHeight());
-  }
-
-  public ElevatorMove(int setpoint) {
     requires(Robot.elevatorSubsystem);
-    requires(Robot.wristSubsystem);
-    this.elevator = Robot.elevatorSubsystem;
-    this.wrist = Robot.wristSubsystem;
-    this.elevatorSetpoint = setpoint;
-    this.wristSetpoint = wrist.getSafeSetpoint(elevator.getHeight());
+    elevator = Robot.elevatorSubsystem;
+    elevatorSetpoint = elevator.getSetpoint();
+    oneOff = false;
   }
-
 
   @Override
   protected void initialize() {
-    elevator.setSetpoint(this.elevatorSetpoint);
-    elevator.enable();
-    wrist.setSetpoint(this.wristSetpoint);
-    wrist.enable();
+    elevator.getPIDController().reset();
+    if (!elevator.getPIDController().isEnabled())
+      elevator.enable();
+    elevatorSetpoint = elevator.getSetpoint();
   }
 
   @Override
   protected void execute() {
     if (!elevator.getPIDController().isEnabled())
       elevator.enable();
-    // Check if under user control
-    if (OI.fightStickLB.get()) {
-      if (OI.POVUp.get()) {
-        elevatorSetpoint = elevator.canMoveUp() ? elevatorSetpoint + moveDist : elevatorSetpoint;
-      } else if (OI.POVDown.get()) {
-        elevatorSetpoint = elevator.canMoveDown() ? elevatorSetpoint - moveDist : elevatorSetpoint;
-      }
-      if (oldElevatorSetpoint != elevatorSetpoint) {
-        elevator.setSetpoint(elevatorSetpoint);
-        oldElevatorSetpoint = elevatorSetpoint;
-      }
+    double setpointMoveDist = 5;
+    if (OI.POVUp.get()) {
+      elevatorSetpoint = oldSetpoint + setpointMoveDist;
+    } else if (OI.POVDown.get())
+      elevatorSetpoint = oldSetpoint - setpointMoveDist;
+    if (elevatorSetpoint != oldSetpoint) {
+      elevator.setSetpoint(elevatorSetpoint);
+      oldSetpoint = elevatorSetpoint;
     }
-    // Move the wrist to a safe position
-    wrist.safeMove(elevator.getHeight());
-  }
-
-  @Override
-  protected void interrupted() {
-    end();
-  }
-
-  @Override
-  protected void end() {
-    elevator.getPIDController().reset();
   }
 
   @Override
   protected boolean isFinished() {
-    return false;
+    return oneOff;
   }
 }

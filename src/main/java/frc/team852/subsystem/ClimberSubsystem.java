@@ -1,21 +1,22 @@
 package frc.team852.subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.ClimberMove;
 
-public class ClimberSubsystem extends PIDSubsystem {
+public class ClimberSubsystem extends Subsystem {
 
   //Set a climber motor
   private final WPI_TalonSRX climberMotor;
-//  private final Encoder encoder;
+  private final DoubleSolenoid pogo;
 
   //Constructor
   public ClimberSubsystem() {
-    super("Climber", 0, 0, 0); // TODO tune
+    super("Climber"); // TODO tune
     climberMotor = RobotMap.climberMotor;
-//    encoder = RobotMap.climberEncoder;
+    pogo = RobotMap.pogoBoi;
   }
 
   //Default command is climberMove
@@ -39,22 +40,13 @@ public class ClimberSubsystem extends PIDSubsystem {
       stopMotors();
   }
 
-//  public double getEncoderPos() {
-//    return this.encoder.get();
-//  }
-
-//  public void resetEncoder() {
-//    this.encoder.reset();
-//  }
-
-  @Override
-  protected double returnPIDInput() {
-//    return encoder.get();
-    return 0;
+  public void extendPogo() {
+    pogo.set(DoubleSolenoid.Value.kForward);
   }
 
-  @Override
-  protected void usePIDOutput(double output) {
-    climberMotor.set(output);
+  public void retractPogo() {
+    pogo.set(DoubleSolenoid.Value.kReverse);
   }
+
+
 }

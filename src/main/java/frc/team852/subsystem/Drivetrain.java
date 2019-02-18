@@ -30,8 +30,8 @@ public class Drivetrain extends Subsystem {
     leftDrive.setInverted(true);
     leftDrive.setPIDSourceType(PIDSourceType.kDisplacement);
     rightDrive.setPIDSourceType(PIDSourceType.kDisplacement);
-    leftDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    rightDrive.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    leftDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    rightDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
   }
 
   @Override

@@ -30,18 +30,20 @@ public class OI {
    * <p>
    * Start the command when the button is pressed and let it run the command
    * until it is finished as determined by it's isFinished method.
-   * button.whenPressed(new ElevatorMove());
+   * button.whenPressed(new ElevatorMoveBangBang());
    * <p>
    * Run the command while the button is being held down and interrupt it once
    * the button is released.
-   * button.whileHeld(new ElevatorMove());
+   * button.whileHeld(new ElevatorMoveBangBang());
    * <p>
    * Start the command when the button is released and let it run the command
    * until it is finished as determined by it's isFinished method.
-   * button.whenReleased(new ElevatorMove());
+   * button.whenReleased(new ElevatorMoveBangBang());
    */
-  public static XboxController xbox = new XboxController(0);
-  public static Joystick fightStick = new Joystick(1);
+  public static Joystick stick1 = new Joystick(0);
+  public static Joystick stick2 = new Joystick(1);
+  public static XboxController xbox = new XboxController(2);
+  public static Joystick fightStick = new Joystick(3);
 
   // Joystick buttons start at 1
   public static Button xboxA = new JoystickButton(xbox, 1);
@@ -73,28 +75,25 @@ public class OI {
     //new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
     //  new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
 
-    //FieldPaths.genPaths();
-    xboxA.whenPressed(new OutputHatch());
+    FieldPaths.genPaths();
+    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
     // TODO Which buttons to use for ToggleGearbox and which for ChangeDriveMode?
-    xboxBack.whenPressed(new ChangeDriveMode());
-    xboxStart.whenPressed(new ChangeDriveMode());
-    xboxLB.whenPressed(new ToggleGearbox());
-    xboxRB.whenPressed(new ToggleGearbox());
+//    xboxBack.whenPressed(new ToggleGearbox());
+//    xboxStart.whenPressed(new ToggleGearbox());
+    xboxLB.whenPressed(new ToggleGearbox(RobotMap.SLOW));
+    xboxRB.whenPressed(new ToggleGearbox(RobotMap.FAST));
 
     //xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
     //xboxB.whenPressed(new DriveTimedVelocity(1, 2));
     //xboxX.whenPressed(new DriveTimed());
     //xboxY.whenPressed(new DriveTank());
 
-
-    xboxY.whenPressed(new DriveDistance(157.48));
-    xboxB.whenPressed(new DriveAngle(90));
-    xboxX.whenPressed(new DriveAngle(-90));
+//    xboxY.whenPressed(new DriveDistance(157.48));
+//    xboxB.whenPressed(new DriveAngle(90));
+//    xboxX.whenPressed(new DriveAngle(-90));
     //TODO change target
-    fightStickA.whileHeld(new ElevatorMove());
-    //fightStickX.whenReleased(new PlaceHatch(0));
-    //fightStickY.whenReleased(new PlaceHatch(1));
-    //fightStickRB.whenReleased(new PlaceHatch(2));
+    fightStickLB.whileHeld(new ElevatorMoveBangBang());
+    fightStickY.whenPressed(new OutputHatch());
 
   }
 

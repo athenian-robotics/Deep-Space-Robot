@@ -4,36 +4,46 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.subsystem.WristSubsystem;
 
-public class WristHold extends Command {
+public class WristMove extends Command {
   private final WristSubsystem wrist;
   private double setpoint;
-  private boolean wasInterrupted;
+  private boolean holdingBall;
+  private final int lowerUnsafe = 50, upperUnsafe = 100; // IDK what these values are
 
-  public WristHold() {
+  public WristMove() {
     requires(Robot.wristSubsystem);
     this.wrist = Robot.wristSubsystem;
     this.setpoint = wrist.getPosition();
-    this.wasInterrupted = false;
+    this.holdingBall = false;
   }
 
   @Override
   protected void initialize() {
-    if (wasInterrupted)
-      this.setpoint = wrist.getPosition();
+    wrist.getPIDController().reset();
     wrist.setSetpoint(this.setpoint);
     wrist.enable();
-    wasInterrupted = false;
   }
 
   @Override
   protected void execute() {
     if (!wrist.getPIDController().isEnabled())
       wrist.enable();
+
+    if (!holdingBall) {
+      int elevatorHeight = Robot.elevatorSubsystem.getHeight();
+      if (elevatorHeight >= lowerUnsafe && elevatorHeight <= upperUnsafe)
+        setpoint = 30; // Not sure what the encoder ticks are
+      else if (elevatorHeight < lowerUnsafe)
+        setpoint = 0; // Not sure how this translates to encoder ticks
+      else
+        setpoint = 90;
+    }
+    wrist.setSetpoint(setpoint);
+
   }
 
   @Override
   protected void interrupted() {
-    this.wasInterrupted = true;
     end();
   }
 

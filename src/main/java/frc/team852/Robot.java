@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
 
 
     RobotMap.gearbox.set(RobotMap.SLOW);
+    RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
 
     oi = new OI(); // Must be defined last
 

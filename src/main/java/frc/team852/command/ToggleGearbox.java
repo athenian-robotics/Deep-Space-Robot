@@ -10,10 +10,16 @@ public class ToggleGearbox extends Command {
 
   private Drivetrain dt;
   private Value gear;
+  private Value state;
 
-  public ToggleGearbox() {
+  public ToggleGearbox(Value state){
     requires(Robot.drivetrain);
     this.gear = Robot.drivetrain.getGearing();
+    this.state = state;
+  }
+
+  public ToggleGearbox() {
+    this(Value.kOff);
   }
 
   @Override
@@ -21,7 +27,6 @@ public class ToggleGearbox extends Command {
     System.out.println("ToggleGear Initialized");
     dt = Robot.drivetrain;
     this.gear = dt.getGearing();
-
   }
 
   /**
@@ -29,14 +34,23 @@ public class ToggleGearbox extends Command {
    */
   @Override
   protected void execute() {
-    System.out.println("Running Toggle Gear");
-    if (gear == RobotMap.SLOW) {
-      dt.setGearbox(RobotMap.FAST);
-      System.out.println("IN LOW GEAR");
+    if(state == Value.kOff) {
+      System.out.println("Toggling Drivetrain Gearing");
+      if (gear == RobotMap.SLOW) {
+        dt.setGearbox(RobotMap.FAST);
+        System.out.println("Gearing: HIGH SPEED");
+      } else {
+        dt.setGearbox(RobotMap.SLOW);
+        System.out.println("Gearing: SLOW SPEED");
+      }
     }
-    else {
-      dt.setGearbox(RobotMap.SLOW);
-      System.out.println("IN HIGH GEAR");
+    else{
+      if(state != gear)
+        dt.setGearbox(state);
+      if(state == RobotMap.FAST)
+        System.out.println("Gearing: HIGH SPEED");
+      else
+        System.out.println("Gearing: SLOW SPEED");
     }
   }
 
