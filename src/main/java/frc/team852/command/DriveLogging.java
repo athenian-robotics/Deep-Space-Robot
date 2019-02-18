@@ -18,6 +18,11 @@ public class DriveLogging extends Command {
     private static final Shuffle sRightNeos = new Shuffle(DriveLogging.class, "RightNeos", 0);
 
     @Override
+    protected void initialize() {
+        System.out.println("DriveLogging started");
+    }
+
+    @Override
     protected void execute() {
         sGyroAngle.set(Robot.gyro.getAngle());
         sGyroFusedHeading.set(Robot.gyro.getFusedHeading());

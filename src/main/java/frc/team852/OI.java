@@ -40,10 +40,8 @@ public class OI {
    * until it is finished as determined by it's isFinished method.
    * button.whenReleased(new ElevatorMoveBangBang());
    */
-  public static Joystick stick1 = new Joystick(0);
-  public static Joystick stick2 = new Joystick(1);
-  public static XboxController xbox = new XboxController(2);
-  public static Joystick fightStick = new Joystick(3);
+  public static XboxController xbox = new XboxController(0);
+  public static Joystick fightStick = new Joystick(1);
 
   // Joystick buttons start at 1
   public static Button xboxA = new JoystickButton(xbox, 1);

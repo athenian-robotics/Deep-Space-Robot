@@ -3,6 +3,7 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.subsystem.WristSubsystem;
 
@@ -12,6 +13,8 @@ public class ElevatorMoveBangBang extends Command {
   private WristSubsystem wrist;
   private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
   private double elevatorSetpoint, oldElevatorSetpoint, wristSetpoint;
+
+  public static final Shuffle sHoldValue = new Shuffle(ElevatorSubsystem.class, "HoldValue", 0);
 
   public ElevatorMoveBangBang() {
     this(Robot.elevatorSubsystem.getHeight());
@@ -40,6 +43,8 @@ public class ElevatorMoveBangBang extends Command {
         elevator.setSpeed(0.3);
       } else if (OI.POVDown.get()) {
         elevator.setSpeed(-0.1);
+      } else {
+        elevator.setSpeed(sHoldValue.get());
       }
     }
   }

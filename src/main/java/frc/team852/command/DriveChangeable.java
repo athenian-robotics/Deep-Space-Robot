@@ -25,10 +25,16 @@ public class DriveChangeable extends Command {
   private static final Shuffle sMaxDecelFast = new Shuffle(DriveChangeable.class, "maxDecelFast", 2);
   private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 1.5);
   private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 2);
-  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "RotationAccelScale", 1);
+  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 1);
+  private static final Shuffle sElevatorScale = new Shuffle(DriveChangeable.class, "elevatorScale", 1);
 
   public DriveChangeable() {
     requires(Robot.drivetrain);
+  }
+
+  @Override
+  protected void initialize() {
+    new DriveLogging().start();
   }
 
   /**
@@ -109,11 +115,11 @@ public class DriveChangeable extends Command {
                     )),
             zRotationError);
 
-    if (this.xSpeed * xSpeedError > 0) {
-      xbox.setRumble(GenericHID.RumbleType.kLeftRumble, Math.abs(xSpeedError) / deltaTime / maxAcceleration);
+    if (this.xSpeed * xSpeedError < 0) {
+      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
     }
     else {
-      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
+      xbox.setRumble(GenericHID.RumbleType.kRightRumble, 0);
     }
 
     /*

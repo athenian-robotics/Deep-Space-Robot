@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team852.command.DriveLogging;
 import frc.team852.command.TrackPosition;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
@@ -99,6 +98,8 @@ public class Robot extends TimedRobot {
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
 
+    RobotMap.wristEncoder.reset();
+
     oi = new OI(); // Must be defined last
 
     try {
@@ -180,7 +181,6 @@ public class Robot extends TimedRobot {
     robotStarted.set(true);
     RobotMap.gearbox.set(RobotMap.SLOW);
     Scheduler.getInstance().add(new TrackPosition());
-    Scheduler.getInstance().add(new DriveLogging());
   }
 
   /**
@@ -190,6 +190,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Make sure to cancel any autonomous stuff
     // Might not be needed as sandstorm etc
+    Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 
   /**
