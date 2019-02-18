@@ -3,7 +3,6 @@ import math
 import numpy as np
 
 from cv_utils.stream import *
-from grpc_utils.CVObject import *
 
 
 # Tape Pair Class for finding tape pairs
@@ -190,9 +189,8 @@ def sortBox(box):
 
 
 # main method that runs everything
-def detectReflTape(frame) -> CameraPose:
-    def emptyVectors() -> CameraPose:
-        return CameraPose(Vector3D(-1, -1, -1), Vector3D(-1, -1, -1))
+def viewReflTape(shared_frame: SharedFrame):
+    frame = shared_frame.getFrame()
 
     height, width, channels = frame.shape
     frame = undistort(frame, width, height)
@@ -214,9 +212,11 @@ def detectReflTape(frame) -> CameraPose:
             c0, c1 = currPair.getPair()
 
             contour0 = c0[0]
+            centroid0 = c0[1]
             box0 = minBoundQuad(frame, contour0)
 
             contour1 = c1[0]
+            centroid1 = c1[1]
             box1 = minBoundQuad(frame, contour1)
 
             pbox0 = sortBox(box0)
@@ -227,24 +227,36 @@ def detectReflTape(frame) -> CameraPose:
             except TypeError:
                 raise TypeError
 
+            pairCentroid = (int((centroid0[0] + centroid1[0]) / 2), int((centroid0[1] + centroid1[1]) / 2))
+            distance = getDistance(centroid0, centroid1)
+
+            indicatorLength = int((stopDistance - distance) * 1.2) if (stopDistance - distance >= 0) else 0
+            indicatorColor = (0, 255, 0)
+
+            # visual indicator
+            if indicatorLength <= 30:
+                indicatorColor = (0, 0, 255)
+                indicatorLength = 1000
+
+            # visual feedback
+            cv2.line(frame, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
+                     indicatorColor, 25)
+            cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
             success, rotation_vector, translation_vector = cv2.solvePnP(object_points, image_points, mtx, dist)
 
             # print("Rotational Vector: \n{}".format(rotation_vector))
             # print("Translation Vector: \n{}".format(translation_vector))
 
-            # TODO find out if xyz is in correct order
-            rtv = Vector3D(rotation_vector[0], rotation_vector[1], rotation_vector[2])
-            tsv = Vector3D(translation_vector[0], translation_vector[1], translation_vector[2])
-
-            return CameraPose(tsv, rtv)
+            cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), -1)
+            return drawCube(frame, rotation_vector, translation_vector)
 
         # return unmodified frame
         except TypeError as e:
             print(e)
-            return emptyVectors()
+            return frame
 
         except AssertionError as e:
             print(e)
-            return emptyVectors()
+            return frame
 
-    return emptyVectors()
+    return frame

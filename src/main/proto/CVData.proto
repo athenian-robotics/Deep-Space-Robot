@@ -5,54 +5,27 @@ import "google/protobuf/empty.proto";
 option java_multiple_files = true;
 option java_package = "frc.team852.DeepSpaceRobot";
 option java_outer_classname = "Proto";
-
 package utils;
 
 service OpenCVInfo {
-    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
-
-    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {}
-
-    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty) {}
-
-    rpc SendBall (Ball) returns (google.protobuf.Empty) {}
-
-    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {}
-
     rpc SendCameraPose (CameraPose) returns (google.protobuf.Empty) {}
+
+    //    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
+    //
+    //    rpc SendGaffeTape (GaffeTape) returns (google.protobuf.Empty) {}
+    //
+    //    rpc SendBall (Ball) returns (google.protobuf.Empty) {}
+    //
+    //    rpc SendHatch (Hatch) returns (google.protobuf.Empty) {}
+    //
+    //    rpc SendReflTape (ReflTapePair) returns (google.protobuf.Empty) {}
 }
 
-message FrameSize {
-    double x = 1;
-    double y = 2;
-}
-
-message ReflTapePair {
-    ReflTape leftTape = 1;
-    ReflTape rightTape = 2;
-    double centroid = 3;
-    double distance = 4;
-}
-
-message ReflTape {
-    double blobsize = 5;
-}
-
-message GaffeTape {
-    Point front = 1;
-    Point centroid = 2;
-    Point back = 3;
-    double degrees = 4;
-}
-
-message Point {
-    int32 x = 1;
-    int32 y = 2;
-}
 
 message CameraPose {
     Vector3D translation = 1;
     Vector3D rotation = 2;
+
 }
 message Vector3D {
     double x = 1;
@@ -60,12 +33,41 @@ message Vector3D {
     double z = 3;
 }
 
-message Hatch {
-    Point centroid = 1;
-    double diameter = 2;
-}
-
-message Ball {
-    Point centroid = 1;
-    double diameter = 2;
-}
+//
+//message ReflTapePair {
+//    ReflTape leftTape = 1;
+//    ReflTape rightTape = 2;
+//    double centroid = 3;
+//    double distance = 4;
+//}
+//
+//message ReflTape {
+//    double blobsize = 5;
+//}
+//
+//message FrameSize {
+//    double x = 1;
+//    double y = 2;
+//}
+//
+//message GaffeTape {
+//    Point front = 1;
+//    Point centroid = 2;
+//    Point back = 3;
+//    double degrees = 4;
+//}
+//
+//message Point {
+//    int32 x = 1;
+//    int32 y = 2;
+//}
+//
+//message Hatch {
+//    Point centroid = 1;
+//    double diameter = 2;
+//}
+//
+//message Ball {
+//    Point centroid = 1;
+//    double diameter = 2;
+//}

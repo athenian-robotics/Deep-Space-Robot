@@ -1,7 +1,8 @@
 package frc.team852.lib.grpc;
 
-import frc.team852.DeepSpaceRobot.FrameSize;
-import frc.team852.lib.callbacks.*;
+//import frc.team852.DeepSpaceRobot.FrameSize;
+
+import frc.team852.lib.callbacks.GenericListener;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 

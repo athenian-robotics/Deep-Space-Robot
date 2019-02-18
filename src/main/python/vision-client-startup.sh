@@ -11,5 +11,5 @@ v4l2-ctl -d /dev/video1 -c exposure_auto=1 -c exposure_absolute=3 -c white_balan
 # v4l2-ctl -d /dev/video3 -c exposure_auto=1
 
 # python3 ./cv_utils/samples/hsvTuner.py
-# python3 ./src/main/python/visionClient.py
-python3 -c 'import cv_utils.viewthreads.viewReflTape.py'
+python3 ./src/main/python/visionClient.py
+# python3 -c 'import cv_utils.viewthreads.viewReflTape.py'
