@@ -161,7 +161,7 @@ def drawOverhead(img, rvecs, tvecs):
 
 # get minimum bounding rectangle
 def minBoundRect(img, contour):
-    rect = cv2.minAreaRect(contour)jkj
+    rect = cv2.minAreaRect(contour)
     box = cv2.boxPoints(rect)
     cv2.drawContours(img, [np.int0(box)], 0, (0, 255, 255), 2)
     return box
