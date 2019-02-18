@@ -13,7 +13,7 @@ public class ToggleGearbox extends Command {
   private Value gear;
   private Value state;
 
-  private static final Shuffle sInHighGear = new Shuffle(ToggleGearbox.class, "InHighGear", false);
+  private static final Shuffle sInFastGear = new Shuffle(ToggleGearbox.class, "InFastGear", false);
 
   public ToggleGearbox(Value state){
     requires(Robot.drivetrain);
@@ -56,7 +56,7 @@ public class ToggleGearbox extends Command {
         System.out.println("Gearing: SLOW SPEED");
     }
 
-    sInHighGear.set(state == RobotMap.FAST);
+    sInFastGear.set(state == RobotMap.FAST);
   }
 
   /**

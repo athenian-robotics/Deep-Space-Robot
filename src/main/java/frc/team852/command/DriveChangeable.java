@@ -80,6 +80,8 @@ public class DriveChangeable extends Command {
 
   // TODO migrate to a more sensible and general place
   public void arcadeDrive(double zRotation, double xSpeed, boolean squareInputs) {
+      zRotation *= .5;
+
     double currTime = System.currentTimeMillis();
     double deltaTime = (currTime - lastTime) / 1000d;
     lastTime = currTime;
