@@ -21,8 +21,8 @@ conn, addr = server_socket.accept()
 
 cam = cv2.VideoCapture(0)
 
-cam.set(3, 320);
-cam.set(4, 240);
+cam.set(3, 640)
+cam.set(4, 480)
 
 img_counter = 0
 
