@@ -1,41 +1,43 @@
 package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.team852.OI;
+import frc.team852.Robot;
+import frc.team852.subsystem.WristSubsystem;
 
 public class WristBangBang extends Command {
-    /** Angles are in degrees unless otherwise specified*/
 
-    public static final double encoderQuarterTurn = 319;  // How many encoder ticks correspond to a quarter turn (90º)
+    private WristSubsystem wrist;
 
-    public static final double slack = 50;  // How much the arm can move without driving the motor and encoder
-    public static final double balancePoint = 0;  // The angle at which the center of mass is directly over the axle
-
-    public static final double posUpright = 0;  // Angle of upright position relative to upright position (0 by definition)
-    public static final double posForward = 90;  // Angle of forward position relative to upright position
-
-    @Override
-    protected void initialize() {
-
+    public WristBangBang(){
+        requires(Robot.wristSubsystem);
+        wrist = Robot.wristSubsystem;
     }
 
     @Override
     protected boolean isFinished() {
-        // TODO change
         return false;
     }
 
     @Override
     protected void execute() {
-
+        if(!OI.fightStickLB.get()){
+            if(OI.POVDown.get() && wrist.canMoveUp()){
+                wrist.setSpeed(0.3);
+            }
+            else if(OI.POVUp.get()){
+                wrist.setSpeed(-0.3);
+            }
+        }
     }
 
     @Override
     protected void end() {
-
+        wrist.stopMotors();
     }
 
     @Override
     protected void interrupted() {
-
+        end();
     }
 }
