@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 from image_server import ImageServer
+from socket_server import SocketServer
 
 from cv_utils.viewthreads.viewReflTape import *
 from grpc_utils.routeClient import SharedFrame, Camera, RouteClient
@@ -15,8 +16,9 @@ class StreamServer(object):
         # self.sf2 = sf2
 
     def start(self):
-        server = ImageServer('./src/main/python/cv_utils/multi-image.html')
-        server.start()
+        server = SocketServer()
+        with ThreadPoolExecutor() as executor:
+            executor.submit(server.run, self.sf1)
 
         # while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
         while self.sf0.notComplete() and self.sf1.notComplete():
@@ -33,8 +35,8 @@ class StreamServer(object):
             #lowStream = self.sf2.getFrame()
             # lowStream = self.sf0.getFrame()
 
-            server.image(rftAssist, "cam0")
-            server.image(medStream, "cam1")
+            # server.image(rftAssist, "cam0")
+            # server.image(medStream, "cam1")
             #server.image(lowStream, "cam2")
 
 
@@ -73,8 +75,8 @@ def main():
     #sflow = SharedFrame()
 
     # 480 x 640 default
-    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(600, 600))
-    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(600, 600))
+    topCamera = Camera(cameraIndex=0, shared_frame=sftop, resolution=(200, 200))
+    medCamera = Camera(cameraIndex=1, shared_frame=sfmed, resolution=(200, 200))
     #lowCamera = Camera(cameraIndex=2, shared_frame=sflow, resolution=(300, 300))
 
     grpc_client = RouteClient(host=HOSTNAME, port=PORT)

@@ -1,7 +1,9 @@
 import math
 
 import numpy as np
+import sys
 
+sys.path.append('src/main/python')
 from cv_utils.stream import *
 
 
