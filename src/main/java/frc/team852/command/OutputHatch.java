@@ -5,18 +5,17 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystem.HatchSubsystem;
 
 public class OutputHatch extends Command {
 
   private HatchSubsystem hatchSubsystem = Robot.hatchSubsystem;
-  private double time;
+  private Timer timer;
   private CANSparkMax.IdleMode ogIdleMode;
 
   public OutputHatch() {
     super();
-    time = Timer.getFPGATimestamp();
+    timer = new Timer();
   }
 
   @Override
@@ -25,11 +24,12 @@ public class OutputHatch extends Command {
     requires(Robot.drivetrain);
     ogIdleMode = Robot.drivetrain.getIdleMode();
     Robot.drivetrain.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    timer.start();
   }
 
   @Override
   protected boolean isFinished() {
-    return time + 0.5 <= Timer.getFPGATimestamp(); //TODO change timing on reception of robot
+    return timer.hasPeriodPassed(1); //TODO change timing on reception of robot
   }
 
   @Override
@@ -47,7 +47,6 @@ public class OutputHatch extends Command {
   protected void execute() {
     if (hatchSubsystem.getPneumaticState() != DoubleSolenoid.Value.kForward) {
       hatchSubsystem.extendPneumatics();
-      time = Timer.getFPGATimestamp();
     }
   }
 }

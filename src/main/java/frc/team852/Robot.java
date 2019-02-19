@@ -190,6 +190,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Make sure to cancel any autonomous stuff
     // Might not be needed as sandstorm etc
+    Shuffle.put(this, "Gyro Connected?", Robot.gyro.isConnected());
+    Shuffle.put(this, "Gyro yaw?", Robot.gyro.getYaw());
+    Shuffle.put(this, "Gyro pitch?", Robot.gyro.getPitch());
+    Shuffle.put(this, "Gyro Roll?", Robot.gyro.getRoll());
+    Shuffle.put(this, "Gyro Calibrating?", Robot.gyro.isCalibrating());
     Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 
