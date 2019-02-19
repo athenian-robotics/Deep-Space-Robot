@@ -1,3 +1,5 @@
+import traceback
+
 import cv2
 import io
 import socket
@@ -6,37 +8,48 @@ import time
 import pickle
 import zlib
 
-HOST = '0.0.0.0'
-PORT = 8081
 
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print('Socket created')
+class SocketServer:
+    def __init__(self, host='0.0.0.0', port=8081):
+        self.host = host
+        self.port = port
 
-server_socket.bind((HOST, PORT))
-print('Socket bind complete')
-server_socket.listen(10)
-print('Socket now listening')
+    def run(self, cam, isSharedFrame=True):
 
-conn, addr = server_socket.accept()
+        def start():
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print('Socket created')
 
-cam = cv2.VideoCapture(0)
+            self.server_socket.bind((self.host, self.port))
+            print('Socket bind complete')
+            self.server_socket.listen(10)
+            print('Socket now listening')
 
-cam.set(3, 640)
-cam.set(4, 480)
+            self.conn, self.addr = self.server_socket.accept()
 
-img_counter = 0
+            self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 
-encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+        start()
+        img_counter = 0
+        while True:
+            try:
+                if isSharedFrame:
+                    frame = cam.getFrame()
+                else:
+                    ret, frame = cam.read()
+                result, frame = cv2.imencode('.jpg', frame, self.encode_param)
+                #    data = zlib.compress(pickle.dumps(frame, 0))
+                data = pickle.dumps(frame, 0)
+                size = len(data)
 
-while True:
-    ret, frame = cam.read()
-    result, frame = cv2.imencode('.jpg', frame, encode_param)
-    #    data = zlib.compress(pickle.dumps(frame, 0))
-    data = pickle.dumps(frame, 0)
-    size = len(data)
+                print("{}: {}".format(img_counter, size))
+                self.conn.sendall(struct.pack(">L", size) + data)
 
-    print("{}: {}".format(img_counter, size))
-    conn.sendall(struct.pack(">L", size) + data)
-    img_counter += 1
+                img_counter += 1
+            except KeyboardInterrupt:
+                return
 
-cam.release()
+            except BaseException:
+                traceback.print_exc()
+
+        cam.release()
