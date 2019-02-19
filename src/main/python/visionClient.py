@@ -18,7 +18,8 @@ class StreamServer(object):
 
     def start(self):
         server = SocketServer()
-        thread = Thread(target=server.run, args=[self.sf0, True])
+        sf2 = SharedFrame()
+        thread = Thread(target=server.run, args=[sf2, True])
         thread.start()
 
         # while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
@@ -26,7 +27,7 @@ class StreamServer(object):
 
             # camera looking at reflective tape
             # rftAssist = viewReflTape(self.sf0.getFrame())
-            rftAssist = viewReflTape(self.sf1.getFrame())
+            sf2.setFrame(viewReflTape(self.sf1.getFrame()))
 
             # camera for driver assist only?
             # medStream = self.sf1.getFrame()
