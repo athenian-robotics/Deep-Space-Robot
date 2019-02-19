@@ -120,8 +120,8 @@ object_points = np.array([
 ])
 
 # Load previously saved data for camera calibration, undistortion
-# with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
-with np.load('calibration_matrix.npz') as X:
+with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
+    # with np.load('calibration_matrix.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 
 
@@ -141,16 +141,19 @@ def getDistance(p1, p2):
 
 # draw cube for visual effect on image
 def drawCube(img, rvecs, tvecs):
-    axis = np.float32([[0, 0, 0], [0, 3, 0], [3, 3, 0], [3, 0, 0], [0, 0, -3], [0, 3, -3], [3, 3, -3], [3, 0, -3]])
+    axis = np.float32([[-1.5, -1.5, 0], [-1.5, 1.5, 0], [1.5, 1.5, 0], [1.5, -1.5, 0],
+                       [-1.5, -1.5, -3], [-1.5, 1.5, -3], [1.5, 1.5, -3], [1.5, -1.5, -3], [0, 0, 0]])
     imgpts, jac = cv2.projectPoints(axis, rvecs, tvecs, mtx, dist)
     imgpts = np.int32(imgpts).reshape(-1, 2)
 
     # draw ground floor in green
     img = cv2.drawContours(img, [imgpts[:4]], -1, (0, 255, 0), -3)
+    # draw white dot for back center
+    img = cv2.circle(img, tuple(imgpts[-1]), 7, (0), -3)
     # draw pillars in blue color
     for i, j in zip(range(4), range(4, 8)): img = cv2.line(img, tuple(imgpts[i]), tuple(imgpts[j]), (255), 3)
     # draw top layer in red color
-    img = cv2.drawContours(img, [imgpts[4:]], -1, (0, 0, 255), 3)
+    img = cv2.drawContours(img, [imgpts[4:-1]], -1, (0, 0, 255), 3)
 
     return img
 
@@ -160,7 +163,9 @@ def drawOverhead(img, rvecs, tvecs):
 
     x = tvecs[0][0]
     y = tvecs[2][0]
-    a = rvecs[1][0]
+    a = -rvecs[1][0]
+    x, y = (x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a))
+    # a = 0
 
     w = 8
     h = 8
@@ -182,14 +187,18 @@ def drawOverhead(img, rvecs, tvecs):
     )
 
     try:
-        overhead_points = list(map(lambda p: [p[0] + 100, p[1] + 100], overhead_points))
+        overhead_points = list(map(lambda p: [p[0] * 5 + 100, p[1] * 5 + 100], overhead_points))
+        overhead_points = list(map(lambda p: tuple(map(int, p)), overhead_points))
     except TypeError as e:
         print(e)
 
     print('hi')
-    for l in overhead_lines:
-        print(tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]))
-        img = cv2.line(img, tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]), (0, 127, 255), 3)
+    try:
+        for l in overhead_lines:
+            print(tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]))
+            img = cv2.line(img, tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]), (0, 127, 255), 3)
+    except BaseException as e:
+        print(e)
 
     return img
 
@@ -204,7 +213,7 @@ def minBoundRect(img, contour):
 
 # get minimum bounding quadrilateral
 def minBoundQuad(img, contour):
-    epsilon = 0.03 * cv2.arcLength(contour, True)
+    epsilon = 0.05 * cv2.arcLength(contour, True)
     approx = cv2.approxPolyDP(contour, epsilon, True)
     cv2.drawContours(img, [approx], 0, (255, 255, 255), 3)
     return approx
@@ -229,14 +238,14 @@ def sortBox(box):
 
 
 # main method that runs everything
-def viewReflTape(frame):
+def viewReflTape(driver, frame):
     # frame = shared_frame.getFrame()
 
     height, width, channels = frame.shape
     frame = undistort(frame, width, height)
 
     center = (int(width / 2), int(height / 2))
-    cv2.circle(frame, (center), 7, (255, 255, 255), 2)
+    # cv2.circle(frame, (center), 7, (255, 255, 255), 2)
 
     blurredframe = cv2.blur(frame, (5, 5))
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)
@@ -246,6 +255,8 @@ def viewReflTape(frame):
     filteredContours = list(filter(lambda contour: blobMin <= cv2.contourArea(contour) <= blobMax, contours))
     ordered = sorted(filteredContours, key=lambda contour: contour[0][0][0])
 
+    cv2.line(frame, (320, 0), (320, 480), (127, 127, 127), 2)
+
     if len(ordered) >= 2:
         try:
             currPair = TapePairs(ordered, center)
@@ -253,11 +264,11 @@ def viewReflTape(frame):
 
             contour0 = c0[0]
             centroid0 = c0[1]
-            box0 = minBoundQuad(frame, contour0)
+            box0 = minBoundQuad(driver, contour0)
 
             contour1 = c1[0]
             centroid1 = c1[1]
-            box1 = minBoundQuad(frame, contour1)
+            box1 = minBoundQuad(driver, contour1)
 
             pbox0 = sortBox(box0)
             pbox1 = sortBox(box1)
@@ -280,42 +291,43 @@ def viewReflTape(frame):
                 indicatorLength = 1000
 
             # visual feedback
-            cv2.line(frame, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
+            cv2.line(driver, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
                      indicatorColor, 25)
-            cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
+            cv2.circle(driver, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
             success, rotation_vector, translation_vector = cv2.solvePnP(object_points, image_points, mtx, dist)
 
             # print("Rotational Vector: \n{}".format(rotation_vector))
             # print("Translation Vector: \n{}".format(translation_vector))
 
-            cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), -1)
+            cv2.line(driver, (pairCentroid[0], 0), (pairCentroid[0], 480), (255, 255, 255), 2)
 
-            frame = drawCube(frame, rotation_vector, translation_vector)
-            frame = drawOverhead(frame, rotation_vector, translation_vector)
-            return frame
+            frame = drawCube(driver, rotation_vector, translation_vector)
+            frame = drawOverhead(driver, rotation_vector, translation_vector)
+
+            return driver
 
         # return unmodified frame
         except TypeError as e:
             # print(e)
-            return frame
+            return driver
 
         except AssertionError as e:
             # print(e)
-            return frame
+            return driver
 
-    return frame
+    return driver
 
-
-cap = cv2.VideoCapture(1)
-
-while True:
-    ret, frame = cap.read()
-    if ret:
-        processed = viewReflTape(frame)
-        cv2.imshow(str(processed.shape), processed)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
+#
+# cap = cv2.VideoCapture(1)
+#
+# while True:
+#     ret, frame = cap.read()
+#     if ret:
+#         processed = viewReflTape(frame)
+#         cv2.imshow(str(processed.shape), processed)
+#
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+#
+# cap.release()
+# cv2.destroyAllWindows()

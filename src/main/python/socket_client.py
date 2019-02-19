@@ -47,14 +47,12 @@
 #     except Exception as e:
 #         traceback.print_exc()
 
-import socket
-import sys
-import cv2
 import pickle
-import numpy as np
+import socket
 import struct  ## new
-import zlib
 import traceback
+
+import cv2
 
 
 class SocketClient:
@@ -69,7 +67,7 @@ class SocketClient:
 
         self.data = b""
         self.payload_size = struct.calcsize(">L")
-        print("self.payload_size: {}".format(self.payload_size))
+        # print("self.payload_size: {}".format(self.payload_size))
 
     def run(self):
         while True:

@@ -1,12 +1,9 @@
-import traceback
-
-import cv2
-import io
+import pickle
 import socket
 import struct
-import time
-import pickle
-import zlib
+import traceback
+
+from cv_utils.viewthreads.overhead import *
 
 
 class SocketServer:
@@ -31,11 +28,11 @@ class SocketServer:
                 else:
                     ret, frame = cam.read()
                 result, frame = cv2.imencode('.jpg', frame, self.encode_param)
-                #    data = zlib.compress(pickle.dumps(frame, 0))
+                # TODO FIGURE OUT BETTER WAY MY DUDE
                 data = pickle.dumps(frame, 0)
                 size = len(data)
 
-                print("{}: {}".format(img_counter, size))
+                # print("{}: {}".format(img_counter, size))
                 self.conn.sendall(struct.pack(">L", size) + data)
 
                 img_counter += 1
