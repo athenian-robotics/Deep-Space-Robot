@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Spark;
+import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
@@ -39,8 +41,7 @@ public class RobotMap {
 
   //Wrist
   public static WPI_TalonSRX wristMotor = new WPI_TalonSRX(6); // TODO set based off of CAN id
-  public static DigitalInput wristLowerLimit = new DigitalInput(4); // TODO set based off of robot wiring
-  public static DigitalInput wristUpperLimit = new DigitalInput(3); // TODO set based off of robot wiring
+  public static InvertedDigitalInput wristUpperLimit = new InvertedDigitalInput(3); // TODO set based off of robot wiring
   public static Encoder wristEncoder = new Encoder(7, 6, true); // TODO set based off of robot wiring
 
   //Hatch Subsystem
@@ -52,9 +53,8 @@ public class RobotMap {
 
   public static AHRS gyro = Robot.gyro;
 
-  // CONSTANTS
-
-
+  //Led status
+  public static Spark statusLeds = new Spark(0);
 
   public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kReverse;
   public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kForward;

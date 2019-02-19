@@ -24,7 +24,7 @@ public class TimedClimb extends Command {
     @Override
     public void initialize(){
         timeStarted = false;
-        isFinished = !OI.fightStickR3.get();
+        isFinished = (!OI.fightStickL3.get() || !OI.fightStickR3.get());
         if (isFinished) cancel();
     }
 
