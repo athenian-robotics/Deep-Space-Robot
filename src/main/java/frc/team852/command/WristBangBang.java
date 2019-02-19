@@ -22,7 +22,7 @@ public class WristBangBang extends Command {
     @Override
     protected void execute() {
         if(!OI.fightStickLB.get()){
-            if(OI.POVDown.get() && wrist.canMoveUp()){
+            if(OI.POVDown.get()){
                 wrist.setSpeed(0.3);
             }
             else if(OI.POVUp.get()){
