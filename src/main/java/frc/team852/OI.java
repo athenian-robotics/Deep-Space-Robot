@@ -93,6 +93,7 @@ public class OI {
     fightStickLB.whileHeld(new ElevatorMoveBangBang());
     fightStickRB.whileHeld(new ElevatorMove());
     fightStickY.whenPressed(new OutputHatch());
+    fightStickB.whenPressed(new TimedClimb());
 
   }
 

@@ -3,6 +3,7 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.lib.utils.Shuffle;
@@ -25,7 +26,7 @@ public class DriveChangeable extends Command {
   private static final Shuffle sMaxDecelFast = new Shuffle(DriveChangeable.class, "maxDecelFast", 2);
   private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 1.5);
   private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 2);
-  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 1);
+  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 0.5);
   private static final Shuffle sElevatorScale = new Shuffle(DriveChangeable.class, "elevatorScale", 1);
 
   public DriveChangeable() {
@@ -74,7 +75,10 @@ public class DriveChangeable extends Command {
         multiplyBy = xbox.getTriggerAxis(GenericHID.Hand.kRight);
       arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
-      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight));
+      squareInputs = OI.xboxStart.get();
+      if(squareInputs)
+        System.out.println("SQUARING INPUTS!");
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), squareInputs);
     }
   }
 
@@ -86,10 +90,10 @@ public class DriveChangeable extends Command {
     double deltaTime = (currTime - lastTime) / 1000d;
     lastTime = currTime;
 
-    if (squareInputs) {
-      this.xSpeed = Math.copySign(this.xSpeed * this.xSpeed, this.xSpeed);
-      this.zRotation = Math.copySign(this.zRotation * this.zRotation, this.zRotation);
-    }
+//    if (squareInputs) {
+//      this.xSpeed = Math.copySign(this.xSpeed * this.xSpeed, this.xSpeed);
+//      this.zRotation = Math.copySign(this.zRotation * this.zRotation, this.zRotation);
+//    }
 
     double xSpeedError = xSpeed - this.xSpeed;
     double zRotationError = zRotation - this.zRotation;
@@ -133,7 +137,7 @@ public class DriveChangeable extends Command {
     }
     */
 
-    drive.arcadeDrive(-this.zRotation, this.xSpeed, false);
+    drive.arcadeDrive(-limit(this.zRotation, 0.5), this.xSpeed, squareInputs);
   }
 
   public void arcadeDrive(double zRotation, double xSpeed) {
@@ -149,33 +153,12 @@ public class DriveChangeable extends Command {
     return 0.0;
   }
 
-  private double smooth(double input){
-    //See: https://www.desmos.com/calculator/h0noo6swsh
-    input = limit(input);
-
-    if(input == 0){
-      return 0.0;
+  protected double limit(double value, double limit) {
+    if (value > limit) {
+      return limit;
     }
-    if(input<=0.4){
-      return Math.cbrt(input)*0.678604;
-    }
-    else if(input<=0.6){
-      return 0.5;
-    }
-    else if(input<=0.85){
-      return (double)(1/3)*Math.tan(input+0.4)-0.0191359;
-    }
-    else{
-      return 1.0;
-    }
-  }
-
-  protected double limit(double value) {
-    if (value > 1.0) {
-      return 1.0;
-    }
-    if (value <= 0) {
-      return 0.0;
+    if (value < limit * -1.0) {
+      return limit * -1.0;
     }
     return value;
   }

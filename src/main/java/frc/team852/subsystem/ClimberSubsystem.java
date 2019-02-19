@@ -16,6 +16,7 @@ public class ClimberSubsystem extends Subsystem {
   public ClimberSubsystem() {
     super("Climber"); // TODO tune
     climberMotor = RobotMap.climberMotor;
+    climberMotor.setInverted(true);
     pogo = RobotMap.pogoBoi;
   }
 
