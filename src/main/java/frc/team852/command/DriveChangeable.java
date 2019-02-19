@@ -27,6 +27,7 @@ public class DriveChangeable extends Command {
   private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 1.5);
   private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 2);
   private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 0.5);
+  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 0.5);
   private static final Shuffle sElevatorScale = new Shuffle(DriveChangeable.class, "elevatorScale", 1);
 
   public DriveChangeable() {
@@ -84,7 +85,10 @@ public class DriveChangeable extends Command {
 
   // TODO migrate to a more sensible and general place
   public void arcadeDrive(double zRotation, double xSpeed, boolean squareInputs) {
-      zRotation *= .5;
+    boolean fastGear = (Robot.drivetrain.getGearing() == RobotMap.FAST);
+    double rotationMax = sRotationMax.get();
+    zRotation *= rotationMax + (1 - rotationMax) * Math.abs(xSpeed);
+    if (fastGear) zRotation = Math.copySign(Math.min(Math.abs(zRotation), Math.abs(xSpeed)), zRotation);
 
     double currTime = System.currentTimeMillis();
     double deltaTime = (currTime - lastTime) / 1000d;
@@ -99,10 +103,10 @@ public class DriveChangeable extends Command {
     double zRotationError = zRotation - this.zRotation;
 
     double maxAcceleration, maxDeceleration;
-    boolean fastGear = (Robot.drivetrain.getGearing() == RobotMap.FAST);
     maxAcceleration = Math.abs(fastGear ? sMaxAccelFast.get() : sMaxAccelSlow.get());
     maxDeceleration = Math.abs(fastGear ? sMaxDecelFast.get() : sMaxDecelSlow.get());
     double rotationAccelScale = Math.abs(sRotationAccelScale.get());
+    if (fastGear) ;
 
     this.xSpeed += Math.copySign(
             Math.max(
@@ -137,7 +141,7 @@ public class DriveChangeable extends Command {
     }
     */
 
-    drive.arcadeDrive(-limit(this.zRotation, 0.5), this.xSpeed, squareInputs);
+    drive.arcadeDrive(-this.zRotation, this.xSpeed, squareInputs);
   }
 
   public void arcadeDrive(double zRotation, double xSpeed) {

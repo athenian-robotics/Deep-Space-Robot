@@ -2,6 +2,7 @@ package frc.team852.command;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.subsystem.ClimberSubsystem;
 import frc.team852.subsystem.Drivetrain;
@@ -23,7 +24,8 @@ public class TimedClimb extends Command {
     @Override
     public void initialize(){
         timeStarted = false;
-        isFinished = false;
+        isFinished = !OI.fightStickR3.get();
+        if (isFinished) cancel();
     }
 
     @Override
