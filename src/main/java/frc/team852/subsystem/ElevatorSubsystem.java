@@ -25,8 +25,6 @@ public class ElevatorSubsystem extends PIDSubsystem {
     setPercentTolerance(1);
     getPIDController().setContinuous(false);
     lidar = RobotMap.elevatorLidar;
-
-
 //    setInputRange(INPUT_RANGE_MIN, INPUT_RANGE_MAX);
 
   }

@@ -1,9 +1,7 @@
 import math
 
 import numpy as np
-import sys
 
-sys.path.append('src/main/python')
 from cv_utils.stream import *
 
 
@@ -123,7 +121,7 @@ object_points = np.array([
 
 # Load previously saved data for camera calibration, undistortion
 # with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
-with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
+with np.load('calibration_matrix.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 
 
@@ -156,8 +154,43 @@ def drawCube(img, rvecs, tvecs):
 
     return img
 
+
 def drawOverhead(img, rvecs, tvecs):
-    img = cv2.line(img, (0, 0), (100, 100), (255, 255, 255), 10)
+    print('start')
+
+    x = tvecs[0][0]
+    y = tvecs[2][0]
+    a = rvecs[1][0]
+
+    w = 8
+    h = 8
+
+    print('xyawh')
+
+    overhead_points = ([-8, 0],
+                       [8, 0],
+                       [x + w / 2 * math.cos(a) - h / 2 * math.sin(a), y + w / 2 * math.sin(a) + h / 2 * math.cos(a)],
+                       [x - w / 2 * math.cos(a) - h / 2 * math.sin(a), y - w / 2 * math.sin(a) + h / 2 * math.cos(a)],
+                       [x - w / 2 * math.cos(a) + h / 2 * math.sin(a), y - w / 2 * math.sin(a) - h / 2 * math.cos(a)],
+                       [x + w / 2 * math.cos(a) + h / 2 * math.sin(a), y + w / 2 * math.sin(a) - h / 2 * math.cos(a)])
+    overhead_lines = (
+        (0, 1),
+        (2, 3),
+        (3, 4),
+        (4, 5),
+        (5, 2),
+    )
+
+    try:
+        overhead_points = list(map(lambda p: [p[0] + 100, p[1] + 100], overhead_points))
+    except TypeError as e:
+        print(e)
+
+    print('hi')
+    for l in overhead_lines:
+        print(tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]))
+        img = cv2.line(img, tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]), (0, 127, 255), 3)
+
     return img
 
 
@@ -249,18 +282,17 @@ def viewReflTape(frame):
             # visual feedback
             cv2.line(frame, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
                      indicatorColor, 25)
-
-            # draw centroid
             cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
             success, rotation_vector, translation_vector = cv2.solvePnP(object_points, image_points, mtx, dist)
-            cv2.line(frame, (center[0] - deadZone, height), (center[0] - deadZone, 0), indicatorColor, 5)
-            cv2.line(frame, (center[0] + deadZone, height), (center[0] + deadZone, 0), indicatorColor, 5)
 
             # print("Rotational Vector: \n{}".format(rotation_vector))
             # print("Translation Vector: \n{}".format(translation_vector))
 
             cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), -1)
-            return drawOverhead(frame, rotation_vector, translation_vector)
+
+            frame = drawCube(frame, rotation_vector, translation_vector)
+            frame = drawOverhead(frame, rotation_vector, translation_vector)
+            return frame
 
         # return unmodified frame
         except TypeError as e:
@@ -273,16 +305,17 @@ def viewReflTape(frame):
 
     return frame
 
-# cap = cv2.VideoCapture(1)
-#
-# while True:
-#     ret, frame = cap.read()
-#     if ret:
-#         processed = viewReflTape(frame)
-#         cv2.imshow(str(processed.shape), processed)
-#
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-#
-# cap.release()
-# cv2.destroyAllWindows()
+
+cap = cv2.VideoCapture(1)
+
+while True:
+    ret, frame = cap.read()
+    if ret:
+        processed = viewReflTape(frame)
+        cv2.imshow(str(processed.shape), processed)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
