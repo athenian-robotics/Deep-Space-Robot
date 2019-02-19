@@ -61,6 +61,7 @@ public class OI {
   public static FightStickDigitalButton fightStickY = new FightStickDigitalButton(fightStick, 4, FightStickInput.input.heavyPunch);
   public static FightStickDigitalButton fightStickLB = new FightStickDigitalButton(fightStick, 5, FightStickInput.input.lightPunch);
   public static FightStickDigitalButton fightStickRB = new FightStickDigitalButton(fightStick, 6, FightStickInput.input.R1);
+  public static FightStickDigitalButton fightStickR3 = new FightStickDigitalButton(fightStick, 10, FightStickInput.input.R3);
   public static FightStickAxisButton fightStickLT = new FightStickAxisButton(fightStick, 2, FightStickInput.input.lightKick);
   public static FightStickAxisButton fightStickRT = new FightStickAxisButton(fightStick, 3, FightStickInput.input.R2);
 
