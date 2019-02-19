@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+from threading import Thread
 
 from image_server import ImageServer
 from socket_server import SocketServer
@@ -17,8 +18,8 @@ class StreamServer(object):
 
     def start(self):
         server = SocketServer()
-        with ThreadPoolExecutor() as executor:
-            executor.submit(server.run, self.sf0, isSharedFrame=True)
+        thread = Thread(target=server.run, args=[self.sf0, True])
+        thread.start()
 
         # while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
         while self.sf0.notComplete() and self.sf1.notComplete():
