@@ -7,6 +7,7 @@ import frc.team852.lib.utils.Shuffle;
 
 public class DriveLogging extends Command {
     private static final Shuffle sGyroAngle = new Shuffle(DriveLogging.class, "GyroAngle", 0);
+    private static final Shuffle sGyroPitch = new Shuffle(DriveLogging.class, "GyroPitch", 0);
     private static final Shuffle sGyroFusedHeading = new Shuffle(DriveLogging.class, "GyroFusedHeading", 0);
 
     private static final Shuffle sGrayhillLeftRate = new Shuffle(DriveLogging.class, "Grayhill Left (Rate)", 0);
@@ -25,6 +26,7 @@ public class DriveLogging extends Command {
     @Override
     protected void execute() {
         sGyroAngle.set(Robot.gyro.getAngle());
+        sGyroPitch.set(Robot.gyro.getPitch());
         sGyroFusedHeading.set(Robot.gyro.getFusedHeading());
 
         sGrayhillLeftRate.set(RobotMap.leftGrayhill.getRate());

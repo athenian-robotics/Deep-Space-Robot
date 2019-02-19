@@ -156,10 +156,14 @@ def drawCube(img, rvecs, tvecs):
 
     return img
 
+def drawOverhead(img, rvecs, tvecs):
+    img = cv2.line(img, (0, 0), (100, 100), (255, 255, 255), 10)
+    return img
+
 
 # get minimum bounding rectangle
 def minBoundRect(img, contour):
-    rect = cv2.minAreaRect(contour)
+    rect = cv2.minAreaRect(contour)jkj
     box = cv2.boxPoints(rect)
     cv2.drawContours(img, [np.int0(box)], 0, (0, 255, 255), 2)
     return box
@@ -252,7 +256,7 @@ def viewReflTape(frame):
             # print("Translation Vector: \n{}".format(translation_vector))
 
             cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), -1)
-            return drawCube(frame, rotation_vector, translation_vector)
+            return drawOverhead(frame, rotation_vector, translation_vector)
 
         # return unmodified frame
         except TypeError as e:
