@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Spark;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
@@ -52,9 +53,8 @@ public class RobotMap {
 
   public static AHRS gyro = Robot.gyro;
 
-  // CONSTANTS
-
-
+  //Led status
+  public static Spark statusLeds = new Spark(0);
 
   public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kReverse;
   public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kForward;

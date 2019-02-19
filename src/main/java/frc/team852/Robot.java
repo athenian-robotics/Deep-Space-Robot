@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
 //  public static CargoSubsystem cargoSubsystem;
   public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
+  public static LedStrip statusLeds;
 
   //Sensors
   public static AHRS_PID gyro;
@@ -88,6 +89,7 @@ public class Robot extends TimedRobot {
 //    cargoSubsystem = new CargoSubsystem();
     hatchSubsystem = new HatchSubsystem();
     climberSubsystem = new ClimberSubsystem();
+    statusLeds = new LedStrip();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
