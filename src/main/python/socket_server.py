@@ -46,3 +46,8 @@ class SocketServer:
                 traceback.print_exc()
 
         cam.release()
+
+
+if __name__ == "__main__":
+    s = SocketServer()
+    s.run(cv2.VideoCapture(0))
