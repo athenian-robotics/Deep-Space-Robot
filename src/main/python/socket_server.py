@@ -13,27 +13,20 @@ class SocketServer:
     def __init__(self, host='0.0.0.0', port=8081):
         self.host = host
         self.port = port
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print('Socket created')
+        self.server_socket.bind((self.host, self.port))
+        print('Socket bind complete')
+        self.server_socket.listen(10)
+        print('Socket now listening')
+        self.conn, self.addr = self.server_socket.accept()
+        self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 
-    def run(self, cam, isSharedFrame=True):
-
-        def start():
-            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            print('Socket created')
-
-            self.server_socket.bind((self.host, self.port))
-            print('Socket bind complete')
-            self.server_socket.listen(10)
-            print('Socket now listening')
-
-            self.conn, self.addr = self.server_socket.accept()
-
-            self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
-
-        start()
+    def run(self, cam, is_shared_frame=False):
         img_counter = 0
         while True:
             try:
-                if isSharedFrame:
+                if is_shared_frame:
                     frame = cam.getFrame()
                 else:
                     ret, frame = cam.read()
