@@ -18,7 +18,7 @@ class StreamServer(object):
     def start(self):
         server = SocketServer()
         with ThreadPoolExecutor() as executor:
-            executor.submit(server.run, self.sf1)
+            executor.submit(server.run, self.sf0, isSharedFrame=True)
 
         # while self.sf0.notComplete() and self.sf1.notComplete() and self.sf2.notComplete():
         while self.sf0.notComplete() and self.sf1.notComplete():
