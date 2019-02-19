@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotStarted.set(true);
-
     try {
       elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
       Timer.delay(1);
