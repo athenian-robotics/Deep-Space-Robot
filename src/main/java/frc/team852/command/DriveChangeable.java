@@ -1,6 +1,7 @@
 package frc.team852.command;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.team852.OI;
@@ -14,8 +15,8 @@ import static frc.team852.OI.xbox;
 public class DriveChangeable extends Command {
 
   private Drivetrain dt = Robot.drivetrain;
-  private double oldRate, currentRate, maxSlowRate, maxFastRate;
   private DifferentialDrive drive = new DifferentialDrive(RobotMap.leftDrive, RobotMap.rightDrive);
+  private Servo tiltServo = RobotMap.tiltServo;
   private boolean squareInputs;
 
   private double lastTime;
@@ -81,6 +82,8 @@ public class DriveChangeable extends Command {
         System.out.println("SQUARING INPUTS!");
       arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), squareInputs);
     }
+
+    tiltServo.setAngle((xbox.getTriggerAxis(GenericHID.Hand.kRight)*30)+90);
   }
 
   // TODO migrate to a more sensible and general place
@@ -148,22 +151,4 @@ public class DriveChangeable extends Command {
     arcadeDrive(zRotation, xSpeed, false);
   }
 
-  private double getDecreasing(){
-    double finalRate = oldRate - currentRate;
-    if(finalRate > 0.05){
-      //TODO: implement scaling from 0-1
-      return finalRate/4000;
-    }
-    return 0.0;
-  }
-
-  protected double limit(double value, double limit) {
-    if (value > limit) {
-      return limit;
-    }
-    if (value < limit * -1.0) {
-      return limit * -1.0;
-    }
-    return value;
-  }
 }
