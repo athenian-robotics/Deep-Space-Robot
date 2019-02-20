@@ -19,6 +19,7 @@ public class Ball extends Command {
 		if(startTime + 100 > System.currentTimeMillis()) {
 			bs.grabBall();
 			done=true;
+			System.out.println("HERE-E2");
 			
 		}
 	}
@@ -27,6 +28,7 @@ public class Ball extends Command {
 	protected void initialize() {
 		startTime = System.currentTimeMillis();
 		bs.dropBall();
+		System.out.println("HERE-E1");
 	}
 	
 	@Override
