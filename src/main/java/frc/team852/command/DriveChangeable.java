@@ -27,8 +27,8 @@ public class DriveChangeable extends Command {
   private static final Shuffle sMaxDecelFast = new Shuffle(DriveChangeable.class, "maxDecelFast", 2);
   private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 1.5);
   private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 2);
-  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 10);
-  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 0.3);
+  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 3);
+  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 0.35);
   private static final Shuffle sElevatorScale = new Shuffle(DriveChangeable.class, "elevatorScale", 1);
 
   public DriveChangeable() {
