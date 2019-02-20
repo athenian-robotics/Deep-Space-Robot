@@ -23,10 +23,10 @@ public class ElevatorSubsystem extends PIDSubsystem {
     this.lowerLimit = RobotMap.elevatorLowerLimit;
     this.upperLimit = RobotMap.elevatorUpperLimit;
     setPercentTolerance(1);
+    setOutputRange(-1, 1);
     getPIDController().setContinuous(false);
+//    setInputRange(6, 200);
     lidar = RobotMap.elevatorLidar;
-//    setInputRange(INPUT_RANGE_MIN, INPUT_RANGE_MAX);
-
   }
 
   public static int getHeight() {

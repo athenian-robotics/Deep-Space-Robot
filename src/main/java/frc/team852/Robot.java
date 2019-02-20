@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
 
   //Data
   public static CVDataServer dataServer;
-  public static CVDataStore dataStore;
 
   //Other
   private static final String kDefaultAuto = "Default";
@@ -81,7 +80,11 @@ public class Robot extends TimedRobot {
 
     new RobotMap();
     dataServer = new CVDataServer();
-    dataStore = new CVDataStore();
+    try {
+      dataServer.start();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
     drivetrain = new Drivetrain();
     elevatorSubsystem = new ElevatorSubsystem();
@@ -100,7 +103,6 @@ public class Robot extends TimedRobot {
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
 
     //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
-    RobotMap.wristEncoder.reset();
 
     oi = new OI(); // Must be defined last
 
@@ -197,7 +199,6 @@ public class Robot extends TimedRobot {
     Shuffle.put(this, "Gyro pitch?", Robot.gyro.getPitch());
     Shuffle.put(this, "Gyro Roll?", Robot.gyro.getRoll());
     Shuffle.put(this, "Gyro Calibrating?", Robot.gyro.isCalibrating());
-    Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 
   /**

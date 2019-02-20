@@ -10,46 +10,31 @@ public class ElevatorMove extends Command {
   private static double elevatorSetpoint;
   private static int positionIndex;
 
-  private static final double posHatchLow = 10;
-  private static final double posHatchMid = 80;
-  private static final double posHatchHigh = 150;
-  private static final double[] posArray = {posHatchLow, posHatchMid, posHatchHigh};
-
   private static final Shuffle sSetpointBound = new Shuffle(ElevatorMove.class, "SetpointBound", 10);
 
-  public ElevatorMove(int pos) {
+  public ElevatorMove(ElevatorHeight height) {
     requires(Robot.elevatorSubsystem);
     elevator = Robot.elevatorSubsystem;
-    positionIndex = pos;
-    setPosition();
+    positionIndex = height.value;
+    elevator.setSpeed(height.value);
   }
 
   public ElevatorMove() {
-    this(0);
+    this(ElevatorHeight.FEED_STATION);
   }
 
   @Override
   protected void initialize() {
     elevator.getPIDController().reset();
     //if (!elevator.getPIDController().isEnabled())
-      elevator.enable();
+    elevator.enable();
     elevatorSetpoint = elevator.getSetpoint();
   }
 
   @Override
   protected void execute() {
-    elevator.enable();
-    /*if (!elevator.getPIDController().isEnabled())
+    if (!elevator.getPIDController().isEnabled())
       elevator.enable();
-
-    if (OI.POVUp.get()) {
-      positionIndex++;
-    }
-    else if (OI.POVDown.get()) {
-      positionIndex--;
-    }
-
-    setPosition();*/
   }
 
   @Override
@@ -58,13 +43,7 @@ public class ElevatorMove extends Command {
   }
 
   @Override
-  protected void interrupted(){
+  protected void interrupted() {
     end();
-  }
-
-  private void setPosition() {
-    positionIndex = Math.max(0, Math.min(posArray.length - 1, positionIndex));
-    elevatorSetpoint = posArray[positionIndex];
-    elevator.setSetpoint(elevatorSetpoint);
   }
 }

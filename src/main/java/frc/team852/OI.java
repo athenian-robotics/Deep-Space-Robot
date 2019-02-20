@@ -82,21 +82,13 @@ public class OI {
     fightStickLB.whileHeld(new ElevatorMoveBangBang());
     //fightStickRB.whileHeld(new ElevatorMove());
 
-    //Hatch 1
-//    fightStickX.whenPressed(new ElevatorMove(20));
-    //Hatch 2
-//    fightStickY.whenPressed(new ElevatorMove(00000));
-    //Hatch 3
-//    fightStickRB.whenPressed(new ElevatorMove(00000));
-
-    //Cargo Ship
-//    fightStickLT.whenActive(new ElevatorMove(00000));
-    //Cargo Rocket 1
-//    fightStickA.whenPressed(new ElevatorMove(000000));
-    //Cargo Rocket 2
-//    fightStickB.whenPressed(new ElevatorMove(000000));
-    //Cargo Rocket 3
-//    fightStickRT.whenActive(new ElevatorMove(00000));
+    fightStickX.whenPressed(new ElevatorMove(ElevatorHeight.HATCH_LOW));
+    fightStickY.whenPressed(new ElevatorMove(ElevatorHeight.HATCH_MID));
+    fightStickRB.whenPressed(new ElevatorMove(ElevatorHeight.HATCH_HIGH));
+    fightStickLT.whenActive(new ElevatorMove(ElevatorHeight.CARGO_SHIP));
+    fightStickA.whenPressed(new ElevatorMove(ElevatorHeight.CARGO_LOW));
+    fightStickB.whenPressed(new ElevatorMove(ElevatorHeight.CARGO_MID));
+    fightStickRT.whenActive(new ElevatorMove(ElevatorHeight.CARGO_HIGH));
 
     //Climb Hab 2
     fightStickOption.whenPressed(new TimedClimb());
