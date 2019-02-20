@@ -1,9 +1,7 @@
 import math
 
 import numpy as np
-import sys
 
-sys.path.append('src/main/python')
 from cv_utils.stream import *
 
 
@@ -122,8 +120,8 @@ object_points = np.array([
 ])
 
 # Load previously saved data for camera calibration, undistortion
-# with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
 with np.load('./src/main/python/cv_utils/calibration_matrix.npz') as X:
+    # with np.load('calibration_matrix.npz') as X:
     mtx, dist, _, _ = [X[i] for i in ('mtx', 'dist', 'rvecs', 'tvecs')]
 
 
@@ -143,21 +141,68 @@ def getDistance(p1, p2):
 
 # draw cube for visual effect on image
 def drawCube(img, rvecs, tvecs):
-    axis = np.float32([[0, 0, 0], [0, 3, 0], [3, 3, 0], [3, 0, 0], [0, 0, -3], [0, 3, -3], [3, 3, -3], [3, 0, -3]])
+    axis = np.float32([[-1.5, -1.5, 0], [-1.5, 1.5, 0], [1.5, 1.5, 0], [1.5, -1.5, 0],
+                       [-1.5, -1.5, -3], [-1.5, 1.5, -3], [1.5, 1.5, -3], [1.5, -1.5, -3], [0, 0, 0]])
     imgpts, jac = cv2.projectPoints(axis, rvecs, tvecs, mtx, dist)
     imgpts = np.int32(imgpts).reshape(-1, 2)
 
     # draw ground floor in green
     img = cv2.drawContours(img, [imgpts[:4]], -1, (0, 255, 0), -3)
+    # draw white dot for back center
+    img = cv2.circle(img, tuple(imgpts[-1]), 7, (0), -3)
     # draw pillars in blue color
     for i, j in zip(range(4), range(4, 8)): img = cv2.line(img, tuple(imgpts[i]), tuple(imgpts[j]), (255), 3)
     # draw top layer in red color
-    img = cv2.drawContours(img, [imgpts[4:]], -1, (0, 0, 255), 3)
+    img = cv2.drawContours(img, [imgpts[4:-1]], -1, (0, 0, 255), 3)
 
     return img
 
-def drawOverhead(img, rvecs, tvecs):
-    img = cv2.line(img, (0, 0), (100, 100), (255, 255, 255), 10)
+
+def drawOverhead(img, rvecs, tvecs, width, height):
+    print('start')
+
+    x = tvecs[0][0]
+    y = tvecs[2][0]
+    a = -rvecs[1][0]
+    x, y = (x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a))
+
+    x -= 3.5
+    y -= 1
+
+    w = 33
+    h = 37
+
+    print('xyawh')
+
+    overhead_points = ([-8, 0],
+                       [8, 0],
+                       [x + w / 2 * math.cos(a) - h / 2 * math.sin(a), y + w / 2 * math.sin(a) + h / 2 * math.cos(a)],
+                       [x - w / 2 * math.cos(a) - h / 2 * math.sin(a), y - w / 2 * math.sin(a) + h / 2 * math.cos(a)],
+                       [x - w / 2 * math.cos(a) + h / 2 * math.sin(a), y - w / 2 * math.sin(a) - h / 2 * math.cos(a)],
+                       [x + w / 2 * math.cos(a) + h / 2 * math.sin(a), y + w / 2 * math.sin(a) - h / 2 * math.cos(a)])
+    overhead_lines = (
+        (0, 1),
+        (2, 3),
+        (3, 4),
+        (4, 5),
+        (5, 2),
+    )
+
+    try:
+        print(width)
+        overhead_points = list(map(lambda p: [p[0] * 1.25 + width * 0.75, p[1] * 1.25 + height * 0.1], overhead_points))
+        overhead_points = list(map(lambda p: tuple(map(int, p)), overhead_points))
+    except TypeError as e:
+        print(e)
+
+    print('hi')
+    try:
+        for l in overhead_lines:
+            print(tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]))
+            img = cv2.line(img, tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]), (0, 127, 255), 3)
+    except BaseException as e:
+        print(e)
+
     return img
 
 
@@ -171,9 +216,10 @@ def minBoundRect(img, contour):
 
 # get minimum bounding quadrilateral
 def minBoundQuad(img, contour):
-    epsilon = 0.03 * cv2.arcLength(contour, True)
+    # contour = cv2.convexHull(contour)
+    epsilon = 0.04 * cv2.arcLength(contour, True)
     approx = cv2.approxPolyDP(contour, epsilon, True)
-    cv2.drawContours(img, [approx], 0, (255, 255, 255), 3)
+    # cv2.drawContours(img, [approx], 0, (255, 255, 255), 3)
     return approx
 
 
@@ -195,23 +241,30 @@ def sortBox(box):
     return bp
 
 
-# main method that runs everything
-def viewReflTape(frame):
-    # frame = shared_frame.getFrame()
+kernel = np.ones((3, 3))
 
+# main method that runs everything
+def viewReflTape(driver, frame):
     height, width, channels = frame.shape
     frame = undistort(frame, width, height)
 
     center = (int(width / 2), int(height / 2))
-    cv2.circle(frame, (center), 7, (255, 255, 255), 2)
+    # cv2.circle(frame, (center), 7, (255, 255, 255), 2)
 
-    blurredframe = cv2.blur(frame, (5, 5))
+    # blurring before contour
+    blurredframe = cv2.blur(frame, (3, 3))
+    # blurredframe = cv2.dilate(frame, kernel)
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)
-    colormask = cv2.inRange(hsv, low, high)
+
+    # colormask = cv2.inRange(hsv, low, high)
+    # colormask = cv2.morphologyEx(colormask, cv2.MORPH_CLOSE, kernel=kernel)
+    colormask = cv2.morphologyEx((cv2.inRange(hsv, low, high)), cv2.MORPH_CLOSE, kernel=kernel)
     contourmask, contours, hierarchy = cv2.findContours(colormask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     filteredContours = list(filter(lambda contour: blobMin <= cv2.contourArea(contour) <= blobMax, contours))
     ordered = sorted(filteredContours, key=lambda contour: contour[0][0][0])
+
+    cv2.line(driver, (width // 2, 0), (width // 2, height), (127, 127, 127), 2)
 
     if len(ordered) >= 2:
         try:
@@ -220,11 +273,11 @@ def viewReflTape(frame):
 
             contour0 = c0[0]
             centroid0 = c0[1]
-            box0 = minBoundQuad(frame, contour0)
+            box0 = minBoundQuad(driver, contour0)
 
             contour1 = c1[0]
             centroid1 = c1[1]
-            box1 = minBoundQuad(frame, contour1)
+            box1 = minBoundQuad(driver, contour1)
 
             pbox0 = sortBox(box0)
             pbox1 = sortBox(box1)
@@ -237,41 +290,38 @@ def viewReflTape(frame):
             pairCentroid = (int((centroid0[0] + centroid1[0]) / 2), int((centroid0[1] + centroid1[1]) / 2))
             distance = getDistance(centroid0, centroid1)
 
-            # TODO Translation distance?
-            indicatorLength = int((stopDistance - distance) * 1.2) if (stopDistance - distance >= 0) else 0
-            indicatorColor = (0, 255, 0)
-
-            # visual indicator
-            if indicatorLength <= 30:
-                indicatorColor = (0, 0, 255)
-                indicatorLength = 1000
+            # indicatorLength = int((stopDistance - distance) * 1.2) if (stopDistance - distance >= 0) else 0
+            # indicatorColor = (0, 255, 0)
+            #
+            # # visual indicator
+            # if indicatorLength <= 30:
+            #     indicatorColor = (0, 0, 255)
+            #     indicatorLength = 1000
 
             # visual feedback
-            cv2.line(frame, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
-                     indicatorColor, 25)
-
-            # draw centroid
-            cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
+            # cv2.line(driver, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
+            #          indicatorColor, 25)
+            cv2.circle(driver, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
             success, rotation_vector, translation_vector = cv2.solvePnP(object_points, image_points, mtx, dist)
-            cv2.line(frame, (center[0] - deadZone, height), (center[0] - deadZone, 0), indicatorColor, 5)
-            cv2.line(frame, (center[0] + deadZone, height), (center[0] + deadZone, 0), indicatorColor, 5)
 
             # print("Rotational Vector: \n{}".format(rotation_vector))
             # print("Translation Vector: \n{}".format(translation_vector))
 
-            cv2.circle(frame, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), -1)
-            return drawOverhead(frame, rotation_vector, translation_vector)
+            cv2.line(driver, (pairCentroid[0], 0), (pairCentroid[0], 480), (255, 255, 255), 2)
+
+            # driver = drawCube(driver, rotation_vector, translation_vector)
+            driver = drawOverhead(driver, rotation_vector, translation_vector, width, height)
+
+            return driver
 
         # return unmodified frame
         except TypeError as e:
-            # print(e)
-            return frame
+            return driver
 
         except AssertionError as e:
-            # print(e)
-            return frame
+            return driver
 
-    return frame
+    return driver
 
 # cap = cv2.VideoCapture(1)
 #

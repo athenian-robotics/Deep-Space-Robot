@@ -11,16 +11,10 @@ public class ElevatorMoveBangBang extends Command {
 
   private ElevatorSubsystem elevator;
   private WristSubsystem wrist;
-  private final int moveDist = 5; // TODO set on reception of robot and tuning of PID
-  private double elevatorSetpoint, oldElevatorSetpoint, wristSetpoint;
 
-  public static final Shuffle sHoldValue = new Shuffle(ElevatorSubsystem.class, "HoldValue", 0);
+  public static final Shuffle sHoldValue = new Shuffle(ElevatorSubsystem.class, "HoldValue", 0.04);
 
   public ElevatorMoveBangBang() {
-    this(Robot.elevatorSubsystem.getHeight());
-  }
-
-  public ElevatorMoveBangBang(int setpoint) {
     requires(Robot.elevatorSubsystem);
     requires(Robot.wristSubsystem);
     this.elevator = Robot.elevatorSubsystem;

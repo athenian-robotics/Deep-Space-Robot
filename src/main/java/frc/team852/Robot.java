@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team852.command.DriveLogging;
 import frc.team852.command.TrackPosition;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
@@ -33,6 +32,7 @@ public class Robot extends TimedRobot {
 //  public static CargoSubsystem cargoSubsystem;
   public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
+  public static LedStrip statusLeds;
 
   //Sensors
   public static AHRS_PID gyro;
@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotStarted.set(true);
-
     try {
       elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
       Timer.delay(1);
@@ -90,6 +89,7 @@ public class Robot extends TimedRobot {
 //    cargoSubsystem = new CargoSubsystem();
     hatchSubsystem = new HatchSubsystem();
     climberSubsystem = new ClimberSubsystem();
+    statusLeds = new LedStrip();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -183,7 +183,6 @@ public class Robot extends TimedRobot {
     robotStarted.set(true);
     RobotMap.gearbox.set(RobotMap.SLOW);
     Scheduler.getInstance().add(new TrackPosition());
-    Scheduler.getInstance().add(new DriveLogging());
   }
 
   /**
@@ -193,6 +192,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Make sure to cancel any autonomous stuff
     // Might not be needed as sandstorm etc
+    Shuffle.put(this, "Gyro Connected?", Robot.gyro.isConnected());
+    Shuffle.put(this, "Gyro yaw?", Robot.gyro.getYaw());
+    Shuffle.put(this, "Gyro pitch?", Robot.gyro.getPitch());
+    Shuffle.put(this, "Gyro Roll?", Robot.gyro.getRoll());
+    Shuffle.put(this, "Gyro Calibrating?", Robot.gyro.isCalibrating());
     Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 

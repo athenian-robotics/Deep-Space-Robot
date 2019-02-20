@@ -61,6 +61,10 @@ public class OI {
   public static FightStickDigitalButton fightStickY = new FightStickDigitalButton(fightStick, 4, FightStickInput.input.heavyPunch);
   public static FightStickDigitalButton fightStickLB = new FightStickDigitalButton(fightStick, 5, FightStickInput.input.lightPunch);
   public static FightStickDigitalButton fightStickRB = new FightStickDigitalButton(fightStick, 6, FightStickInput.input.R1);
+  public static FightStickDigitalButton fightStickShare = new FightStickDigitalButton(fightStick, 7, FightStickInput.input.share);
+  public static FightStickDigitalButton fightStickOption = new FightStickDigitalButton(fightStick, 8, FightStickInput.input.option);
+  public static FightStickDigitalButton fightStickL3 = new FightStickDigitalButton(fightStick, 9, FightStickInput.input.L3);
+  public static FightStickDigitalButton fightStickR3 = new FightStickDigitalButton(fightStick, 10, FightStickInput.input.R3);
   public static FightStickAxisButton fightStickLT = new FightStickAxisButton(fightStick, 2, FightStickInput.input.lightKick);
   public static FightStickAxisButton fightStickRT = new FightStickAxisButton(fightStick, 3, FightStickInput.input.R2);
 
@@ -70,28 +74,32 @@ public class OI {
 
   public OI() {
     // Only created once, init and execute are called when button is pressed/released
-    //new JoystickButton(stick1, 6).whenPressed(new ChangeDriveMode());
-    //  new JoystickButton(stick2, 6).whenPressed(new ChangeDriveMode());
 
     FieldPaths.genPaths();
-    xboxA.whenPressed(new DriveDistanceVelocity(4, 1));
-    // TODO Which buttons to use for ToggleGearbox and which for ChangeDriveMode?
-//    xboxBack.whenPressed(new ToggleGearbox());
-//    xboxStart.whenPressed(new ToggleGearbox());
     xboxLB.whenPressed(new ToggleGearbox(RobotMap.SLOW));
     xboxRB.whenPressed(new ToggleGearbox(RobotMap.FAST));
 
-    //xboxA.whenPressed(new DriveDistanceVelocity(2, 1));
-    xboxB.whenPressed(new WristSetup());
-    //xboxX.whenPressed(new DriveTimed());
-    //xboxY.whenPressed(new DriveTank());
-
-//    xboxY.whenPressed(new DriveDistance(157.48));
-//    xboxB.whenPressed(new DriveAngle(90));
-//    xboxX.whenPressed(new DriveAngle(-90));
-    //TODO change target
     fightStickLB.whileHeld(new ElevatorMoveBangBang());
-    fightStickY.whenPressed(new OutputHatch());
+    //fightStickRB.whileHeld(new ElevatorMove());
+
+    //Hatch 1
+//    fightStickX.whenPressed(new ElevatorMove(20));
+    //Hatch 2
+//    fightStickY.whenPressed(new ElevatorMove(00000));
+    //Hatch 3
+//    fightStickRB.whenPressed(new ElevatorMove(00000));
+
+    //Cargo Ship
+//    fightStickLT.whenActive(new ElevatorMove(00000));
+    //Cargo Rocket 1
+//    fightStickA.whenPressed(new ElevatorMove(000000));
+    //Cargo Rocket 2
+//    fightStickB.whenPressed(new ElevatorMove(000000));
+    //Cargo Rocket 3
+//    fightStickRT.whenActive(new ElevatorMove(00000));
+
+    //Climb Hab 2
+    fightStickOption.whenPressed(new TimedClimb());
 
   }
 

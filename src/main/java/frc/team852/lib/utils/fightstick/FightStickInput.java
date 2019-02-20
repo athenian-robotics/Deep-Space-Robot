@@ -17,8 +17,12 @@ public class FightStickInput {
     lightKick,
     medKick,
     heavyKick,
+    share,
+    option,
+    L3,
+    R3,
     R2,
-    R1
+    R1,
   }
 
   public static input getJoystickEnumValue(int povAngle) {
