@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.command.TrackPosition;
+import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
 import frc.team852.lib.utils.AHRS_PID;
 import frc.team852.lib.utils.SerialLidar;
@@ -29,9 +30,10 @@ public class Robot extends TimedRobot {
   public static ElevatorSubsystem elevatorSubsystem;
   public static WristSubsystem wristSubsystem;
 //  public static CargoSubsystem cargoSubsystem;
-  public static HatchSubsystem hatchSubsystem;
+  //public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
   public static LedStrip statusLeds;
+  public static BallSubsystem ballSubsystem;
 
   //Sensors
   public static AHRS_PID gyro;
@@ -39,6 +41,7 @@ public class Robot extends TimedRobot {
 
   //Data
   public static CVDataServer dataServer;
+  public static CVDataStore dataStore;
 
   //Other
   private static final String kDefaultAuto = "Default";
@@ -89,9 +92,10 @@ public class Robot extends TimedRobot {
     elevatorSubsystem = new ElevatorSubsystem();
     wristSubsystem = new WristSubsystem();
 //    cargoSubsystem = new CargoSubsystem();
-    hatchSubsystem = new HatchSubsystem();
+    //hatchSubsystem = new HatchSubsystem();
     climberSubsystem = new ClimberSubsystem();
     statusLeds = new LedStrip();
+    ballSubsystem = new BallSubsystem();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -100,6 +104,9 @@ public class Robot extends TimedRobot {
 
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
+
+    //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
+    //RobotMap.wristEncoder.reset();
 
     oi = new OI(); // Must be defined last
 
@@ -196,6 +203,7 @@ public class Robot extends TimedRobot {
     Shuffle.put(this, "Gyro pitch?", Robot.gyro.getPitch());
     Shuffle.put(this, "Gyro Roll?", Robot.gyro.getRoll());
     Shuffle.put(this, "Gyro Calibrating?", Robot.gyro.isCalibrating());
+    //Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 
   /**
