@@ -99,6 +99,7 @@ public class Robot extends TimedRobot {
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
 
+    //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
     RobotMap.wristEncoder.reset();
 
     oi = new OI(); // Must be defined last
