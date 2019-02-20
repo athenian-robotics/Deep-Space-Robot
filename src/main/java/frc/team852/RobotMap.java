@@ -55,6 +55,8 @@ public class RobotMap {
 
   //Led status
   public static Spark statusLeds = new Spark(0);
+  public static DigitalInput inHabRange = new DigitalInput(2);
+  public static DigitalInput inStationRange = new DigitalInput(3);
 
   public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kReverse;
   public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kForward;
