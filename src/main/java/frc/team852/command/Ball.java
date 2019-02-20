@@ -7,21 +7,30 @@ import frc.team852.subsystem.BallSubsystem;
 
 public class Ball extends Command {
 	private final BallSubsystem bs;
-	private boolean ballIn = false;
+	private long startTime;
+	private boolean done = false;
 	
 	public Ball() {
 		requires(Robot.ballSubsystem);
 		bs = Robot.ballSubsystem;
 	}
+	@Override
+	protected void execute(){
+		if(startTime + 100 > System.currentTimeMillis()) {
+			bs.grabBall();
+			done=true;
+			
+		}
+	}
 	
 	@Override
 	protected void initialize() {
+		startTime = System.currentTimeMillis();
 		bs.dropBall();
-		bs.grabBall();
 	}
 	
 	@Override
 	protected boolean isFinished() {
-		return true;
+		return done;
 	}
 }
