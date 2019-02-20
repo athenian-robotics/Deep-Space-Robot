@@ -9,6 +9,8 @@ public class WristBangBang extends Command {
 
     private WristSubsystem wrist;
 
+    public static boolean isUp = true;
+
     public WristBangBang(){
         requires(Robot.wristSubsystem);
         wrist = Robot.wristSubsystem;
@@ -23,10 +25,12 @@ public class WristBangBang extends Command {
     protected void execute() {
         if(!OI.fightStickLB.get()){
             if(OI.POVDown.get()){
-                wrist.setSpeed(0.3);
+                wrist.setSpeed(-0.3);
+                isUp = true;
             }
             else if(OI.POVUp.get()){
-                wrist.setSpeed(-0.3);
+                wrist.setSpeed(0.3);
+                isUp = false;
             }
         }
     }

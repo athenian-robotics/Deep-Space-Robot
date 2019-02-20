@@ -23,17 +23,20 @@ public class StatusLedIndication extends Command {
 
     @Override
     protected void execute() {
-        if(inHabRange.get()){
-            statusLeds.setColor(LedStrip.LedColors.GOLD_STROBE);
-        }
-        else if(inStationRange.get()){
-            statusLeds.setColor(LedStrip.LedColors.WHITE_STROBE);
+        if(!RobotMap.ledError) {
+            if (inHabRange.get()) {
+                statusLeds.setColor(LedStrip.LedColors.GOLD_STROBE);
+            } else if (inStationRange.get()) {
+                statusLeds.setColor(LedStrip.LedColors.WHITE_STROBE);
+            } else {
+                if (sIsBlueTeam.getB())
+                    statusLeds.setColor(LedStrip.LedColors.BLUE);
+                else
+                    statusLeds.setColor(LedStrip.LedColors.DARK_RED);
+            }
         }
         else{
-            if(sIsBlueTeam.getB())
-              statusLeds.setColor(LedStrip.LedColors.BLUE);
-            else
-              statusLeds.setColor(LedStrip.LedColors.RED);
+            statusLeds.setColor(LedStrip.LedColors.RED_STROBE);
         }
     }
 
