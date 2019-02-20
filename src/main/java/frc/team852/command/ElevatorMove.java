@@ -7,16 +7,14 @@ import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorMove extends Command {
   private final ElevatorSubsystem elevator;
-  private static double elevatorSetpoint;
-  private static int positionIndex;
+  private static int heightVal, oldSetpoint;
 
   private static final Shuffle sSetpointBound = new Shuffle(ElevatorMove.class, "SetpointBound", 10);
 
   public ElevatorMove(ElevatorHeight height) {
     requires(Robot.elevatorSubsystem);
     elevator = Robot.elevatorSubsystem;
-    positionIndex = height.value;
-    elevator.setSpeed(height.value);
+    heightVal = height.value;
   }
 
   public ElevatorMove() {
@@ -26,9 +24,9 @@ public class ElevatorMove extends Command {
   @Override
   protected void initialize() {
     elevator.getPIDController().reset();
-    //if (!elevator.getPIDController().isEnabled())
     elevator.enable();
-    elevatorSetpoint = elevator.getSetpoint();
+    oldSetpoint = (int) elevator.getSetpoint();
+    elevator.setSetpoint(heightVal);
   }
 
   @Override
@@ -44,6 +42,7 @@ public class ElevatorMove extends Command {
 
   @Override
   protected void interrupted() {
+    elevator.setSetpoint(oldSetpoint);
     end();
   }
 }
