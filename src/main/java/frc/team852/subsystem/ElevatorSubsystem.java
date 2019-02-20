@@ -48,28 +48,16 @@ public class ElevatorSubsystem extends PIDSubsystem {
 
   @Override
   protected void usePIDOutput(double output) {
-    if (output > 0 && upperLimit.get()) {
-      System.out.println("[!!] Elevator on upper limit.");
-      output = 0;
-    } else if (output < 0 && lowerLimit.get()) {
-      System.out.println("[!!] Elevator on lower limit.");
-      output = 0;
-    }
     Shuffle.put(this, "motorPower", output);
     motor.set(output);
-
   }
 
-  public boolean canMoveUp() {
-    return !upperLimit.get();
+  public boolean onUpperLimit() {
+    return upperLimit.get();
   }
 
-  public boolean canMoveDown() {
-    return !lowerLimit.get();
-  }
-
-  public boolean canMove() {
-    return lowerLimit.get() || upperLimit.get();
+  public boolean onLowerLimit() {
+    return lowerLimit.get();
   }
 
   @Override

@@ -20,8 +20,8 @@ public class ElevatorMove extends Command {
   public ElevatorMove(int pos) {
     requires(Robot.elevatorSubsystem);
     elevator = Robot.elevatorSubsystem;
-    //positionIndex = pos;
-    //setPosition();
+    positionIndex = pos;
+    setPosition();
   }
 
   public ElevatorMove() {
@@ -55,6 +55,11 @@ public class ElevatorMove extends Command {
   @Override
   protected boolean isFinished() {
     return false;  // Will be automatically canceled by whenHeld() in OI
+  }
+
+  @Override
+  protected void interrupted(){
+    end();
   }
 
   private void setPosition() {

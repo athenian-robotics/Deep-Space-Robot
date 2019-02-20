@@ -34,9 +34,9 @@ public class ElevatorMoveBangBang extends Command {
     // Check if under user control
     if (OI.fightStickLB.get()) {
       if (OI.POVUp.get()) {
-        elevator.setSpeed(0.3);
+        elevator.setSpeed(0.5);
       } else if (OI.POVDown.get()) {
-        elevator.setSpeed(-0.1);
+        elevator.setSpeed(-0.3);
       } else {
         elevator.setSpeed(sHoldValue.get());
       }
