@@ -33,7 +33,6 @@ public class ElevatorMove extends Command {
   protected void execute() {
     if (!elevator.getPIDController().isEnabled())
       elevator.enable();
-    System.out.println(heightVal);
   }
 
   @Override

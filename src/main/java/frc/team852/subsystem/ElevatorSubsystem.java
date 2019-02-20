@@ -3,6 +3,7 @@ package frc.team852.subsystem;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import frc.team852.OI;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
 import frc.team852.command.ElevatorMove;
@@ -55,7 +56,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
       output = 0.04;
     }
 
-    RobotMap.ledError = (getCurrentCommand().getClass().equals(ElevatorMove.class) && output > 0 && WristBangBang.isUp);
+    RobotMap.ledError = (OI.POVUp.get() && output > 0 && WristBangBang.isUp);
     if (RobotMap.ledError)
       output = 0.04;
 
