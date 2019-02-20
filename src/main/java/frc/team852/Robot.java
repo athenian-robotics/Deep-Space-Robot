@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.command.TrackPosition;
-import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
 import frc.team852.lib.utils.AHRS_PID;
 import frc.team852.lib.utils.SerialLidar;
@@ -101,8 +100,6 @@ public class Robot extends TimedRobot {
 
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
-
-    //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
 
     oi = new OI(); // Must be defined last
 

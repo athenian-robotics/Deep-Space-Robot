@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.StatusLedIndication;
+import frc.team852.lib.utils.Shuffle;
 
 public class LedStrip extends Subsystem {
 
@@ -58,7 +59,8 @@ public class LedStrip extends Subsystem {
 
     public void setColor(LedColors color) {
         statusLeds.setSpeed(color.getColorValue());
-        System.out.println("Arm Led's set to " + color.name());
+        //System.out.println("Arm Led's set to " + color.name());
+        Shuffle.put(this, "color", color.name());
     }
 
     public void resetLeds() {

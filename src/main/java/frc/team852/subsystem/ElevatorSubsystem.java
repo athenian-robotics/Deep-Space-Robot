@@ -16,17 +16,17 @@ public class ElevatorSubsystem extends PIDSubsystem {
   private final SerialLidar lidar;
 
   public ElevatorSubsystem() {
-    super("Elevator", 0, 0, 0); // TODO tune
+    super("Elevator", 0.01, 0.00005, 0.0025); // TODO tune
 //    disable();
     motor = RobotMap.elevatorMotor;
     motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     this.lowerLimit = RobotMap.elevatorLowerLimit;
     this.upperLimit = RobotMap.elevatorUpperLimit;
     setPercentTolerance(1);
-    setOutputRange(-1, 1);
     getPIDController().setContinuous(false);
-//    setInputRange(6, 200);
     lidar = RobotMap.elevatorLidar;
+    setOutputRange(-0.4, 0.75);
+
   }
 
   public static int getHeight() {
@@ -48,6 +48,13 @@ public class ElevatorSubsystem extends PIDSubsystem {
 
   @Override
   protected void usePIDOutput(double output) {
+//    if (output > 0 && upperLimit.get()) {
+//      System.out.println("[!!] Elevator on upper limit.");
+//      output = 0;
+//    } else if (output < 0 && lowerLimit.get()) {
+//      System.out.println("[!!] Elevator on lower limit.");
+//      output = 0;
+//    }
     Shuffle.put(this, "motorPower", output);
     motor.set(output);
   }

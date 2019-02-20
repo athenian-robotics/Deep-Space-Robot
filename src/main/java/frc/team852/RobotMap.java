@@ -3,7 +3,6 @@ package frc.team852;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.*;
-import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
 import frc.team852.lib.utils.SparkMaxGroup;
@@ -35,7 +34,6 @@ public class RobotMap {
 
   //Wrist
   public static WPI_TalonSRX wristMotor = new WPI_TalonSRX(6); // TODO set based off of CAN id
-  public static InvertedDigitalInput wristUpperLimit = new InvertedDigitalInput(3); // TODO set based off of robot wiring
 
   //Hatch Subsystem
   public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(3, 2);

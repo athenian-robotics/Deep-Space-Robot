@@ -2,7 +2,6 @@ package frc.team852.subsystem;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team852.RobotMap;
 import frc.team852.command.WristBangBang;
@@ -10,12 +9,10 @@ import frc.team852.command.WristBangBang;
 public class WristSubsystem extends Subsystem {
 
   private final WPI_TalonSRX motor;
-  private DigitalInput upperLimit;
 
   public WristSubsystem() {
     super("Wrist"); // TODO Tune
     this.motor = RobotMap.wristMotor;
-    this.upperLimit = RobotMap.wristUpperLimit;
     this.motor.setNeutralMode(NeutralMode.Brake);
 //    this.setInputRange(ENCODER_RANGE_MIN, ENCODER_RANGE_MAX);
   }
