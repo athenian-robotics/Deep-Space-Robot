@@ -24,6 +24,7 @@ class StreamServer(object):
         while self.sf0.notComplete() and self.sf1.notComplete():
             # camera looking at reflective tape
             self.sf2.setFrame(viewReflTape(self.sf0.getFrame(), self.sf1.getFrame()))
+            # self.sf2.setFrame(viewReflTape(self.sf1.getFrame(), self.sf1.getFrame()))
 
 """
 The Process:
