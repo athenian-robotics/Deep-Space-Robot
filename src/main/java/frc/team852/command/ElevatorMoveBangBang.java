@@ -53,6 +53,7 @@ public class ElevatorMoveBangBang extends Command {
 
   @Override
   protected void end() {
+    RobotMap.ledError = false;
     elevator.getPIDController().reset();
   }
 
