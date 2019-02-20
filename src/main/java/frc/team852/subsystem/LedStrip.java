@@ -16,7 +16,7 @@ public class LedStrip extends Subsystem {
         GREEN,
         ORANGE,
         BLUE,
-        RED,
+        DARK_RED,
         RAINBOW,
         RED_STROBE,
         BLUE_STROBE,
@@ -35,8 +35,8 @@ public class LedStrip extends Subsystem {
                     return 0.65;
                 case BLUE:
                     return 0.85;
-                case RED:
-                    return 0.61;
+                case DARK_RED:
+                    return 0.59;
                 case RAINBOW:
                     return -0.99;
                 case RED_STROBE:

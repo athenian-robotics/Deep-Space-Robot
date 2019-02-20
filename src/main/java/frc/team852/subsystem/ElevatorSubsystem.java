@@ -55,9 +55,9 @@ public class ElevatorSubsystem extends PIDSubsystem {
       output = 0.04;
     }
 
-    if (output > 0 && !WristBangBang.isUp) {
+    RobotMap.ledError = (output > 0 && !WristBangBang.isUp);
+    if (RobotMap.ledError)
       output = 0.04;
-    }
 
     Shuffle.put(this, "motorPower", output);
     motor.set(output);

@@ -57,6 +57,7 @@ public class RobotMap {
   public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kReverse;
   public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kForward;
   public static Drivetrain.DriveMode currentDriveMode = Drivetrain.DriveMode.GTA;
+  public static boolean ledError = false;
 
   public RobotMap() {
     // TODO calculate these values (m/s) from gearing, check empirically
