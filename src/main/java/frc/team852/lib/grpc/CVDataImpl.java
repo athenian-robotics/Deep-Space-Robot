@@ -14,8 +14,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
-  private CVDataStore store = Robot.dataStore;
   private Map<Class, ConcurrentLinkedQueue<GenericListener>> allCallbacks = new ConcurrentHashMap<>();
+
+  @Override
+  public void sendCameraPose(CameraPose request, StreamObserver<Empty> responseObserver) {
+    Empty reply = Empty.newBuilder().build();
+    System.out.print(request);
+    allCallbacks.computeIfAbsent(CameraPose.class, k -> new ConcurrentLinkedQueue<>());
+    try {
+      allCallbacks.get(CameraPoseListener.class).forEach(c -> ((CameraPoseListener) c).onNewData(request));
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("STOP BEING A POSER, FIX YOUR CALLBACK");
+    }
+    responseObserver.onNext(reply);
+    responseObserver.onCompleted();
+  }
+
+  public synchronized void registerCallback(GenericListener listener) {
+    if (listener.msgType == null) {
+      throw new RuntimeException("Listener's message type is null");
+    }
+    allCallbacks.computeIfAbsent(listener.msgType, k -> new ConcurrentLinkedQueue<>());
+    allCallbacks.get(listener.msgType).add(listener);
+  }
 
 //  @Override
 //  public void sendBall(Ball request, StreamObserver<Empty> responseObserver) {
@@ -97,29 +119,4 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
 //    responseObserver.onNext(reply);
 //    responseObserver.onCompleted();
 //  }
-
-  @Override
-  public void sendCameraPose(CameraPose request, StreamObserver<Empty> responseObserver) {
-    Empty reply = Empty.newBuilder().build();
-    System.out.print(request);
-    this.store.cameraPoseRef.set(request);
-    allCallbacks.computeIfAbsent(CameraPose.class, k -> new ConcurrentLinkedQueue<>());
-    try {
-      allCallbacks.get(CameraPoseListener.class).forEach(c -> ((CameraPoseListener) c).onNewData(request));
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("STOP BEING A POSER, FIX YOUR CALLBACK");
-    }
-    responseObserver.onNext(reply);
-    responseObserver.onCompleted();
-  }
-
-
-  public synchronized void registerCallback(GenericListener listener) {
-    if (listener.msgType == null) {
-      throw new RuntimeException("Listener's message type is null");
-    }
-    allCallbacks.computeIfAbsent(listener.msgType, k -> new ConcurrentLinkedQueue<>());
-    allCallbacks.get(listener.msgType).add(listener);
-  }
 }
