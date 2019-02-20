@@ -159,8 +159,6 @@ def drawCube(img, rvecs, tvecs):
 
 
 def drawOverhead(img, rvecs, tvecs, width, height):
-    print('start')
-
     x = tvecs[0][0]
     y = tvecs[2][0]
     a = -rvecs[1][0]
@@ -171,8 +169,6 @@ def drawOverhead(img, rvecs, tvecs, width, height):
 
     w = 33
     h = 37
-
-    print('xyawh')
 
     overhead_points = ([-8, 0],
                        [8, 0],
@@ -189,16 +185,13 @@ def drawOverhead(img, rvecs, tvecs, width, height):
     )
 
     try:
-        print(width)
         overhead_points = list(map(lambda p: [p[0] * 1.25 + width * 0.75, p[1] * 1.25 + height * 0.1], overhead_points))
         overhead_points = list(map(lambda p: tuple(map(int, p)), overhead_points))
     except TypeError as e:
         print(e)
 
-    print('hi')
     try:
         for l in overhead_lines:
-            print(tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]))
             img = cv2.line(img, tuple(overhead_points[l[0]]), tuple(overhead_points[l[1]]), (0, 127, 255), 3)
     except BaseException as e:
         print(e)
@@ -248,27 +241,24 @@ def viewReflTape(driver, frame):
     height, width, channels = frame.shape
     frame = undistort(frame, width, height)
 
-    center = (int(width / 2), int(height / 2))
-    # cv2.circle(frame, (center), 7, (255, 255, 255), 2)
+    frame_center = (int(width / 2), int(height / 2))
+    # cv2.circle(frame, (frame_center), 7, (255, 255, 255), 2)
 
-    # blurring before contour
     blurredframe = cv2.blur(frame, (3, 3))
     # blurredframe = cv2.dilate(frame, kernel)
     hsv = cv2.cvtColor(blurredframe, cv2.COLOR_BGR2HSV)
 
-    # colormask = cv2.inRange(hsv, low, high)
-    # colormask = cv2.morphologyEx(colormask, cv2.MORPH_CLOSE, kernel=kernel)
     colormask = cv2.morphologyEx((cv2.inRange(hsv, low, high)), cv2.MORPH_CLOSE, kernel=kernel)
     contourmask, contours, hierarchy = cv2.findContours(colormask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     filteredContours = list(filter(lambda contour: blobMin <= cv2.contourArea(contour) <= blobMax, contours))
     ordered = sorted(filteredContours, key=lambda contour: contour[0][0][0])
 
-    cv2.line(driver, (width // 2, 0), (width // 2, height), (127, 127, 127), 2)
+    cv2.line(driver, (frame_center[0], 0), (frame_center[0], height), (127, 127, 127), 2)
 
     if len(ordered) >= 2:
         try:
-            currPair = TapePairs(ordered, center)
+            currPair = TapePairs(ordered, frame_center)
             c0, c1 = currPair.getPair()
 
             contour0 = c0[0]
@@ -288,7 +278,15 @@ def viewReflTape(driver, frame):
                 raise TypeError
 
             pairCentroid = (int((centroid0[0] + centroid1[0]) / 2), int((centroid0[1] + centroid1[1]) / 2))
-            distance = getDistance(centroid0, centroid1)
+
+            cv2.circle(driver, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
+            success, rotation_vector, translation_vector = cv2.solvePnP(object_points, image_points, mtx, dist)
+
+            cv2.line(driver, (pairCentroid[0], 0), (pairCentroid[0], 480), (255, 255, 255), 2)
+
+            driver = drawOverhead(driver, rotation_vector, translation_vector, width, height)
+
+            # distance = getDistance(centroid0, centroid1)
 
             # indicatorLength = int((stopDistance - distance) * 1.2) if (stopDistance - distance >= 0) else 0
             # indicatorColor = (0, 255, 0)
@@ -301,16 +299,6 @@ def viewReflTape(driver, frame):
             # visual feedback
             # cv2.line(driver, (center[0] - indicatorLength, height - 50), (center[0] + indicatorLength, height - 50),
             #          indicatorColor, 25)
-            cv2.circle(driver, (pairCentroid[0], pairCentroid[1]), 7, (255, 0, 0), 8)
-            success, rotation_vector, translation_vector = cv2.solvePnP(object_points, image_points, mtx, dist)
-
-            # print("Rotational Vector: \n{}".format(rotation_vector))
-            # print("Translation Vector: \n{}".format(translation_vector))
-
-            cv2.line(driver, (pairCentroid[0], 0), (pairCentroid[0], 480), (255, 255, 255), 2)
-
-            # driver = drawCube(driver, rotation_vector, translation_vector)
-            driver = drawOverhead(driver, rotation_vector, translation_vector, width, height)
 
             return driver
 
@@ -322,17 +310,3 @@ def viewReflTape(driver, frame):
             return driver
 
     return driver
-
-# cap = cv2.VideoCapture(1)
-#
-# while True:
-#     ret, frame = cap.read()
-#     if ret:
-#         processed = viewReflTape(frame)
-#         cv2.imshow(str(processed.shape), processed)
-#
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-#
-# cap.release()
-# cv2.destroyAllWindows()
