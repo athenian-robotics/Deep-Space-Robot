@@ -1,7 +1,6 @@
 package frc.team852;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.*;
 import frc.team852.lib.utils.InvertedDigitalInput;
@@ -45,10 +44,8 @@ public class RobotMap {
   public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(5); // TODO set based off of CAN id
   public static DoubleSolenoid pogoBoi = new DoubleSolenoid(4, 5);
 
-  public static AHRS gyro = Robot.gyro;
-
   //Led status
-  public static Spark statusLeds = new Spark(0);
+  public static Spark statusLeds = new Spark(9);
   public static DigitalInput inHabRange = new DigitalInput(2);
   public static DigitalInput inStationRange = new DigitalInput(3);
 

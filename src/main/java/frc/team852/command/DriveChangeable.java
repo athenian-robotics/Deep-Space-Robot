@@ -83,7 +83,7 @@ public class DriveChangeable extends Command {
       arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), squareInputs);
     }
 
-    tiltServo.setAngle((xbox.getTriggerAxis(GenericHID.Hand.kRight)*30)+90);
+    tiltServo.setAngle((xbox.getY(GenericHID.Hand.kRight)*30)+90);
   }
 
   // TODO migrate to a more sensible and general place
