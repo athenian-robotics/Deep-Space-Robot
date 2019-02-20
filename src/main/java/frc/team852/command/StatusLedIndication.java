@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.LedStrip;
 
 
@@ -12,6 +13,7 @@ public class StatusLedIndication extends Command {
     private DigitalInput inHabRange = RobotMap.inHabRange;
     private DigitalInput inStationRange = RobotMap.inStationRange;
     private LedStrip statusLeds;
+    private static final Shuffle sIsBlueTeam = new Shuffle(StatusLedIndication.class, "isBlueTeam", false);
 
 
     public StatusLedIndication() {
@@ -28,7 +30,10 @@ public class StatusLedIndication extends Command {
             statusLeds.setColor(LedStrip.LedColors.WHITE_STROBE);
         }
         else{
-            statusLeds.setColor(LedStrip.LedColors.GREEN);
+            if(sIsBlueTeam.getB())
+              statusLeds.setColor(LedStrip.LedColors.BLUE);
+            else
+              statusLeds.setColor(LedStrip.LedColors.RED);
         }
     }
 
