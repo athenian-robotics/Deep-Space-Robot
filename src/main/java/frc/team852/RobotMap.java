@@ -3,10 +3,7 @@ package frc.team852;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.*;
 import frc.team852.lib.utils.InvertedDigitalInput;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.SparkMax;
@@ -31,18 +28,15 @@ public class RobotMap {
   public static Encoder rightGrayhill = new Encoder(0, 1, true);
   public static DoubleSolenoid gearbox = new DoubleSolenoid(7, 6); // TODO set based off of robot wiring
 
-
   //Elevator
   public static SparkMax elevatorMotor = new SparkMax(4, SparkMax.MotorType.kBrushless); // TODO set based off of CAN id
   public static DigitalInput elevatorLowerLimit = new DigitalInput(15); // TODO set based off of robot wiring
   public static DigitalInput elevatorUpperLimit = new DigitalInput(5); // TODO set based off of robot wiring
   public static SerialLidar elevatorLidar = Robot.elevatorLidar;
 
-
   //Wrist
   public static WPI_TalonSRX wristMotor = new WPI_TalonSRX(6); // TODO set based off of CAN id
   public static InvertedDigitalInput wristUpperLimit = new InvertedDigitalInput(3); // TODO set based off of robot wiring
-  public static Encoder wristEncoder = new Encoder(7, 6, true); // TODO set based off of robot wiring
 
   //Hatch Subsystem
   public static DoubleSolenoid hatchPancakePneumatics = new DoubleSolenoid(3, 2);
@@ -55,10 +49,15 @@ public class RobotMap {
 
   //Led status
   public static Spark statusLeds = new Spark(0);
+  public static DigitalInput inHabRange = new DigitalInput(2);
+  public static DigitalInput inStationRange = new DigitalInput(3);
 
+  //Camera Servo
+  public static Servo tiltServo = new Servo(8);
+
+  //Constants
   public static DoubleSolenoid.Value FAST = DoubleSolenoid.Value.kReverse;
   public static DoubleSolenoid.Value SLOW = DoubleSolenoid.Value.kForward;
-
   public static Drivetrain.DriveMode currentDriveMode = Drivetrain.DriveMode.GTA;
 
   public RobotMap() {
