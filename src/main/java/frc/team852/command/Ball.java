@@ -7,7 +7,7 @@ import frc.team852.subsystem.BallSubsystem;
 
 public class Ball extends Command {
 	private final BallSubsystem bs;
-	private static boolean ballIn = false;
+	private boolean ballIn = false;
 	
 	public Ball() {
 		requires(Robot.ballSubsystem);
@@ -16,12 +16,8 @@ public class Ball extends Command {
 	
 	@Override
 	protected void initialize() {
-		if (ballIn) {
-			bs.grabBall();
-		} else {
-			bs.dropBall();
-		}
-		ballIn = !ballIn;
+		bs.dropBall();
+		bs.grabBall();
 	}
 	
 	@Override
