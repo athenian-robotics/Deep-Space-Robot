@@ -9,7 +9,7 @@ public class WristBangBang extends Command {
 
     private WristSubsystem wrist;
 
-    public static boolean isUp;
+    public static boolean isUp = true;
 
     public WristBangBang(){
         requires(Robot.wristSubsystem);
