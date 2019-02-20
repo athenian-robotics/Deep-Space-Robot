@@ -7,7 +7,7 @@ import frc.team852.subsystem.ElevatorSubsystem;
 
 public class ElevatorMove extends Command {
   private final ElevatorSubsystem elevator;
-  private static int heightVal, oldSetpoint;
+  private int heightVal, oldSetpoint;
 
   private static final Shuffle sSetpointBound = new Shuffle(ElevatorMove.class, "SetpointBound", 10);
 
@@ -33,6 +33,7 @@ public class ElevatorMove extends Command {
   protected void execute() {
     if (!elevator.getPIDController().isEnabled())
       elevator.enable();
+    System.out.println(heightVal);
   }
 
   @Override
