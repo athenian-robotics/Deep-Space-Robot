@@ -3,6 +3,7 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
+import frc.team852.RobotMap;
 import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.ElevatorSubsystem;
 import frc.team852.subsystem.WristSubsystem;
@@ -33,8 +34,10 @@ public class ElevatorMoveBangBang extends Command {
       elevator.disable();
     // Check if under user control
     if (OI.fightStickLB.get()) {
+      RobotMap.ledError = OI.POVUp.get() && WristBangBang.isUp;
       if (OI.POVUp.get()) {
-        elevator.setSpeed(0.5);
+        if (!RobotMap.ledError)
+          elevator.setSpeed(0.5);
       } else if (OI.POVDown.get()) {
         elevator.setSpeed(-0.3);
       } else {
