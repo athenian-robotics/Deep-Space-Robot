@@ -49,5 +49,9 @@ public class ClimberSubsystem extends Subsystem {
     pogo.set(DoubleSolenoid.Value.kReverse);
   }
 
+  public DoubleSolenoid.Value getPogoState(){
+    return pogo.get();
+  }
+
 
 }

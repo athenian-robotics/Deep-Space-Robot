@@ -49,9 +49,9 @@ public class TimedClimb extends Command {
     protected void execute(){
         double currentTime = Timer.getFPGATimestamp();
 
-        if(Robot.gyro.getRoll() < 8.0 && !timeStarted){
+        if(Robot.gyro.getRoll() < 8.5 && !timeStarted){
             climber.setSpeed(0.4);
-            System.out.println("CAM's going to 8 degree roll val");
+            System.out.println("CAM's going to 8.5 degree roll val");
         }
         else {
             if(!timeStarted) {
@@ -72,14 +72,14 @@ public class TimedClimb extends Command {
                 climber.stopMotors();
                 climber.extendPogo();
                 System.out.println("TimedClimb at 4th stage!");
-            } else if (currentTime <= startTime + 2.3) {
+            } else if (currentTime <= startTime + 2.5) {
                 dt.drive(0.3, 0.3);
                 System.out.println("TimedClimb at 5th stage!");
-            } else if (currentTime <= startTime + 2.6) {
+            } else if (currentTime <= startTime + 2.8) {
                 dt.drive(0.4, 0.4);
                 climber.retractPogo();
                 System.out.println("TimedClimb at 6th stage!");
-            } else if (currentTime <= startTime + 3) {
+            } else if (currentTime <= startTime + 3.2) {
                 dt.stop();
                 System.out.println("TimedClimb at 7th stage!");
                 isFinished = true;

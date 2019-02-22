@@ -93,7 +93,9 @@ public class OI {
     //Climb Hab 2
     fightStickOption.whenPressed(new TimedClimb());
     
-    xboxY.whenReleased(new Ball());
+    xboxY.whenPressed(new Ball());
+
+    xboxStart.whenPressed(new TogglePogo());
 
   }
 
