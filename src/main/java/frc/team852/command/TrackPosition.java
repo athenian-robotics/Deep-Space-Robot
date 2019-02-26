@@ -38,16 +38,9 @@ public class TrackPosition extends Command {
   @Override
   protected void execute() {
     // TODO @Jackson do something with pose data
-        /*//
-        Pose2D pose = tracker.currPose.get();
-        SmartDashboard.putNumber("Position Tracking X", pose.getTranslation().getX());
-        SmartDashboard.putNumber("Position Tracking Y", pose.getTranslation().getY());
-        SmartDashboard.putNumber("Position Tracking Angle", pose.getRotation().getAngle());
-        //*/
-    //*//
-    SmartDashboard.putNumber("Position Tracking X", PositionTracking.getInstance().getX());
-    SmartDashboard.putNumber("Position Tracking Y", PositionTracking.getInstance().getY());
-    SmartDashboard.putNumber("Position Tracking Angle", PositionTracking.getInstance().getAngle());
+    SmartDashboard.putNumber("Position Tracking X", PositionTracking.getCurrX());
+    SmartDashboard.putNumber("Position Tracking Y", PositionTracking.getCurrY());
+    SmartDashboard.putNumber("Position Tracking Angle", PositionTracking.getCurrAngle());
     //*/
   }
 }

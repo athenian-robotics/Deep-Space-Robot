@@ -7,7 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team852.command.TrackPosition;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
+import frc.team852.lib.path.utilities.Pose2D;
 import frc.team852.lib.utils.AHRS_PID;
+import frc.team852.lib.utils.datatypes.InterpolatingDouble;
+import frc.team852.lib.utils.datatypes.InterpolatingTreeMap;
 import frc.team852.lib.utils.PositionTracking;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.Shuffle;
@@ -43,6 +46,7 @@ public class Robot extends TimedRobot {
   //Data
   public static CVDataServer dataServer;
   public static CVDataStore dataStore;
+  public static InterpolatingTreeMap<InterpolatingDouble, Pose2D> positions;
 
   //Other
   private static final String kDefaultAuto = "Default";
@@ -51,11 +55,12 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public Robot() {
-    super();
+    this(kDefaultPeriod);
   }
 
   public Robot(double period) {
     super(period);
+    positions = new InterpolatingTreeMap<>((int) (1 / period) * 2);
   }
 
   public static Shuffle robotStarted = new Shuffle(Robot.class, "robotStarted", false);
@@ -121,6 +126,7 @@ public class Robot extends TimedRobot {
     }
 
     robotReady.set(true);
+    PositionTracking.getInstance().start();
   }
 
   /**
@@ -140,6 +146,7 @@ public class Robot extends TimedRobot {
       e.printStackTrace();
     }
     // Do stuff like zeroing sensors here (i.e. arm is on limit switch-> zero the encoder)
+    positions.put(new InterpolatingDouble(Timer.getFPGATimestamp()), PositionTracking.getPose());
   }
 
   /**

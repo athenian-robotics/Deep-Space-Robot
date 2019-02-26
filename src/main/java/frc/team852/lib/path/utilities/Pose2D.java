@@ -4,7 +4,9 @@
  */
 package frc.team852.lib.path.utilities;
 
-public class Pose2D implements CSVWritable {
+import frc.team852.lib.utils.datatypes.Interpolatable;
+
+public class Pose2D implements CSVWritable, Interpolatable<Pose2D> {
 
     private final Translation2D translation;
     private final Rotation2D rotation;

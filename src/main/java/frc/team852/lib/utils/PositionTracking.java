@@ -22,10 +22,10 @@ public class PositionTracking implements Runnable {
   public static final boolean useGyro = true;
 
 
-  private AtomicReference<Pose2D> currPose = new AtomicReference<>();
-  private AtomicReference<Double> currX = new AtomicReference<>(0d);
-  private AtomicReference<Double> currY = new AtomicReference<>(0d);
-  private AtomicReference<Double> currAngle = new AtomicReference<>(0d);
+  private static AtomicReference<Pose2D> currPose = new AtomicReference<>();
+  private static AtomicReference<Double> currX = new AtomicReference<>(0d);
+  private static AtomicReference<Double> currY = new AtomicReference<>(0d);
+  private static AtomicReference<Double> currAngle = new AtomicReference<>(0d);
 
   private double lastEncValue;
   private double lastGyroHeading;
@@ -43,6 +43,9 @@ public class PositionTracking implements Runnable {
     reset();
   }
 
+  /**
+   * Must use getInstance to call due to {@code this} being inaccessible from a static context
+   */
   public void start() {
     if (!started) {
       thread = new Thread(this);
@@ -122,22 +125,22 @@ public class PositionTracking implements Runnable {
     System.out.println("Ended position tracking.");
   }
 
-  public Pose2D getPose() {
+  public static Pose2D getPose() {
     if (pure)
       return new Pose2D(currX.get(), currY.get(), currAngle.get());
     else
       return currPose.get();
   }
 
-  public double getX() {
+  public static double getCurrX() {
     return currX.get();
   }
 
-  public double getY() {
+  public static double getCurrY() {
     return currY.get();
   }
 
-  public double getAngle() {
+  public static double getCurrAngle() {
     return currAngle.get();
   }
 
