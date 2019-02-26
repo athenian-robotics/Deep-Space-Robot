@@ -8,6 +8,7 @@ import frc.team852.command.TrackPosition;
 import frc.team852.lib.CVDataStore;
 import frc.team852.lib.grpc.CVDataServer;
 import frc.team852.lib.utils.AHRS_PID;
+import frc.team852.lib.utils.PositionTracking;
 import frc.team852.lib.utils.SerialLidar;
 import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.*;
@@ -29,7 +30,7 @@ public class Robot extends TimedRobot {
   public static DoubleSolenoid.Value gearstate;
   public static ElevatorSubsystem elevatorSubsystem;
   public static WristSubsystem wristSubsystem;
-//  public static CargoSubsystem cargoSubsystem;
+  //  public static CargoSubsystem cargoSubsystem;
   //public static HatchSubsystem hatchSubsystem;
   public static ClimberSubsystem climberSubsystem;
   public static LedStrip statusLeds;
@@ -48,10 +49,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  public Robot(){
+
+  public Robot() {
     super();
   }
-  public Robot(double period){
+
+  public Robot(double period) {
     super(period);
   }
 
@@ -69,14 +72,13 @@ public class Robot extends TimedRobot {
       elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
       Timer.delay(1);
       elevatorLidar.setReadBufferSize(10);
-    }
-    catch (RuntimeException ex){
+    } catch (RuntimeException ex) {
       DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
     }
 
     try {
       gyro = new AHRS_PID(I2C.Port.kOnboard);
-    } catch (RuntimeException ex ) {
+    } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
 
@@ -188,6 +190,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     robotStarted.set(true);
     RobotMap.gearbox.set(RobotMap.SLOW);
+    PositionTracking.getInstance().start();
     Scheduler.getInstance().add(new TrackPosition());
   }
 
