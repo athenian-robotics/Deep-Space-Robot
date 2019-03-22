@@ -21,3 +21,6 @@ debug.sh
 
 # personal testing scripts
 ./src/main/python/re*.py
+
+# Vim sessions
+sessions

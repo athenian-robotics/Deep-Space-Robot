@@ -49,6 +49,9 @@ public class Robot extends TimedRobot {
   public static InterpolatingTreeMap<InterpolatingDouble, Pose2D> positions;
 
   //Other
+  public static int VIDEO_STREAM_IDX = 0;
+  public static int VIDEO_STREAM_FLIP_CODE = 0;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -73,13 +76,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robotStarted.set(true);
-    try {
-      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
-      Timer.delay(1);
-      elevatorLidar.setReadBufferSize(10);
-    } catch (RuntimeException ex) {
-      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
-    }
+
 
     try {
       gyro = new AHRS_PID(I2C.Port.kOnboard);
@@ -123,6 +120,15 @@ public class Robot extends TimedRobot {
     } catch (IOException e) {
       System.out.println(e.getMessage());
       SmartDashboard.putString("GRPC status", "Vision Driver assist unavailable");
+    }
+
+    Timer.delay(2);
+    try {
+      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
+      Timer.delay(1);
+      elevatorLidar.setReadBufferSize(10);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
     }
 
     robotReady.set(true);

@@ -30,7 +30,7 @@ public class StatusLedIndication extends Command {
         } else if (inStationRange.get()) {
             statusLeds.setColor(LedStrip.LedColors.WHITE_STROBE);
         } else if (!Ball.ballIn) {
-            statusLeds.setColor(LedStrip.LedColors.BLUE_STROBE);
+            statusLeds.setColor(LedStrip.LedColors.RAINBOW);
         } else {
             if (sIsBlueTeam.getB())
                 statusLeds.setColor(LedStrip.LedColors.BLUE);

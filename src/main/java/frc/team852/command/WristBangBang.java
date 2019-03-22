@@ -25,12 +25,15 @@ public class WristBangBang extends Command {
     protected void execute() {
         if(!OI.fightStickLB.get()){
             if(OI.POVDown.get()){
-                wrist.setSpeed(-0.3);
+                wrist.setSpeed(-0.7);
                 isUp = true;
             }
             else if(OI.POVUp.get()){
-                wrist.setSpeed(0.3);
+                wrist.setSpeed(0.6);
                 isUp = false;
+            }
+            else{
+                wrist.setSpeed(isUp ? -0.2 : 0.2);
             }
         }
     }

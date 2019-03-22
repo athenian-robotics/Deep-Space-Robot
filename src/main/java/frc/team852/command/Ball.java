@@ -3,14 +3,18 @@ package frc.team852.command;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.subsystem.BallSubsystem;
+import frc.team852.subsystem.LedStrip;
 
 public class Ball extends Command {
 	private final BallSubsystem bs;
+	private final LedStrip statusLeds;
 	public static boolean ballIn = true;
 	
 	public Ball() {
 		requires(Robot.ballSubsystem);
+		requires(Robot.statusLeds);
 		bs = Robot.ballSubsystem;
+		statusLeds = Robot.statusLeds;
 	}
 	
 	@Override

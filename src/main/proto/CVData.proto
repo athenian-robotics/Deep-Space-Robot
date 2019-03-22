@@ -9,6 +9,7 @@ package utils;
 
 service OpenCVInfo {
     rpc SendCameraPose (CameraPose) returns (google.protobuf.Empty) {}
+    rpc GetCameraConfig (google.protobuf.Empty) returns (stream CameraConfig) {}
 
     //    rpc SendFrameSize (FrameSize) returns (google.protobuf.Empty) {}
     //
@@ -27,6 +28,12 @@ message CameraPose {
     Vector3D rotation = 2;
 
 }
+
+message CameraConfig {
+  int32 flipCode = 1;
+  int32 index = 2;
+}
+
 message Vector3D {
     double x = 1;
     double y = 2;

@@ -79,6 +79,10 @@ public class OI {
     xboxLB.whenPressed(new ToggleGearbox(RobotMap.SLOW));
     xboxRB.whenPressed(new ToggleGearbox(RobotMap.FAST));
 
+    xboxY.whenPressed(new Ball());
+
+    xboxStart.whenPressed(new TogglePogo());
+
     fightStickLB.whileHeld(new ElevatorMoveBangBang());
     //fightStickRB.whileHeld(new ElevatorMove());
 
@@ -88,14 +92,11 @@ public class OI {
     //fightStickLT.whenActive(new ElevatorMove(ElevatorHeight.CARGO_SHIP));
     fightStickA.whenPressed(new ElevatorMove(ElevatorHeight.CARGO_LOW));
     fightStickB.whenPressed(new ElevatorMove(ElevatorHeight.CARGO_MID));
-    //fightStickRT.whenActive(new ElevatorMove(ElevatorHeight.CARGO_HIGH));
+    fightStickRT.whenActive(new ElevatorMove(ElevatorHeight.CARGO_HIGH));
 
     //Climb Hab 2
     fightStickOption.whenPressed(new TimedClimb());
     
-    xboxY.whenPressed(new Ball());
-
-    xboxStart.whenPressed(new TogglePogo());
 
   }
 

@@ -80,12 +80,12 @@ blobMin = 200
 
 # hsv range
 hrange = 27
-srange = 83
+srange = 82
 vrange = 38
 
 # hsv base
 bhue = 68
-bsat = 174
+bsat = 173
 bval = 62
 
 low = np.array([bhue - hrange, bsat - srange, bval - vrange])

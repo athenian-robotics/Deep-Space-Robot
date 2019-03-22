@@ -29,9 +29,6 @@ public class ElevatorHeightBangBang extends Command {
       speed = -0.2;
     }
 //    if(speed > 0 && elevator.)
-
-
-
   }
 
   @Override

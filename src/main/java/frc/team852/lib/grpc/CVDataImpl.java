@@ -1,6 +1,7 @@
 package frc.team852.lib.grpc;
 
 import com.google.protobuf.Empty;
+import frc.team852.DeepSpaceRobot.CameraConfig;
 import frc.team852.DeepSpaceRobot.CameraPose;
 import frc.team852.DeepSpaceRobot.OpenCVInfoGrpc;
 import frc.team852.Robot;
@@ -22,13 +23,22 @@ class CVDataImpl extends OpenCVInfoGrpc.OpenCVInfoImplBase {
     System.out.print(request);
     allCallbacks.computeIfAbsent(CameraPose.class, k -> new ConcurrentLinkedQueue<>());
     try {
-      allCallbacks.get(CameraPoseListener.class).forEach(c -> ((CameraPoseListener) c).onNewData(request));
+      allCallbacks.get(CameraPoseListener.class).forEach(c -> ((CameraPoseListener) c).onNewData(request, responseObserver));
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("STOP BEING A POSER, FIX YOUR CALLBACK");
     }
     responseObserver.onNext(reply);
     responseObserver.onCompleted();
+  }
+
+
+  @Override
+  public void getCameraConfig(Empty request, StreamObserver<CameraConfig> responseObserver) {
+    int camIdx = Robot.VIDEO_STREAM_IDX;
+    int flipCode = Robot.VIDEO_STREAM_FLIP_CODE;
+
+    responseObserver.onNext(CameraConfig.newBuilder().setFlipCode(flipCode).setIndex(camIdx).build());
   }
 
   public synchronized void registerCallback(GenericListener listener) {

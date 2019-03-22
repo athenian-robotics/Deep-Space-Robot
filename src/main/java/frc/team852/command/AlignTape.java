@@ -1,5 +1,6 @@
 package frc.team852.command;
 
+import com.google.protobuf.Empty;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.team852.DeepSpaceRobot.CameraPose;
@@ -11,6 +12,7 @@ import frc.team852.lib.utils.PositionTracking;
 import frc.team852.lib.utils.Shuffle;
 import frc.team852.lib.utils.datatypes.CallbackDataContainer;
 import frc.team852.lib.utils.datatypes.InterpolatingDouble;
+import io.grpc.stub.StreamObserver;
 
 public class AlignTape extends CommandGroup {
     private CallbackDataContainer<CameraPose> cameraPose = new CallbackDataContainer<>();
@@ -19,7 +21,7 @@ public class AlignTape extends CommandGroup {
     public AlignTape() {
         Robot.dataServer.registerCallback(new CameraPoseListener() {
             @Override
-            public void onNewData(CameraPose data) {
+            public void onNewData(CameraPose data, StreamObserver<Empty> respObsv) {
                 cameraPose.update(data);
             }
         });
