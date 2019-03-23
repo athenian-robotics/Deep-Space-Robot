@@ -28,7 +28,6 @@ public class ElevatorSubsystem extends PIDSubsystem {
     getPIDController().setContinuous(false);
     lidar = RobotMap.elevatorLidar;
     setOutputRange(-0.4, 0.75);
-
   }
 
   public static int getHeight() {
@@ -40,24 +39,26 @@ public class ElevatorSubsystem extends PIDSubsystem {
   }
 
   public void setSpeed(double speed) {
-    if(lidar.pidGet() == 0){
-      this.getPIDController().disable();
+    if(!OI.fightStickLT.get()) {
+      if (speed < 0 && onLowerLimit()) {
+        speed = 0.04;
+      } else if (speed > 0 && onUpperLimit()) {
+        speed = 0;
+      }
+      RobotMap.ledError = (OI.POVUp.get() && speed > 0 && WristBangBang.isUp);
+      if (RobotMap.ledError)
+        speed = 0.04;
+      Shuffle.put(this, "motorPower", speed);
+      motor.set(speed);
     }
-    if (speed < 0 && onLowerLimit()) {
-      speed = 0.04;
-    } else if (speed > 0 && onUpperLimit()) {
-      speed = 0;
+    else {
+      motor.set(0);
     }
-    RobotMap.ledError = (OI.POVUp.get() && speed > 0 && WristBangBang.isUp);
-    if (RobotMap.ledError)
-      speed = 0.04;
-    Shuffle.put(this, "motorPower", speed);
-    motor.set(speed);
   }
 
   @Override
   protected double returnPIDInput() {
-    return lidar.pidGet();
+    return Robot.elevatorLidar.pidGet();
   }
 
   @Override
@@ -66,11 +67,11 @@ public class ElevatorSubsystem extends PIDSubsystem {
   }
 
   public boolean onUpperLimit() {
-    return lidar.getLidarDistance() > 195;
+    return Robot.elevatorLidar.getLidarDistance() > 195;
   }
 
   public boolean onLowerLimit() {
-    return lidar.getLidarDistance() < 9;
+    return Robot.elevatorLidar.getLidarDistance() < 7;
   }
 
   @Override

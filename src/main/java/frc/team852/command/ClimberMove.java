@@ -1,23 +1,17 @@
 package frc.team852.command;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.team852.OI;
 import frc.team852.Robot;
-import frc.team852.RobotMap;
 import frc.team852.subsystem.ClimberSubsystem;
 
 public class ClimberMove extends Command {
     private final ClimberSubsystem climber;
 
-	/**
-	 * @param speed the speed to move the climber at
-	 * @param target the target location, in encoder ticks, to move the motor to
-	 *               	//TODO convert to inches?
-	 *               may go slightly past the encoder position
-	 */
-
     //In case no speed is given, default to this
     public ClimberMove() {
       requires(Robot.climberSubsystem);
+
       climber = Robot.climberSubsystem;
     }
 
@@ -45,5 +39,15 @@ public class ClimberMove extends Command {
 
     //Pass a speed through the motors, stop when done
     protected void execute() {
+
+        if (OI.fightStickLT.get()) {
+            if (OI.POVUp.get()) {
+                climber.setSpeed(0.75);
+            } else if (OI.POVDown.get()) {
+                climber.setSpeed(-0.75);
+            } else {
+                climber.setSpeed(0);
+            }
+        }
     }
 }

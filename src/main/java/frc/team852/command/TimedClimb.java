@@ -48,44 +48,48 @@ public class TimedClimb extends Command {
     @Override
     protected void execute(){
         double currentTime = Timer.getFPGATimestamp();
-
-        if(Robot.gyro.getRoll() < 8.5 && !timeStarted){
-            climber.setSpeed(0.4);
-            System.out.println("CAM's going to 8.5 degree roll val");
-        }
-        else {
-            if(!timeStarted) {
-                startTime = Timer.getFPGATimestamp();
-                timeStarted = true;
-            }
-
-            if (currentTime <= startTime + 1) {
-                climber.setSpeed(0.4);
+        if(!OI.fightStickShare.get()) {
+            if (Robot.gyro.getRoll() < 7.5 && !timeStarted) {
+                climber.setSpeed(0.75);
                 dt.drive(0.2, 0.2);
-                System.out.println("TimedClimb at 2nd stage!");
-            } else if (currentTime <= startTime + 1.5) {
-                climber.setSpeed(0.2);
-                dt.drive(0.2, 0.2);
-                System.out.println("TimedClimb at 3rd stage!");
-            } else if (currentTime <= startTime + 2) {
-                dt.stop();
-                climber.stopMotors();
-                climber.extendPogo();
-                System.out.println("TimedClimb at 4th stage!");
-            } else if (currentTime <= startTime + 2.5) {
-                dt.drive(0.3, 0.3);
-                System.out.println("TimedClimb at 5th stage!");
-            } else if (currentTime <= startTime + 2.8) {
-                dt.drive(0.4, 0.4);
-                climber.retractPogo();
-                System.out.println("TimedClimb at 6th stage!");
-            } else if (currentTime <= startTime + 3.2) {
-                dt.stop();
-                System.out.println("TimedClimb at 7th stage!");
-                isFinished = true;
+                System.out.println("CAM's going to 7.5 degree roll val");
             } else {
-                isFinished = true;
+                if (!timeStarted) {
+                    startTime = Timer.getFPGATimestamp();
+                    timeStarted = true;
+                }
+
+                if (currentTime <= startTime + 0.8) {
+                    climber.setSpeed(0.6);
+                    dt.drive(0.2, 0.2);
+                    System.out.println("TimedClimb at 2nd stage!");
+                } else if (currentTime <= startTime + 1.3) {
+                    climber.setSpeed(0.4);
+                    dt.drive(0.2, 0.2);
+                    System.out.println("TimedClimb at 3rd stage!");
+                } else if (currentTime <= startTime + 1.8) {
+                    dt.stop();
+                    climber.stopMotors();
+                    climber.extendPogo();
+                    System.out.println("TimedClimb at 4th stage!");
+                } else if (currentTime <= startTime + 2.3) {
+                    dt.drive(0.3, 0.3);
+                    System.out.println("TimedClimb at 5th stage!");
+                } else if (currentTime <= startTime + 2.6) {
+                    dt.drive(0.4, 0.4);
+                    climber.retractPogo();
+                    System.out.println("TimedClimb at 6th stage!");
+                } else if (currentTime <= startTime + 3.0) {
+                    dt.stop();
+                    System.out.println("TimedClimb at 7th stage!");
+                    isFinished = true;
+                } else {
+                    isFinished = true;
+                }
             }
+        }
+        else{
+            isFinished = true;
         }
     }
 }

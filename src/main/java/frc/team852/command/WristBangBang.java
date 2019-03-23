@@ -1,5 +1,6 @@
 package frc.team852.command;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
@@ -8,6 +9,8 @@ import frc.team852.subsystem.WristSubsystem;
 public class WristBangBang extends Command {
 
     private WristSubsystem wrist;
+    private boolean firstDown = true;
+    private double startTime = 0;
 
     public static boolean isUp = true;
 
@@ -21,19 +24,31 @@ public class WristBangBang extends Command {
         return false;
     }
 
+    protected void initialize(){
+        startTime = Timer.getFPGATimestamp();
+    }
+
     @Override
     protected void execute() {
-        if(!OI.fightStickLB.get()){
-            if(OI.POVDown.get()){
-                wrist.setSpeed(-0.7);
-                isUp = true;
-            }
-            else if(OI.POVUp.get()){
-                wrist.setSpeed(0.6);
-                isUp = false;
-            }
+        if(firstDown){
+            if(startTime + 0.1 <= Timer.getFPGATimestamp())
+                wrist.setSpeed(0.2);
             else{
-                wrist.setSpeed(isUp ? -0.2 : 0.2);
+                wrist.setSpeed(0);
+                firstDown = false;
+            }
+        }
+        else {
+            if (!OI.fightStickLB.get() && !OI.fightStickLT.get()) {
+                if (OI.POVDown.get()) {
+                    wrist.setSpeed(-0.7);
+                    isUp = true;
+                } else if (OI.POVUp.get()) {
+                    wrist.setSpeed(0.6);
+                    isUp = false;
+                } else {
+                    wrist.setSpeed(isUp ? -0.2 : 0.2);
+                }
             }
         }
     }

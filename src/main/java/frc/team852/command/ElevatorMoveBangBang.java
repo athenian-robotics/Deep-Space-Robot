@@ -30,8 +30,6 @@ public class ElevatorMoveBangBang extends Command {
 
   @Override
   protected void execute() {
-    if (elevator.getPIDController().isEnabled())
-      elevator.disable();
     // Check if under user control
     if (OI.fightStickLB.get()) {
       RobotMap.ledError = OI.POVUp.get() && WristBangBang.isUp;

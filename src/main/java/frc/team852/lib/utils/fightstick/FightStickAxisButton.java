@@ -2,7 +2,6 @@ package frc.team852.lib.utils.fightstick;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import frc.team852.OI;
 
 public class FightStickAxisButton extends Trigger implements FightStickButton {
 
@@ -11,6 +10,7 @@ public class FightStickAxisButton extends Trigger implements FightStickButton {
   private Joystick fightStick;
 
   public FightStickAxisButton(Joystick fightStick, int axis, FightStickInput.input button) {
+    this.fightStick = fightStick;
     this.axis = axis;
     this.button = button;
   }

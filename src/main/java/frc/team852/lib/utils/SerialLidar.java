@@ -31,7 +31,12 @@ public class SerialLidar extends SerialPort implements PIDSource {
 
             this.bytes = this.read(2);
             if(bytes != null)
-                return (this.bytes[0] & 0xff) | (this.bytes[1] & 0xff) << 8;
+                dist = (this.bytes[0] & 0xff) | (this.bytes[1] & 0xff) << 8;
+            if(dist > 1000){
+                this.reset();
+                DriverStation.reportError("Lidar has been reset!", false);
+            }
+            return dist;
         }
         catch (RuntimeException ex){
             DriverStation.reportError("Error reading lidar! " + ex.getMessage(), false);

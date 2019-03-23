@@ -25,10 +25,10 @@ public class DriveChangeable extends Command {
 
   private static final Shuffle sMaxAccelFast = new Shuffle(DriveChangeable.class, "maxAccelFast", 1.5);
   private static final Shuffle sMaxDecelFast = new Shuffle(DriveChangeable.class, "maxDecelFast", 2);
-  private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 1.5);
-  private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 2);
-  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 3);
-  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 0.35);
+  private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 2.5);
+  private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 4);
+  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 4);
+  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 1.2);
   private static final Shuffle sElevatorScale = new Shuffle(DriveChangeable.class, "elevatorScale", 1);
 
   public DriveChangeable() {
@@ -65,6 +65,8 @@ public class DriveChangeable extends Command {
   @Override
   protected void execute() {
 
+    double x = 0;
+    double y = 0;
     // TODO replace old joystick tank/arcade with xbox joystick inputs
     Shuffle.put(this, "currentDriveMode", RobotMap.currentDriveMode.toString());
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
@@ -75,12 +77,16 @@ public class DriveChangeable extends Command {
       double multiplyBy = 0.6;
       if (xbox.getTriggerAxis(GenericHID.Hand.kRight) > 0.6)
         multiplyBy = xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
+      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
-      squareInputs = OI.xboxStart.get();
-      if(squareInputs)
-        System.out.println("SQUARING INPUTS!");
-      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), squareInputs);
+      x = -xbox.getX(GenericHID.Hand.kLeft) * 0.8;
+      y = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight) * 0.8;
+
+      if(OI.xboxA.get()){
+        x = -xbox.getX(GenericHID.Hand.kLeft)/2;
+        y = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight)/2;
+      }
+      drive.arcadeDrive(x, y, false);
     }
 
     double angle = xbox.getY(GenericHID.Hand.kRight);
@@ -91,69 +97,71 @@ public class DriveChangeable extends Command {
     }
   }
 
+
+
   // TODO migrate to a more sensible and general place
-  public void arcadeDrive(double zRotation, double xSpeed, boolean squareInputs) {
-    boolean fastGear = (Robot.drivetrain.getGearing() == RobotMap.FAST);
-    double rotationMax = sRotationMax.get();
-    zRotation *= rotationMax + (1 - rotationMax) * Math.abs(xSpeed);
-    if (fastGear) zRotation = Math.copySign(Math.min(Math.abs(zRotation), Math.abs(xSpeed)), zRotation);
-
-    double currTime = System.currentTimeMillis();
-    double deltaTime = (currTime - lastTime) / 1000d;
-    lastTime = currTime;
-
-//    if (squareInputs) {
-//      this.xSpeed = Math.copySign(this.xSpeed * this.xSpeed, this.xSpeed);
-//      this.zRotation = Math.copySign(this.zRotation * this.zRotation, this.zRotation);
+//  public void arcadeDrive(double zRotation, double xSpeed, boolean squareInputs) {
+//    boolean fastGear = (Robot.drivetrain.getGearing() == RobotMap.FAST);
+//    double rotationMax = sRotationMax.get();
+//    zRotation *= rotationMax + (1 - rotationMax) * Math.abs(xSpeed);
+//    if (fastGear) zRotation = Math.copySign(Math.min(Math.abs(zRotation), Math.abs(xSpeed)), zRotation);
+//
+//    double currTime = System.currentTimeMillis();
+//    double deltaTime = (currTime - lastTime) / 1000d;
+//    lastTime = currTime;
+//
+////    if (squareInputs) {
+////      this.xSpeed = Math.copySign(this.xSpeed * this.xSpeed, this.xSpeed);
+////      this.zRotation = Math.copySign(this.zRotation * this.zRotation, this.zRotation);
+////    }
+//
+//    double xSpeedError = xSpeed - this.xSpeed;
+//    double zRotationError = zRotation - this.zRotation;
+//
+//    double maxAcceleration, maxDeceleration;
+//    maxAcceleration = Math.abs(fastGear ? sMaxAccelFast.get() : sMaxAccelSlow.get());
+//    maxDeceleration = Math.abs(fastGear ? sMaxDecelFast.get() : sMaxDecelSlow.get());
+//    double rotationAccelScale = Math.abs(sRotationAccelScale.get());
+//    if (fastGear) ;
+//
+//    this.xSpeed += Math.copySign(
+//            Math.max(
+//                    -maxDeceleration * deltaTime,
+//                    Math.min(
+//                            maxAcceleration * deltaTime,
+//                            Math.copySign(xSpeedError, this.xSpeed * xSpeedError)
+//                    )),
+//            xSpeedError);
+//    this.zRotation += Math.copySign(
+//            Math.max(
+//                    -maxDeceleration * rotationAccelScale * deltaTime,
+//                    Math.min(
+//                            maxAcceleration * rotationAccelScale * deltaTime,
+//                            Math.copySign(zRotationError, this.zRotation * zRotationError)
+//                    )),
+//            zRotationError);
+//
+//    if (this.xSpeed * xSpeedError < 0) {
+//      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
 //    }
-
-    double xSpeedError = xSpeed - this.xSpeed;
-    double zRotationError = zRotation - this.zRotation;
-
-    double maxAcceleration, maxDeceleration;
-    maxAcceleration = Math.abs(fastGear ? sMaxAccelFast.get() : sMaxAccelSlow.get());
-    maxDeceleration = Math.abs(fastGear ? sMaxDecelFast.get() : sMaxDecelSlow.get());
-    double rotationAccelScale = Math.abs(sRotationAccelScale.get());
-    if (fastGear) ;
-
-    this.xSpeed += Math.copySign(
-            Math.max(
-                    -maxDeceleration * deltaTime,
-                    Math.min(
-                            maxAcceleration * deltaTime,
-                            Math.copySign(xSpeedError, this.xSpeed * xSpeedError)
-                    )),
-            xSpeedError);
-    this.zRotation += Math.copySign(
-            Math.max(
-                    -maxDeceleration * rotationAccelScale * deltaTime,
-                    Math.min(
-                            maxAcceleration * rotationAccelScale * deltaTime,
-                            Math.copySign(zRotationError, this.zRotation * zRotationError)
-                    )),
-            zRotationError);
-
-    if (this.xSpeed * xSpeedError < 0) {
-      xbox.setRumble(GenericHID.RumbleType.kRightRumble, Math.abs(xSpeedError) / deltaTime / maxDeceleration);
-    }
-    else {
-      xbox.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-    }
-
-    /*
-    if(xSpeedError > 0){
-      xbox.setRumble(GenericHID.RumbleType.kRightRumble, xSpeedError);
-    }
-    else{
-      xbox.setRumble(GenericHID.RumbleType.kLeftRumble, xSpeedError);
-    }
-    */
-
-    drive.arcadeDrive(-this.zRotation, this.xSpeed, squareInputs);
-  }
-
-  public void arcadeDrive(double zRotation, double xSpeed) {
-    arcadeDrive(zRotation, xSpeed, false);
-  }
+//    else {
+//      xbox.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+//    }
+//
+//    /*
+//    if(xSpeedError > 0){
+//      xbox.setRumble(GenericHID.RumbleType.kRightRumble, xSpeedError);
+//    }
+//    else{
+//      xbox.setRumble(GenericHID.RumbleType.kLeftRumble, xSpeedError);
+//    }
+//    */
+//
+//    drive.arcadeDrive(-this.zRotation, this.xSpeed, squareInputs);
+//  }
+//
+//  public void arcadeDrive(double zRotation, double xSpeed) {
+//    arcadeDrive(zRotation, xSpeed, false);
+//  }
 
 }

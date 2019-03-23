@@ -108,6 +108,7 @@ public class Robot extends TimedRobot {
 
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
+    RobotMap.tiltServo.setAngle(90);
 
     //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
     //RobotMap.wristEncoder.reset();
