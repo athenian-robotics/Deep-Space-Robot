@@ -40,11 +40,11 @@ public class ClimberMove extends Command {
     //Pass a speed through the motors, stop when done
     protected void execute() {
 
-        if (OI.fightStickLT.get()) {
+        if (OI.fightStickOption.get()) {
             if (OI.POVUp.get()) {
-                climber.setSpeed(0.75);
+                climber.setSpeed(0.85);
             } else if (OI.POVDown.get()) {
-                climber.setSpeed(-0.75);
+                climber.setSpeed(-0.85);
             } else {
                 climber.setSpeed(0);
             }

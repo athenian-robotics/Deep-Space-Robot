@@ -39,7 +39,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
   }
 
   public void setSpeed(double speed) {
-    if(!OI.fightStickLT.get()) {
+    if(!OI.fightStickShare.get()) {
       if (speed < 0 && onLowerLimit()) {
         speed = 0.04;
       } else if (speed > 0 && onUpperLimit()) {

@@ -48,7 +48,7 @@ public class TimedClimb extends Command {
     @Override
     protected void execute(){
         double currentTime = Timer.getFPGATimestamp();
-        if(!OI.fightStickShare.get()) {
+        if(!OI.fightStickLT.get()) {
             if (Robot.gyro.getRoll() < 7.5 && !timeStarted) {
                 climber.setSpeed(0.75);
                 dt.drive(0.2, 0.2);
@@ -89,6 +89,7 @@ public class TimedClimb extends Command {
             }
         }
         else{
+            end();
             isFinished = true;
         }
     }

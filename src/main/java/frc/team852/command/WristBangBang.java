@@ -39,7 +39,7 @@ public class WristBangBang extends Command {
             }
         }
         else {
-            if (!OI.fightStickLB.get() && !OI.fightStickLT.get()) {
+            if (!OI.fightStickLB.get() && !OI.fightStickShare.get()) {
                 if (OI.POVDown.get()) {
                     wrist.setSpeed(-0.7);
                     isUp = true;

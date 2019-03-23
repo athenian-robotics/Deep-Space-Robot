@@ -10,14 +10,21 @@ class SocketServer:
     def __init__(self, host='0.0.0.0', port=8081):
         self.host = host
         self.port = port
+        self.connected = False
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print('Socket created')
         self.server_socket.bind((self.host, self.port))
         print('Socket bind complete')
-        self.server_socket.listen(10)
+        self.server_socket.listen(1)
         print('Socket now listening')
         self.conn, self.addr = self.server_socket.accept()
+        self.connected = True
         self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+
+    def reconnect(self):
+        self.conn.close()
+        self.conn, self.addr = self.server_socket.accept()
+
 
     def run(self, cam, is_shared_frame=False):
         img_counter = 0
@@ -33,7 +40,11 @@ class SocketServer:
                 size = len(data)
 
                 # print("{}: {}".format(img_counter, size))
-                self.conn.sendall(struct.pack(">L", size) + data)
+                sendable = struct.pack(">L", size) + data
+                try:
+                    self.conn.sendall(sendable)
+                except:
+                    self.reconnect()
 
                 img_counter += 1
             except KeyboardInterrupt:

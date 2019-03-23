@@ -9,8 +9,8 @@ import cv2
 class SocketClient:
     def __init__(self):
         # HOST = '0.0.0.0'
-        HOST = '10.16.103.41'
-        PORT = 8081
+        HOST = '10.8.52.17'
+        PORT = 5808
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((HOST, PORT))
