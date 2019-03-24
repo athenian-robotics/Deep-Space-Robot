@@ -7,6 +7,7 @@ import frc.team852.subsystem.ClimberSubsystem;
 
 public class ClimberMove extends Command {
     private final ClimberSubsystem climber;
+    private boolean shouldRun, down;
 
     //In case no speed is given, default to this
     public ClimberMove() {
@@ -39,8 +40,7 @@ public class ClimberMove extends Command {
 
     //Pass a speed through the motors, stop when done
     protected void execute() {
-
-        if (OI.fightStickOption.get()) {
+        if (OI.fightStickShare.get()) {
             if (OI.POVUp.get()) {
                 climber.setSpeed(0.85);
             } else if (OI.POVDown.get()) {

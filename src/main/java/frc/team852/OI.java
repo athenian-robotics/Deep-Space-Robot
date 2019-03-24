@@ -96,7 +96,7 @@ public class OI {
 
     //Climb Hab 2
     fightStickOption.whenPressed(new TimedClimb());
-    fightStickShare.whenPressed(new ClimberMove());
+    fightStickShare.whileHeld(new ClimberMove());
 
   }
 

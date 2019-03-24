@@ -25,6 +25,8 @@ public class StatusLedIndication extends Command {
     protected void execute() {
         if (RobotMap.ledError) {
             statusLeds.setColor(LedStrip.LedColors.RED_STROBE);
+        } else if(RobotMap.isInOverride){
+            statusLeds.setColor(LedStrip.LedColors.WAVE_FOREST);
         } else if (inHabRange.get()) {
             statusLeds.setColor(LedStrip.LedColors.GOLD_STROBE);
         } else if (inStationRange.get()) {

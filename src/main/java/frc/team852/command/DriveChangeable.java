@@ -1,5 +1,6 @@
 package frc.team852.command;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Command;
@@ -23,12 +24,12 @@ public class DriveChangeable extends Command {
   private double xSpeed;
   private double zRotation;
 
-  private static final Shuffle sMaxAccelFast = new Shuffle(DriveChangeable.class, "maxAccelFast", 100);
-  private static final Shuffle sMaxDecelFast = new Shuffle(DriveChangeable.class, "maxDecelFast", 200);
-  private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 250);
-  private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 400);
-  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 400);
-  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 120);
+  private static final Shuffle sMaxAccelFast = new Shuffle(DriveChangeable.class, "maxAccelFast", 1.5);
+  private static final Shuffle sMaxDecelFast = new Shuffle(DriveChangeable.class, "maxDecelFast", 2);
+  private static final Shuffle sMaxAccelSlow = new Shuffle(DriveChangeable.class, "maxAccelSlow", 2.5);
+  private static final Shuffle sMaxDecelSlow = new Shuffle(DriveChangeable.class, "maxDecelSlow", 10);
+  private static final Shuffle sRotationAccelScale = new Shuffle(DriveChangeable.class, "rotationAccelScale", 10);
+  private static final Shuffle sRotationMax = new Shuffle(DriveChangeable.class, "rotationMax", 1);
   private static final Shuffle sElevatorScale = new Shuffle(DriveChangeable.class, "elevatorScale", 1);
 
   public DriveChangeable() {
@@ -65,8 +66,6 @@ public class DriveChangeable extends Command {
   @Override
   protected void execute() {
 
-    double x = 0;
-    double y = 0;
     // TODO replace old joystick tank/arcade with xbox joystick inputs
     Shuffle.put(this, "currentDriveMode", RobotMap.currentDriveMode.toString());
     if (RobotMap.currentDriveMode == Drivetrain.DriveMode.Tank) {
@@ -77,16 +76,12 @@ public class DriveChangeable extends Command {
       double multiplyBy = 0.6;
       if (xbox.getTriggerAxis(GenericHID.Hand.kRight) > 0.6)
         multiplyBy = xbox.getTriggerAxis(GenericHID.Hand.kRight);
-      drive.arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft) * multiplyBy, -xbox.getY(GenericHID.Hand.kLeft) * multiplyBy, true);
     } else if (RobotMap.currentDriveMode == Drivetrain.DriveMode.GTA) {
-      x = -xbox.getX(GenericHID.Hand.kLeft);
-      y = -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight);
-
-//      if(OI.xboxA.get()){
-//        x = x/2;
-//        y = y/2;
-//      }
-      arcadeDrive(x, y, false);
+      squareInputs = OI.xboxStart.get();
+      if(squareInputs)
+        System.out.println("SQUARING INPUTS!");
+      arcadeDrive(-xbox.getX(GenericHID.Hand.kLeft), -xbox.getTriggerAxis(GenericHID.Hand.kLeft) + xbox.getTriggerAxis(GenericHID.Hand.kRight), squareInputs);
     }
 
     double angle = xbox.getY(GenericHID.Hand.kRight);
@@ -97,13 +92,11 @@ public class DriveChangeable extends Command {
     }
   }
 
-
-
-//   TODO migrate to a more sensible and general place
+  // TODO migrate to a more sensible and general place
   public void arcadeDrive(double zRotation, double xSpeed, boolean squareInputs) {
     boolean fastGear = (Robot.drivetrain.getGearing() == RobotMap.FAST);
-    double rotationMax = sRotationMax.get();
-    zRotation *= rotationMax + (1 - rotationMax) * Math.abs(xSpeed);
+//    double rotationMax = sRotationMax.get();
+//    zRotation *= rotationMax + (1 - rotationMax) * Math.abs(xSpeed);
     if (fastGear) zRotation = Math.copySign(Math.min(Math.abs(zRotation), Math.abs(xSpeed)), zRotation);
 
     double currTime = System.currentTimeMillis();
@@ -156,6 +149,15 @@ public class DriveChangeable extends Command {
       xbox.setRumble(GenericHID.RumbleType.kLeftRumble, xSpeedError);
     }
     */
+    if(OI.xboxA.get()){
+      RobotMap.isInOverride = true;
+      DriverStation.reportWarning("----OVERPOWEREDDDD-----", false);
+      this.xSpeed = Math.max(-1, Math.min(1, this.xSpeed));
+    }
+    else{
+      RobotMap.isInOverride = false;
+      this.xSpeed = Math.max(-0.6, Math.min(0.6, this.xSpeed));
+    }
 
     drive.arcadeDrive(-this.zRotation, this.xSpeed, squareInputs);
   }

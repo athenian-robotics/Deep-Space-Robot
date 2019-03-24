@@ -21,7 +21,11 @@ public class LedStrip extends Subsystem {
         RED_STROBE,
         BLUE_STROBE,
         WHITE_STROBE,
-        GOLD_STROBE;
+        GOLD_STROBE,
+        WAVE_LAVA,
+        RED_SHOT,
+        LARGE_FIRE,
+        WAVE_FOREST;
 
         public double getColorValue() {
             switch (this) {
@@ -47,6 +51,14 @@ public class LedStrip extends Subsystem {
                     return -0.05;
                 case GOLD_STROBE:
                     return -0.07;
+                case WAVE_LAVA:
+                    return -0.39;
+                case RED_SHOT:
+                    return -0.85;
+                case LARGE_FIRE:
+                    return -0.57;
+                case WAVE_FOREST:
+                    return -0.37;
                 default:
                     return 0.99;
             }

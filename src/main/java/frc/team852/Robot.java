@@ -108,7 +108,6 @@ public class Robot extends TimedRobot {
 
     RobotMap.gearbox.set(RobotMap.SLOW);
     RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
-    RobotMap.tiltServo.setAngle(90);
 
     //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
     //RobotMap.wristEncoder.reset();
@@ -134,6 +133,7 @@ public class Robot extends TimedRobot {
 
     robotReady.set(true);
     PositionTracking.getInstance().start();
+    RobotMap.tiltServo.setAngle(90);
   }
 
   /**
@@ -178,6 +178,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    RobotMap.tiltServo.setAngle(90);
     robotStarted.set(true);
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
