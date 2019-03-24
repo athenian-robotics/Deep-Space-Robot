@@ -1,6 +1,7 @@
 package frc.team852.command;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.OI;
 import frc.team852.Robot;
@@ -8,25 +9,25 @@ import frc.team852.subsystem.ClimberSubsystem;
 
 public class TogglePogo extends Command {
 
-    private boolean shouldRun, down;
+    private double startTime = 0;
+    private boolean shouldRun;
     private ClimberSubsystem climber;
 
     public TogglePogo(){
         requires(Robot.climberSubsystem);
         climber = Robot.climberSubsystem;
         shouldRun = false;
-        down = true;
     }
 
     @Override
     protected void initialize(){
-        down = climber.getPogoState() == DoubleSolenoid.Value.kReverse;
+        startTime = Timer.getFPGATimestamp();
         shouldRun = OI.xboxBack.get();
     }
 
     @Override
     protected boolean isFinished() {
-        return true;
+        return (Timer.getFPGATimestamp() >= (startTime + 0.4) || !shouldRun);
     }
 
     @Override
@@ -42,11 +43,8 @@ public class TogglePogo extends Command {
 
     @Override
     protected void execute(){
-        if(shouldRun){
-            if (down)
-                climber.extendPogo();
-            else
-                climber.retractPogo();
+        if(climber.getPogoState() != DoubleSolenoid.Value.kForward && shouldRun){
+            climber.extendPogo();
         }
     }
 }
