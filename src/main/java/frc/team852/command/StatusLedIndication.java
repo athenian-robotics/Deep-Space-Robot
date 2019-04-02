@@ -26,11 +26,11 @@ public class StatusLedIndication extends Command {
         if (RobotMap.ledError) {
             statusLeds.setColor(LedStrip.LedColors.RED_STROBE);
         } else if(RobotMap.isInOverride){
-            statusLeds.setColor(LedStrip.LedColors.RAINBOW_FOREST);
+            statusLeds.setColor(LedStrip.LedColors.WHITE_STROBE);
         } else if (inHabRange.get()) {
             statusLeds.setColor(LedStrip.LedColors.GOLD_STROBE);
         } else if (inStationRange.get()) {
-            statusLeds.setColor(LedStrip.LedColors.WHITE_STROBE);
+            statusLeds.setColor(LedStrip.LedColors.GREEN);
         } else if (!Ball.ballIn) {
             statusLeds.setColor(LedStrip.LedColors.RAINBOW);
         } else {

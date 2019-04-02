@@ -95,7 +95,7 @@ public class OI {
     fightStickRT.whenActive(new ElevatorMove(ElevatorHeight.CARGO_HIGH));
 
     //Climb Hab 2
-    fightStickOption.whenPressed(new TimedClimb());
+//    fightStickOption.whenPressed(new TimedClimb());
     fightStickShare.whileHeld(new ClimberMove());
 
   }

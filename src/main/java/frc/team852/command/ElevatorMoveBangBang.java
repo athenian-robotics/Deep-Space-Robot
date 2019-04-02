@@ -31,7 +31,7 @@ public class ElevatorMoveBangBang extends Command {
   @Override
   protected void execute() {
     // Check if under user control
-    if (OI.fightStickLB.get()) {
+    if (OI.fightStickLB.get() && !OI.fightStickShare.get()) {
       RobotMap.ledError = OI.POVUp.get() && WristBangBang.isUp;
       if (OI.POVUp.get()) {
         if (!RobotMap.ledError)

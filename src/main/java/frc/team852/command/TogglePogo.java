@@ -27,7 +27,7 @@ public class TogglePogo extends Command {
 
     @Override
     protected boolean isFinished() {
-        return (Timer.getFPGATimestamp() >= (startTime + 0.4) || !shouldRun);
+        return (Timer.getFPGATimestamp() >= (startTime + 0.9) || !shouldRun);
     }
 
     @Override

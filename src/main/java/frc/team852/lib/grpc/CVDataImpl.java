@@ -5,7 +5,6 @@ import frc.team852.DeepSpaceRobot.CameraConfig;
 import frc.team852.DeepSpaceRobot.CameraPose;
 import frc.team852.DeepSpaceRobot.OpenCVInfoGrpc;
 import frc.team852.Robot;
-import frc.team852.lib.CVDataStore;
 import frc.team852.lib.callbacks.CameraPoseListener;
 import frc.team852.lib.callbacks.GenericListener;
 import io.grpc.stub.StreamObserver;
