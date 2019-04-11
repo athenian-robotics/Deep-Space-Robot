@@ -4,16 +4,25 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team852.Robot;
 import frc.team852.RobotMap;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.Drivetrain;
 
 public class ToggleGearbox extends Command {
 
   private Drivetrain dt;
   private Value gear;
+  private Value state;
 
-  public ToggleGearbox() {
+  private static final Shuffle sInFastGear = new Shuffle(ToggleGearbox.class, "InFastGear", false);
+
+  public ToggleGearbox(Value state){
     requires(Robot.drivetrain);
     this.gear = Robot.drivetrain.getGearing();
+    this.state = state;
+  }
+
+  public ToggleGearbox() {
+    this(Value.kOff);
   }
 
   @Override
@@ -21,7 +30,6 @@ public class ToggleGearbox extends Command {
     System.out.println("ToggleGear Initialized");
     dt = Robot.drivetrain;
     this.gear = dt.getGearing();
-
   }
 
   /**
@@ -29,15 +37,26 @@ public class ToggleGearbox extends Command {
    */
   @Override
   protected void execute() {
-    System.out.println("Running Toggle Gear");
-    if (gear == RobotMap.HIGH_GEAR) {
-      dt.setGearbox(RobotMap.LOW_GEAR);
-      System.out.println("IN LOW GEAR");
+    if(state == Value.kOff) {
+      System.out.println("Toggling Drivetrain Gearing");
+      if (gear == RobotMap.SLOW) {
+        dt.setGearbox(RobotMap.FAST);
+        System.out.println("Gearing: HIGH SPEED");
+      } else {
+        dt.setGearbox(RobotMap.SLOW);
+        System.out.println("Gearing: SLOW SPEED");
+      }
     }
-    else {
-      dt.setGearbox(RobotMap.HIGH_GEAR);
-      System.out.println("IN HIGH GEAR");
+    else{
+      if(state != gear)
+        dt.setGearbox(state);
+      if(state == RobotMap.FAST)
+        System.out.println("Gearing: HIGH SPEED");
+      else
+        System.out.println("Gearing: SLOW SPEED");
     }
+
+    sInFastGear.set(state == RobotMap.FAST);
   }
 
   /**

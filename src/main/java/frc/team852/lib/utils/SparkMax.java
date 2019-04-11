@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
+public class SparkMax extends CANSparkMax implements PIDSource, PIDOutput {
 
-  private double resetOffset, lastPos, val;
+  private double resetOffset, lastPos, val, lastSpeed, isInverted;
   private CANEncoder enc;
   private PIDSourceType m_sourceType;
 
@@ -30,6 +30,7 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
   public SparkMax(int channel, MotorType motorType, PIDSourceType sourceType) {
     this(channel, motorType, sourceType, false);
   }
+
   /**
    * @param channel    CAN id of the SparkMax
    * @param motorType  Brushed or Brushless motor connected (Really important)
@@ -44,8 +45,15 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
     this.enc = getEncoder();
     this.m_sourceType = sourceType;
     this.setInverted(inverted);
+    this.lastSpeed = 0;
   }
 
+  public void set(double speed) {
+    if (this.lastSpeed != speed) {
+      super.set(speed);
+      this.lastSpeed = speed;
+    }
+  }
 
   /**
    * @return Readings from the encoder
@@ -53,6 +61,7 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
   public double getEncoderPosition() {
     lastPos = val;
     val = enc.getPosition();
+    val *= isInverted;
     if (resetOffset >= val - 0.05 && resetOffset <= val + 0.05) return 0.0000;
     if (val == 0.0) return lastPos - resetOffset;
     return val - resetOffset;
@@ -63,6 +72,12 @@ public class SparkMax extends CANSparkMax implements PIDOutput, PIDSource {
    */
   public void resetEncoder() {
     resetOffset += getEncoderPosition();
+  }
+
+  public void setInverted(boolean inverted){
+      super.setInverted(inverted);
+      if(inverted) isInverted = -1.0;
+      else isInverted = 1.0;
   }
 
   /**

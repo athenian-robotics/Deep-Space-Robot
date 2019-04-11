@@ -1,11 +1,22 @@
 package frc.team852;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team852.command.TrackPosition;
+import frc.team852.lib.CVDataStore;
+import frc.team852.lib.grpc.CVDataServer;
+import frc.team852.lib.path.utilities.Pose2D;
+import frc.team852.lib.utils.AHRS_PID;
+import frc.team852.lib.utils.datatypes.InterpolatingDouble;
+import frc.team852.lib.utils.datatypes.InterpolatingTreeMap;
+import frc.team852.lib.utils.PositionTracking;
+import frc.team852.lib.utils.SerialLidar;
+import frc.team852.lib.utils.Shuffle;
 import frc.team852.subsystem.*;
+
+import java.io.IOException;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,13 +27,47 @@ import frc.team852.subsystem.*;
  */
 public class Robot extends TimedRobot {
   public static OI oi;
+
+  //Subsystems
   public static Drivetrain drivetrain;
   public static DoubleSolenoid.Value gearstate;
+  public static ElevatorSubsystem elevatorSubsystem;
+  public static WristSubsystem wristSubsystem;
+  //  public static CargoSubsystem cargoSubsystem;
+  //public static HatchSubsystem hatchSubsystem;
+  public static ClimberSubsystem climberSubsystem;
+  public static LedStrip statusLeds;
+  public static BallSubsystem ballSubsystem;
+
+  //Sensors
+  public static AHRS_PID gyro;
+  public static SerialLidar elevatorLidar;
+
+  //Data
+  public static CVDataServer dataServer;
+  public static CVDataStore dataStore;
+  public static InterpolatingTreeMap<InterpolatingDouble, Pose2D> positions;
+
+  //Other
+  public static int VIDEO_STREAM_IDX = 0;
+  public static int VIDEO_STREAM_FLIP_CODE = 0;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  public Robot() {
+    this(kDefaultPeriod);
+  }
+
+  public Robot(double period) {
+    super(period);
+    positions = new InterpolatingTreeMap<>((int) (1 / period) * 2);
+  }
+
+  public static Shuffle robotStarted = new Shuffle(Robot.class, "robotStarted", false);
+  public static Shuffle robotReady = new Shuffle(Robot.class, "robotReady", false);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -30,14 +75,65 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    new RobotMap(); // Empty declaration
+    robotStarted.set(true);
+
+
+    try {
+      gyro = new AHRS_PID(I2C.Port.kOnboard);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+    }
+
+    new RobotMap();
+    dataServer = new CVDataServer();
+    try {
+      dataServer.start();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     drivetrain = new Drivetrain();
+    elevatorSubsystem = new ElevatorSubsystem();
+    wristSubsystem = new WristSubsystem();
+//    cargoSubsystem = new CargoSubsystem();
+    //hatchSubsystem = new HatchSubsystem();
+    climberSubsystem = new ClimberSubsystem();
+    statusLeds = new LedStrip();
+    ballSubsystem = new BallSubsystem();
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+
+    RobotMap.gearbox.set(RobotMap.SLOW);
+    RobotMap.pogoBoi.set(DoubleSolenoid.Value.kReverse);
+
+    //RobotMap.wristEncoder.setDistancePerPulse(1/319D);
+    //RobotMap.wristEncoder.reset();
+
     oi = new OI(); // Must be defined last
+
+    try {
+      dataServer.start();
+      SmartDashboard.putString("GRPC_STATUS", "Vision Driver assist available");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+      SmartDashboard.putString("GRPC status", "Vision Driver assist unavailable");
+    }
+
+    Timer.delay(2);
+    try {
+      elevatorLidar = new SerialLidar(9600, SerialPort.Port.kUSB);
+      Timer.delay(1);
+      elevatorLidar.setReadBufferSize(10);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error initializing Elevator Lidar! " + ex.getMessage(), true);
+    }
+
+    robotReady.set(true);
+    PositionTracking.getInstance().start();
+    RobotMap.tiltServo.setAngle(90);
   }
 
   /**
@@ -57,6 +153,7 @@ public class Robot extends TimedRobot {
       e.printStackTrace();
     }
     // Do stuff like zeroing sensors here (i.e. arm is on limit switch-> zero the encoder)
+    positions.put(new InterpolatingDouble(Timer.getFPGATimestamp()), PositionTracking.getPose());
   }
 
   /**
@@ -65,7 +162,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-
+    robotStarted.set(false);
   }
 
   /**
@@ -81,6 +178,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    RobotMap.tiltServo.setAngle(90);
+    robotStarted.set(true);
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -104,6 +203,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotStarted.set(true);
+    RobotMap.gearbox.set(RobotMap.SLOW);
+    PositionTracking.getInstance().start();
+    Scheduler.getInstance().add(new TrackPosition());
   }
 
   /**
@@ -113,6 +216,12 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Make sure to cancel any autonomous stuff
     // Might not be needed as sandstorm etc
+    Shuffle.put(this, "Gyro Connected?", Robot.gyro.isConnected());
+    Shuffle.put(this, "Gyro yaw?", Robot.gyro.getYaw());
+    Shuffle.put(this, "Gyro pitch?", Robot.gyro.getPitch());
+    Shuffle.put(this, "Gyro Roll?", Robot.gyro.getRoll());
+    Shuffle.put(this, "Gyro Calibrating?", Robot.gyro.isCalibrating());
+    //Shuffle.put(this, "Wrist encoder val", RobotMap.wristEncoder.getDistance());
   }
 
   /**

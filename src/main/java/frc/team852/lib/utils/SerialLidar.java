@@ -1,80 +1,107 @@
 package frc.team852.lib.utils;
 
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
-import frc.team852.RobotMap;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SerialLidar extends SerialPort {
+public class SerialLidar extends SerialPort implements PIDSource {
 
-    private int[] currVal, lastVal, badVal;
-    private int numCharsRead;
-    private byte[] currByte, lastByte;
+    private int dist, distance, lastDistance;
+    private String distString;
+    private double rate, lastSampleTime;
+    private byte[] bytes;
+    private PIDSourceType pidSourceType = PIDSourceType.kDisplacement;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private AtomicBoolean running;
 
-    public SerialLidar(int baudRate, Port port, int dataBits, Parity parity, StopBits stopBits) {
-        super(baudRate, port, dataBits, parity, stopBits);
+    public SerialLidar(int baudRate, Port port) {
+        super(baudRate, port);
         this.startUpLidar();
     }
 
-    private int[] getDist(){
-        while(true) {
-            currByte = RobotMap.lidar.read(1);
+    private int getDist(){
+        try{
+//            this.distString = this.readString();
+//            if(distString != null){
+//                return Integer.parseInt(distString);
+//            }
 
-            if (lastByte[0] == 0x59 && currByte[0] == 0x59) {
-                lastByte[0] = 0x00;
-                break;
-            } else {
-                lastByte = currByte;
-                numCharsRead++;
+            this.bytes = this.read(2);
+            if(bytes != null)
+                dist = (this.bytes[0] & 0xff) | (this.bytes[1] & 0xff) << 8;
+            if(dist > 1000){
+                this.reset();
+                DriverStation.reportError("Lidar has been reset!", false);
             }
-            if (numCharsRead > 30) {
-                return badVal;
-            }
+            return dist;
         }
-        byte[] b = new byte[7];
-        byte checksum = (byte) 0xB2;
-        for(int i = 0; i<=6; i++){
-            b[i] = RobotMap.lidar.read(1)[0];
-            if(i<=5) checksum = (byte) (b[i] + checksum);
+        catch (RuntimeException ex){
+            DriverStation.reportError("Error reading lidar! " + ex.getMessage(), false);
         }
-        if(checksum != b[6]){
-            return badVal;
-        }
-        int[] ans = new int[]{((b[1] << 8) + b[0]), ((b[3] << 8) + b[2])};
-        return ans;
-    }
 
-    public int[] getLidarDistance(){
-        if (currVal == badVal) return lastVal;
-        return currVal;
+//        if(bytes != null)
+//            this.dist = (this.bytes[0] & 0xff) | (this.bytes[1] & 0xff) << 8;
+
+        return 0;
     }
 
     private void startUpLidar(){
-        byte[] setStandardMode = {0x42,0x57,0x02,0x00,0x00,0x00,0x01,0x06,0x00,0x00};
-        write(setStandardMode, 8);
-        currByte = new byte[]{0x00};
-        lastByte = currByte;
-        badVal = new int[]{-1, -1};
-        currVal = badVal;
-        lastVal = currVal;
-        running = new AtomicBoolean(true);
-        executor.submit(() -> {
-            Timer.delay(2);
+        this.dist = 0;
+        this.lastDistance = 0;
+        this.running = new AtomicBoolean(true);
+        this.executor.submit(() -> {
+            Timer.delay(5);
+            reset();
             while(running.get()) {
-                lastVal = currVal;
-                currVal = this.getDist();
+                this.fetchLidar();
                 Timer.delay(0.05);
             }
         });
     }
 
     public void shutDownLidar(){
-        running.set(false);
-        executor.shutdown();
+        this.running.set(false);
+        this.executor.shutdown();
+    }
+
+    private void fetchLidar(){
+        this.lastDistance = distance;
+        this.distance = getDist();
+        this.rate = (dist-lastDistance)/(Timer.getFPGATimestamp()-lastSampleTime);
+        lastSampleTime = Timer.getFPGATimestamp();
+
+        SmartDashboard.putNumber("Lidar Distance:", this.distance);
+        SmartDashboard.putNumber("Lidar Rate:", this.rate);
+        if(distance == 0){
+            System.out.println("Error retrieving lidar distance!");
+        }
+    }
+
+    public int getLidarDistance(){
+        return distance;
+    }
+
+    public double getLidarRate(){
+        return rate;
+    }
+
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+        pidSourceType = pidSource;
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return pidSourceType;
+    }
+
+    @Override
+    public double pidGet() {
+        if(pidSourceType == PIDSourceType.kRate)
+            return rate;
+        return getLidarDistance();
     }
 }

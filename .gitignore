@@ -1,9 +1,12 @@
 # Output
 build
+out
 *.iml
 .idea
 .gradle
 *.jar
+*.csv
+__pycache__
 
 # Project files
 *.iml
@@ -15,3 +18,9 @@ build
 # Personal deploy scripts
 deploy.sh
 debug.sh
+
+# personal testing scripts
+./src/main/python/re*.py
+
+# Vim sessions
+sessions
